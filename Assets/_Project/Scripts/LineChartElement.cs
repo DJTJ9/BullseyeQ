@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// Custom VisualElement that renders a float data series as a line chart using Painter2D.
-/// Features: Y-axis min/max labels, hover tooltip showing exact values.
+/// Features: Y-axis min/max labels, subtle horizontal grid, hover tooltip showing exact values.
 /// Call <see cref="SetData"/> to populate. Set <see cref="FormatValue"/> to control formatting.
 /// </summary>
 public class LineChartElement : VisualElement
@@ -12,19 +12,16 @@ public class LineChartElement : VisualElement
     private float[]   _data   = Array.Empty<float>();
     private Vector2[] _points = Array.Empty<Vector2>();
 
-    public Color lineColor  = new Color(0.31f, 0.80f, 0.77f);
+    public Color lineColor  = UiTheme.Hit;
     public bool  showDots   = true;
-    public float dotRadius  = 3.5f;
+    public float dotRadius  = 3f;
     public float lineWidth  = 2f;
 
     /// <summary>Formats a data value for the Y-axis labels and tooltip. Default: one decimal place.</summary>
     public Func<float, string> FormatValue = v => v.ToString("F1");
 
-    private static readonly Color AxisColor        = new Color(0.75f, 0.78f, 0.83f);
-    private static readonly Color InsufficientColor = new Color(0.75f, 0.78f, 0.83f);
-    private static readonly Color TooltipBg        = new Color(0.11f, 0.17f, 0.29f, 0.92f);
-
-    private const float PadL = 44f, PadR = 6f, PadT = 6f, PadB = 4f;
+    private const float PadL = 44f, PadR = 8f, PadT = 8f, PadB = 14f;
+    private const int   GridLines = 3;
 
     private readonly Label _minLabel;
     private readonly Label _maxLabel;
@@ -38,32 +35,20 @@ public class LineChartElement : VisualElement
         style.minHeight = 60;
         style.overflow  = Overflow.Hidden;
 
-        // Y-axis min/max labels (absolute, left column)
-        _maxLabel = MakeAxisLabel();
-        _maxLabel.style.top  = PadT;
+        _maxLabel = new Label { pickingMode = PickingMode.Ignore };
+        _maxLabel.AddToClassList("chart-axis-label");
+        _maxLabel.style.top  = PadT - 6f;
         _maxLabel.style.left = 0;
         Add(_maxLabel);
 
-        _minLabel = MakeAxisLabel();
-        _minLabel.style.bottom = PadB;
+        _minLabel = new Label { pickingMode = PickingMode.Ignore };
+        _minLabel.AddToClassList("chart-axis-label");
+        _minLabel.style.bottom = PadB - 6f;
         _minLabel.style.left   = 0;
         Add(_minLabel);
 
-        // Hover tooltip
-        _tooltipLabel = new Label();
-        _tooltipLabel.style.position        = Position.Absolute;
-        _tooltipLabel.style.display         = DisplayStyle.None;
-        _tooltipLabel.style.backgroundColor = new StyleColor(TooltipBg);
-        _tooltipLabel.style.color           = new StyleColor(Color.white);
-        _tooltipLabel.style.fontSize        = 10;
-        _tooltipLabel.style.paddingTop      = 2;
-        _tooltipLabel.style.paddingBottom   = 2;
-        _tooltipLabel.style.paddingLeft     = 5;
-        _tooltipLabel.style.paddingRight    = 5;
-        _tooltipLabel.style.borderTopLeftRadius     = 3;
-        _tooltipLabel.style.borderTopRightRadius    = 3;
-        _tooltipLabel.style.borderBottomLeftRadius  = 3;
-        _tooltipLabel.style.borderBottomRightRadius = 3;
+        _tooltipLabel = new Label { pickingMode = PickingMode.Ignore };
+        _tooltipLabel.AddToClassList("chart-tooltip");
         Add(_tooltipLabel);
 
         RegisterCallback<PointerMoveEvent>(OnPointerMove);
@@ -102,16 +87,24 @@ public class LineChartElement : VisualElement
         if (w <= 0 || h <= 0) return;
 
         var p = ctx.painter2D;
+        float chartW = w - PadL - PadR;
+        float chartH = h - PadT - PadB;
+
+        // Grid + baseline (always, so empty charts still read as charts)
+        p.strokeColor = UiTheme.Line;
+        p.lineWidth   = 1f;
+        for (int i = 0; i <= GridLines; i++)
+        {
+            float y = h - PadB - chartH * i / GridLines;
+            p.BeginPath();
+            p.MoveTo(new Vector2(PadL, y));
+            p.LineTo(new Vector2(w - PadR, y));
+            p.Stroke();
+        }
 
         if (_data.Length < 2)
         {
             _points = Array.Empty<Vector2>();
-            p.BeginPath();
-            p.MoveTo(new Vector2(PadL, h * 0.5f));
-            p.LineTo(new Vector2(w - PadR, h * 0.5f));
-            p.strokeColor = InsufficientColor;
-            p.lineWidth   = 1f;
-            p.Stroke();
             return;
         }
 
@@ -124,18 +117,6 @@ public class LineChartElement : VisualElement
         float range = maxVal - minVal;
         if (range < 0.001f) { minVal -= 1f; maxVal += 1f; range = 2f; }
 
-        float chartW = w - PadL - PadR;
-        float chartH = h - PadT - PadB;
-
-        // Baseline
-        p.BeginPath();
-        p.MoveTo(new Vector2(PadL, h - PadB));
-        p.LineTo(new Vector2(w - PadR, h - PadB));
-        p.strokeColor = AxisColor;
-        p.lineWidth   = 1f;
-        p.Stroke();
-
-        // Compute and cache points
         var pts = new Vector2[_data.Length];
         for (int i = 0; i < _data.Length; i++)
         {
@@ -145,15 +126,14 @@ public class LineChartElement : VisualElement
         }
         _points = pts;
 
-        // Line
         p.BeginPath();
         p.MoveTo(pts[0]);
         for (int i = 1; i < pts.Length; i++) p.LineTo(pts[i]);
         p.strokeColor = lineColor;
         p.lineWidth   = lineWidth;
+        p.lineJoin    = LineJoin.Round;
         p.Stroke();
 
-        // Dots
         if (!showDots) return;
         foreach (var pt in pts)
         {
@@ -169,7 +149,6 @@ public class LineChartElement : VisualElement
         if (_points.Length == 0) { HideTooltip(); return; }
 
         float mouseX = evt.localPosition.x;
-
         int nearest = 0;
         float minDist = float.MaxValue;
         for (int i = 0; i < _points.Length; i++)
@@ -177,32 +156,20 @@ public class LineChartElement : VisualElement
             float dx = Mathf.Abs(_points[i].x - mouseX);
             if (dx < minDist) { minDist = dx; nearest = i; }
         }
-
         if (minDist > 24f) { HideTooltip(); return; }
 
         _tooltipLabel.text = FormatValue(_data[nearest]);
         _tooltipLabel.style.display = DisplayStyle.Flex;
 
-        float maxX = resolvedStyle.width  - 50f;
-        float maxY = resolvedStyle.height - 20f;
+        float maxX = resolvedStyle.width  - 56f;
+        float maxY = resolvedStyle.height - 22f;
         _tooltipLabel.style.left = Mathf.Clamp(_points[nearest].x - 18f, PadL, maxX);
-        _tooltipLabel.style.top  = Mathf.Clamp(_points[nearest].y - 22f, 0f, maxY);
+        _tooltipLabel.style.top  = Mathf.Clamp(_points[nearest].y - 26f, 0f, maxY);
     }
 
     private void HideTooltip()
     {
         if (_tooltipLabel != null)
             _tooltipLabel.style.display = DisplayStyle.None;
-    }
-
-    private static Label MakeAxisLabel()
-    {
-        var lbl = new Label();
-        lbl.style.position       = Position.Absolute;
-        lbl.style.width          = PadL - 4f;
-        lbl.style.fontSize       = 9;
-        lbl.style.unityTextAlign = TextAnchor.MiddleRight;
-        lbl.style.color          = new StyleColor(new Color(0.65f, 0.68f, 0.73f));
-        return lbl;
     }
 }
