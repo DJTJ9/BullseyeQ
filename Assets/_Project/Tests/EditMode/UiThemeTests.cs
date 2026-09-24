@@ -55,4 +55,21 @@ public class UiThemeTests
     {
         AssertColor(UiTheme.HeatColor(3, 10, false), UiTheme.HeatColor(3, 10, true), "alt irrelevant");
     }
+
+    // --- UiFx.TickValue ---
+
+    [Test]
+    public void TickValue_AtZero_ReturnsFrom()      => Assert.AreEqual(501, UiFx.TickValue(501, 441, 0f));
+
+    [Test]
+    public void TickValue_AtOne_ReturnsTo()         => Assert.AreEqual(441, UiFx.TickValue(501, 441, 1f));
+
+    [Test]
+    public void TickValue_Half_RoundsToNearest()    => Assert.AreEqual(471, UiFx.TickValue(501, 441, 0.5f));
+
+    [Test]
+    public void TickValue_ClampsAboveOne()          => Assert.AreEqual(441, UiFx.TickValue(501, 441, 1.7f));
+
+    [Test]
+    public void TickValue_CountsUpToo()             => Assert.AreEqual(25, UiFx.TickValue(0, 100, 0.25f));
 }
