@@ -93,7 +93,7 @@ public class LineChartElement : VisualElement
         // Grid + baseline (always, so empty charts still read as charts)
         p.strokeColor = UiTheme.Line;
         p.lineWidth   = 1f;
-        for (int i = 0; i <= GridLines; i++)
+        for (int i = 0; i < GridLines; i++)
         {
             float y = h - PadB - chartH * i / GridLines;
             p.BeginPath();
