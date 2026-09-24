@@ -28,9 +28,15 @@ public static class UiFx
 
     static IVisualElementScheduledItem _bannerHide;
 
-    // Tracks a scheduled SwitchPanel enter so a rapid second switch can cancel a stale
-    // Show() that would otherwise land on a target that is no longer current.
-    static IVisualElementScheduledItem _pendingShow;
+    // Tracks a scheduled SwitchPanel enter per panel group (keyed by the shared parent) so a rapid
+    // second switch within the same group can cancel a stale Show() that would otherwise land on a
+    // target that is no longer current — without cancelling an unrelated group's own pending Show()
+    // (e.g. ShowPanel + ShowSessionTab firing back-to-back for two different panel containers).
+    static readonly Dictionary<VisualElement, IVisualElementScheduledItem> _pendingShow = new();
+
+    // Tracks elements whose FlashRow fade is still in flight, so ReleaseFx (called by Pop/Shake
+    // cleanups that may finish first) doesn't strip bq-fx out from under a still-fading flash.
+    static readonly HashSet<VisualElement> _flashing = new();
 
     /// <summary>True when the element's panel root has reduced motion enabled.</summary>
     public static bool NoMotion(VisualElement el)
@@ -60,15 +66,23 @@ public static class UiFx
     /// Switching to the already-visible panel is a no-op.</summary>
     public static void SwitchPanel(VisualElement from, VisualElement to)
     {
-        _pendingShow?.Pause();
-        _pendingShow = null;
-
         if (from == to) { if (to != null && to.resolvedStyle.display == DisplayStyle.None) Show(to); return; }
         if (from != null) Hide(from);
         if (to == null) return;
 
+        var key = to.parent ?? to;
+        if (_pendingShow.TryGetValue(key, out var pending))
+        {
+            pending.Pause();
+            _pendingShow.Remove(key);
+        }
+
         if (from == null || NoMotion(to)) Show(to);
-        else _pendingShow = to.schedule.Execute(() => Show(to)).StartingIn(ExitMs);
+        else _pendingShow[key] = to.schedule.Execute(() =>
+        {
+            _pendingShow.Remove(key);
+            Show(to);
+        }).StartingIn(ExitMs);
     }
 
     /// <summary>display:flex with enter animation (opacity 0 / translate 16px → identity).</summary>
@@ -155,7 +169,8 @@ public static class UiFx
     static void ReleaseFx(VisualElement el)
     {
         if (el.ClassListContains(PopClass) || el.ClassListContains(ShakeL) ||
-            el.ClassListContains(ShakeR) || el.ClassListContains(FlashClass)) return;
+            el.ClassListContains(ShakeR) || el.ClassListContains(FlashClass) ||
+            _flashing.Contains(el)) return;
         el.RemoveFromClassList(FxClass);
     }
 
@@ -204,18 +219,20 @@ public static class UiFx
         _running[el] = item;
     }
 
-    /// <summary>Instant background highlight that fades over 400 ms.</summary>
+    /// <summary>Instant background highlight that fades over 400 ms; <c>bq-fx</c> is released once the fade
+    /// finishes (400 ms), guarded by <see cref="_flashing"/> so a concurrent Pop/Shake cleanup that finishes
+    /// earlier can't strip it out from under the still-running fade.</summary>
     public static void FlashRow(VisualElement el)
     {
         if (el == null || NoMotion(el)) return;
         el.AddToClassList(FxClass);
         el.AddToClassList(FlashClass);                                 // 0 s → instant highlight
-        // FlashClass stays on until the fade is done: it also guards ReleaseFx (Pop/Shake finishing
-        // in between must not strip bq-fx out from under this element's still-running flash).
+        _flashing.Add(el);
+        el.schedule.Execute(() => el.RemoveFromClassList(FlashClass)); // next frame → 400 ms fade (bq-fx still attached)
         el.schedule.Execute(() =>
         {
-            el.RemoveFromClassList(FlashClass);
-            ReleaseFx(el);
+            _flashing.Remove(el);
+            ReleaseFx(el);                                             // 400 ms → fade done
         }).StartingIn(FlashMs);
     }
 
