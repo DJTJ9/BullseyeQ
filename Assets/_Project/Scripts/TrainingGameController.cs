@@ -14,11 +14,18 @@ using Random = System.Random;
 public class TrainingGameController : MonoBehaviour
 {
     // ---- UI elements ----
+    private VisualElement _root;
     private TextField[] _fields;
+    private VisualElement _fieldsRow;
     private Label _turnLabel;
     private Label _feedbackLabel;
+    private VisualElement _playerPlate;
+    private VisualElement _aiPlate;
     private Label _playerScoreLabel;
+    private Label _playerAvgLabel;
+    private Label _playerLastLabel;
     private Label _aiScoreLabel;
+    private Label _aiAvgLabel;
     private Label[] _aiDartSlots;   // 3 dart display labels, filled one by one
     private Label _aiLastScoreLabel;
     private VisualElement _throwsContainer;
@@ -43,6 +50,10 @@ public class TrainingGameController : MonoBehaviour
     private bool _playerGoesFirst;
     private int _visitStartRemaining;
 
+    // ---- Display state (tick start values) ----
+    private int _shownPlayerScore = DartRules.StartScore;
+    private int _shownAiScore     = DartRules.StartScore;
+
     // ---- AI state ----
     private Random _rng;
     private float _aiT20HitRate;
@@ -56,13 +67,10 @@ public class TrainingGameController : MonoBehaviour
 
     private static FiveOhOneSession PlayerSession => DataManager.Instance.CurrentTrainingGameSession;
 
-    private static readonly Color RowBorder  = new(0.85f, 0.85f, 0.85f);
-    private static readonly Color MutedColor = new(0.5f, 0.5f, 0.5f);
-    private static readonly Color PlaceholderColor = new(0.67f, 0.67f, 0.67f);
-
     void OnEnable()
     {
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        _root = GetComponent<UIDocument>().rootVisualElement;
+        var root = _root;
 
         _fields = new[]
         {
@@ -70,10 +78,16 @@ public class TrainingGameController : MonoBehaviour
             root.Q<TextField>("tg-dart-field-1"),
             root.Q<TextField>("tg-dart-field-2"),
         };
+        _fieldsRow         = root.Q<VisualElement>("tg-fields-row");
         _turnLabel         = root.Q<Label>("tg-turn-label");
         _feedbackLabel     = root.Q<Label>("tg-feedback-label");
+        _playerPlate       = root.Q<VisualElement>("tg-player-plate");
+        _aiPlate           = root.Q<VisualElement>("tg-ai-plate");
         _playerScoreLabel  = root.Q<Label>("tg-current-score");
+        _playerAvgLabel    = root.Q<Label>("tg-player-avg");
+        _playerLastLabel   = root.Q<Label>("tg-player-last");
         _aiScoreLabel      = root.Q<Label>("tg-ai-score");
+        _aiAvgLabel        = root.Q<Label>("tg-ai-avg");
         _aiDartSlots = new[]
         {
             root.Q<Label>("tg-ai-dart-0"),
@@ -100,12 +114,6 @@ public class TrainingGameController : MonoBehaviour
         _btnRemoveLast.clicked += OnRemoveLast;
         _btnOk.clicked        += OnGameOverConfirm;
 
-        foreach (var field in _fields)
-        {
-            var inputEl = field.Q(className: "unity-base-field__input");
-            if (inputEl != null) inputEl.style.backgroundColor = Color.white;
-        }
-
         for (int i = 0; i < _fields.Length; i++)
         {
             int index = i;
@@ -124,7 +132,7 @@ public class TrainingGameController : MonoBehaviour
 
     void Start()
     {
-        // Show idle state — user presses "New Game" to start
+        // Show idle state — user presses "New game" to start
         SetIdleDisplay();
     }
 
@@ -134,7 +142,7 @@ public class TrainingGameController : MonoBehaviour
     {
         if (_state != State.PlayerTurn)
         {
-            _feedbackLabel.text = _state == State.AITurn ? "KI ist dran – bitte warten." : "Neues Spiel starten.";
+            _feedbackLabel.text = _state == State.AITurn ? "AI is throwing..." : "Start a new game.";
             return;
         }
 
@@ -143,7 +151,7 @@ public class TrainingGameController : MonoBehaviour
         {
             if (!DartArrow.TryParse(_fields[i].value, out var a))
             {
-                _feedbackLabel.text = $"Dart {i + 1} ungültig: \"{_fields[i].value}\"";
+                _feedbackLabel.text = $"Dart {i + 1} invalid: \"{_fields[i].value}\"";
                 FocusField(i);
                 return;
             }
@@ -159,13 +167,16 @@ public class TrainingGameController : MonoBehaviour
             if (result == DartResult.Checkout)
             {
                 CommitPlayerVisit(darts.GetRange(0, i + 1), busted: false, checkout: true);
+                UiFx.ShowBanner(_root, "Checkout!");
                 EndGame(playerWon: true);
                 return;
             }
             if (result == DartResult.Bust)
             {
                 CommitPlayerVisit(darts.GetRange(0, i + 1), busted: true, checkout: false);
-                _feedbackLabel.text = "BUST – Visit zählt 0.";
+                _feedbackLabel.text = "Bust – visit counts 0.";
+                UiFx.Shake(_fieldsRow);
+                UiFx.FlashRow(_playerPlate);
                 ClearFields();
                 RefreshAll();
                 StartAITurn();
@@ -183,7 +194,7 @@ public class TrainingGameController : MonoBehaviour
         }
         else
         {
-            _playerScoreLabel.text = running.ToString();
+            SetPlayerScore(running);
             RebuildFinishes(running);
             FocusField(index + 1);
         }
@@ -194,6 +205,8 @@ public class TrainingGameController : MonoBehaviour
         var visit = new FiveOhOneVisit(darts, busted, checkout);
         DataManager.Instance.AddVisitToCurrentTrainingGame(visit);
         _visitStartRemaining = PlayerSession.remaining;
+        UiFx.Pop(_playerPlate);
+        if (!busted && visit.scoredPoints == 180) UiFx.ShowBanner(_root, "180!");
     }
 
     private void OnRemoveLast()
@@ -251,7 +264,7 @@ public class TrainingGameController : MonoBehaviour
         _aiVisits        = new List<FiveOhOneVisit>();
 
         _visitStartRemaining = DartRules.StartScore;
-        _gameOverOverlay.style.display = DisplayStyle.None;
+        UiFx.Hide(_gameOverOverlay);
         ClearFields();
         ClearAIDisplay();
 
@@ -260,13 +273,13 @@ public class TrainingGameController : MonoBehaviour
         if (_playerGoesFirst)
         {
             _state = State.PlayerTurn;
-            _turnLabel.text = "Du bist dran";
+            _turnLabel.text = "Your turn";
             SetInputEnabled(true);
             FocusField(0);
         }
         else
         {
-            _turnLabel.text = "KI beginnt …";
+            _turnLabel.text = "AI starts...";
             _state = State.AITurn;
             StartCoroutine(AITurnCoroutine());
         }
@@ -276,7 +289,7 @@ public class TrainingGameController : MonoBehaviour
 
     private void OnGameOverConfirm()
     {
-        _gameOverOverlay.style.display = DisplayStyle.None;
+        UiFx.Hide(_gameOverOverlay);
         SetIdleDisplay();
     }
 
@@ -289,10 +302,7 @@ public class TrainingGameController : MonoBehaviour
             ? (float)_aiCheckoutHits / _aiCheckoutAttempts
             : -1f;
 
-        // Compute AI average
-        float aiAvg = _aiDartsThrown > 0
-            ? (float)_aiVisits.Sum(v => v.scoredPoints) / _aiDartsThrown * 3f
-            : 0f;
+        float aiAvg = AiAverage();
 
         var match = TrainingGameMatch.Create(
             PlayerSession,
@@ -303,12 +313,10 @@ public class TrainingGameController : MonoBehaviour
 
         DataManager.Instance.SaveTrainingGameMatch(match);
 
-        _gameOverTitle.text    = playerWon ? "Du gewinnst! 🎯" : "KI gewinnt!";
-        _gameOverSubtitle.text = playerWon
-            ? $"Dein Ø: {PlayerSession.threeDartAverage:F1}  |  KI Ø: {aiAvg:F1}"
-            : $"KI Ø: {aiAvg:F1}  |  Dein Ø: {PlayerSession.threeDartAverage:F1}";
+        _gameOverTitle.text    = playerWon ? "You win!" : "AI wins!";
+        _gameOverSubtitle.text = $"Your avg {PlayerSession.threeDartAverage:F1}   |   AI avg {aiAvg:F1}";
 
-        _gameOverOverlay.style.display = DisplayStyle.Flex;
+        UiFx.Show(_gameOverOverlay);
         RefreshAll();
     }
 
@@ -318,7 +326,7 @@ public class TrainingGameController : MonoBehaviour
     {
         if (_state == State.GameOver) return;
         _state = State.PlayerTurn; // will be set to AITurn inside coroutine
-        _turnLabel.text = "KI ist dran …";
+        _turnLabel.text = "AI's turn...";
         SetInputEnabled(false);
         StartCoroutine(AITurnCoroutine());
     }
@@ -338,24 +346,24 @@ public class TrainingGameController : MonoBehaviour
             _rng,
             ref _aiStreakBonus);
 
-        // Clear dart slots and score before animating
+        // Clear dart slots before animating
         foreach (var slot in _aiDartSlots) slot.text = "";
-        _aiLastScoreLabel.text = "";
 
         // Show darts one by one into their fixed slots
         for (int i = 0; i < visit.arrows.Length; i++)
         {
             _aiDartSlots[i].text = DartArrow.FieldKey(visit.arrows[i]);
+            UiFx.Pop(_aiDartSlots[i]);
             yield return new WaitForSeconds(1f);
         }
 
         // Show result after all darts are visible
         if (visit.busted)
-            _aiLastScoreLabel.text = "BUST";
+            _aiLastScoreLabel.text = "last bust";
         else if (visit.checkout)
-            _aiLastScoreLabel.text = "CHECKOUT!";
+            _aiLastScoreLabel.text = "last checkout";
         else
-            _aiLastScoreLabel.text = $"→ {_aiRemaining - visit.scoredPoints}";
+            _aiLastScoreLabel.text = $"last {visit.scoredPoints}";
 
         // Commit the full visit
         _aiDartsThrown += visit.dartsThrown;
@@ -365,12 +373,15 @@ public class TrainingGameController : MonoBehaviour
         if (visit.checkout)   _aiCheckoutHits++;
 
         _aiVisits.Add(visit);
+        UiFx.Pop(_aiPlate);
+        if (!visit.busted && visit.scoredPoints == 180) UiFx.ShowBanner(_root, "180!");
 
         if (visit.checkout)
         {
             _aiRemaining = 0;
-            AddAIThrowRow(_aiVisits.Count, visit, 0);
-            _aiScoreLabel.text = "0";
+            UiFx.FlashRow(AddAIThrowRow(_aiVisits.Count, visit, 0));
+            SetAiScore(0);
+            UiFx.ShowBanner(_root, "Checkout!");
             EndGame(playerWon: false);
             yield break;
         }
@@ -378,13 +389,13 @@ public class TrainingGameController : MonoBehaviour
         if (!visit.busted)
             _aiRemaining -= visit.scoredPoints;
 
-        AddAIThrowRow(_aiVisits.Count, visit, _aiRemaining);
-        _aiScoreLabel.text = _aiRemaining.ToString();
+        UiFx.FlashRow(AddAIThrowRow(_aiVisits.Count, visit, _aiRemaining));
+        SetAiScore(_aiRemaining);
         _aiThrowsScroll?.ScrollTo(_aiThrowsContainer.ElementAt(_aiThrowsContainer.childCount - 1));
 
         // Hand back to player
         _state = State.PlayerTurn;
-        _turnLabel.text = "Du bist dran";
+        _turnLabel.text = "Your turn";
         SetInputEnabled(true);
         FocusField(0);
     }
@@ -394,12 +405,46 @@ public class TrainingGameController : MonoBehaviour
     private void RefreshAll()
     {
         int live = LiveRemaining();
-        _playerScoreLabel.text = live.ToString();
+        SetPlayerScore(live);
+        RefreshPlateMeta();
         RebuildThrows();
         RebuildFinishes(live);
         RebuildRecentList();
         if (_state != State.AITurn)
-            _aiScoreLabel.text = _aiRemaining.ToString();
+            SetAiScore(_aiRemaining);
+    }
+
+    private void SetPlayerScore(int value)
+    {
+        UiFx.TickNumber(_playerScoreLabel, _shownPlayerScore, value);
+        _shownPlayerScore = value;
+    }
+
+    private void SetAiScore(int value)
+    {
+        UiFx.TickNumber(_aiScoreLabel, _shownAiScore, value);
+        _shownAiScore = value;
+    }
+
+    private float AiAverage() => _aiDartsThrown > 0
+        ? (float)_aiVisits.Sum(v => v.scoredPoints) / _aiDartsThrown * 3f
+        : 0f;
+
+    private void RefreshPlateMeta()
+    {
+        var s = PlayerSession;
+        bool hasVisits = s != null && s.visits.Count > 0;
+        if (_playerAvgLabel  != null) _playerAvgLabel.text  = hasVisits ? $"avg {s.threeDartAverage:F1}" : "avg –";
+        if (_playerLastLabel != null)
+        {
+            if (!hasVisits) _playerLastLabel.text = "last –";
+            else
+            {
+                var last = s.visits[^1];
+                _playerLastLabel.text = last.busted ? "last bust" : last.checkout ? "last checkout" : $"last {last.scoredPoints}";
+            }
+        }
+        if (_aiAvgLabel != null) _aiAvgLabel.text = _aiDartsThrown > 0 ? $"avg {AiAverage():F1}" : "avg –";
     }
 
     private int LiveRemaining()
@@ -427,78 +472,41 @@ public class TrainingGameController : MonoBehaviour
             int remBefore = running;
             if (!v.busted) running -= v.scoredPoints;
             int remAfter = v.busted ? remBefore : running;
-            lastRow = AddPlayerThrowRow(i + 1, v, remAfter);
+            lastRow = AddThrowRow(_throwsContainer, i + 1, v, remAfter);
         }
-        if (lastRow != null) _throwsScroll?.ScrollTo(lastRow);
+        if (lastRow != null)
+        {
+            _throwsScroll?.ScrollTo(lastRow);
+            if (_state != State.Idle) UiFx.FlashRow(lastRow);
+        }
     }
 
-    private VisualElement AddPlayerThrowRow(int number, FiveOhOneVisit visit, int remAfter)
+    private VisualElement AddAIThrowRow(int number, FiveOhOneVisit visit, int remAfter)
+        => AddThrowRow(_aiThrowsContainer, number, visit, remAfter);
+
+    private static VisualElement AddThrowRow(VisualElement container, int number, FiveOhOneVisit visit, int remAfter)
     {
         var row = new VisualElement();
-        row.style.flexDirection    = FlexDirection.Row;
-        row.style.alignItems       = Align.Center;
-        row.style.paddingTop       = 4;
-        row.style.paddingBottom    = 4;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(RowBorder);
+        row.AddToClassList("list-row");
 
         var numLabel = new Label($"#{number}");
-        numLabel.style.color = new StyleColor(MutedColor);
-        numLabel.style.width = 28;
+        numLabel.AddToClassList("list-row__num");
 
-        var darts = string.Join("  ", visit.arrows.Select(DartArrow.FieldKey));
-        var dartsLabel = new Label(darts);
-        dartsLabel.style.flexGrow = 1;
+        var dartsLabel = new Label(string.Join("  ", visit.arrows.Select(DartArrow.FieldKey)));
+        dartsLabel.AddToClassList("list-row__darts");
 
         var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
-        scoredLabel.style.width = 36;
-        scoredLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        scoredLabel.style.color = new StyleColor(MutedColor);
+        scoredLabel.AddToClassList("list-row__score");
 
-        string remText = visit.busted ? "BUST" : visit.checkout ? $"{remAfter} ✓" : remAfter.ToString();
+        string remText = visit.busted ? "Bust" : visit.checkout ? "Out" : remAfter.ToString();
         var remLabel = new Label(remText);
-        remLabel.style.width = 64;
-        remLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        remLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        if (visit.busted) remLabel.style.color = new StyleColor(new Color(0.8f, 0.2f, 0.2f));
+        remLabel.AddToClassList("list-row__rem");
+        if (visit.busted)   remLabel.AddToClassList("list-row__rem--bust");
+        if (visit.checkout) remLabel.AddToClassList("list-row__rem--checkout");
 
         row.Add(numLabel); row.Add(dartsLabel); row.Add(scoredLabel); row.Add(remLabel);
-        _throwsContainer.Add(row);
+        container.Add(row);
         return row;
-    }
-
-    private void AddAIThrowRow(int number, FiveOhOneVisit visit, int remAfter)
-    {
-        var row = new VisualElement();
-        row.style.flexDirection    = FlexDirection.Row;
-        row.style.alignItems       = Align.Center;
-        row.style.paddingTop       = 4;
-        row.style.paddingBottom    = 4;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(RowBorder);
-
-        var numLabel = new Label($"#{number}");
-        numLabel.style.color = new StyleColor(MutedColor);
-        numLabel.style.width = 28;
-
-        var darts = string.Join("  ", visit.arrows.Select(DartArrow.FieldKey));
-        var dartsLabel = new Label(darts);
-        dartsLabel.style.flexGrow = 1;
-
-        var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
-        scoredLabel.style.width = 36;
-        scoredLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        scoredLabel.style.color = new StyleColor(MutedColor);
-
-        string remText = visit.busted ? "BUST" : visit.checkout ? $"{remAfter} ✓" : remAfter.ToString();
-        var remLabel = new Label(remText);
-        remLabel.style.width = 64;
-        remLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        remLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        if (visit.busted) remLabel.style.color = new StyleColor(new Color(0.8f, 0.2f, 0.2f));
-
-        row.Add(numLabel); row.Add(dartsLabel); row.Add(scoredLabel); row.Add(remLabel);
-        _aiThrowsContainer.Add(row);
     }
 
     private void RebuildFinishes(int remaining)
@@ -508,31 +516,21 @@ public class TrainingGameController : MonoBehaviour
 
         if (routes == null || routes.Count == 0)
         {
-            var none = new Label(remaining > 170 ? "Score zu hoch für ein Finish." : "Kein Finish mit ≤3 Darts möglich.");
-            none.style.color = new StyleColor(PlaceholderColor);
-            none.style.unityFontStyleAndWeight = FontStyle.Italic;
+            var none = new Label(remaining > 170 ? "Score too high for a finish." : "No finish with 3 darts.");
+            none.AddToClassList("placeholder-text");
             _finishesContainer.Add(none);
             return;
         }
 
-        var header = new Label($"Rest {remaining}");
-        header.style.fontSize = 14;
-        header.style.color = new StyleColor(MutedColor);
-        header.style.unityTextAlign = TextAnchor.MiddleCenter;
-        header.style.marginBottom = 6;
+        var header = new Label($"Remaining {remaining}");
+        header.AddToClassList("finish-header");
         _finishesContainer.Add(header);
 
         for (int i = 0; i < routes.Count; i++)
         {
-            bool primary = i == 0;
             var routeLabel = new Label(routes[i]);
-            routeLabel.style.fontSize = primary ? 28 : 20;
-            routeLabel.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
-            routeLabel.style.color = new StyleColor(primary
-                ? new Color(46f / 255f, 125f / 255f, 50f / 255f)
-                : new Color(0.35f, 0.35f, 0.35f));
-            routeLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            routeLabel.style.marginTop = primary ? 0 : 2;
+            routeLabel.AddToClassList("finish-route");
+            if (i == 0) routeLabel.AddToClassList("finish-route--primary");
             _finishesContainer.Add(routeLabel);
         }
     }
@@ -544,14 +542,13 @@ public class TrainingGameController : MonoBehaviour
 
         if (recent.Count == 0)
         {
-            var empty = new Label("Noch keine abgeschlossenen Legs.");
-            empty.style.color = new StyleColor(PlaceholderColor);
-            empty.style.unityFontStyleAndWeight = FontStyle.Italic;
+            var empty = new Label("No finished legs yet.");
+            empty.AddToClassList("placeholder-text");
             _recentContainer.Add(empty);
             return;
         }
 
-        _recentContainer.Add(MakeRecentRow("Darts", "Ø", "→Fin", "CO%", isHeader: true));
+        _recentContainer.Add(MakeRecentRow("Darts", "Avg", "Fin", "CO%", isHeader: true));
         for (int i = recent.Count - 1; i >= 0; i--)
         {
             var s = recent[i];
@@ -567,18 +564,13 @@ public class TrainingGameController : MonoBehaviour
     private static VisualElement MakeRecentRow(string c0, string c1, string c2, string c3, bool isHeader)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.justifyContent = Justify.SpaceBetween;
-        row.style.paddingTop = row.style.paddingBottom = 3;
-        if (!isHeader) { row.style.borderBottomWidth = 1; row.style.borderBottomColor = new StyleColor(RowBorder); }
+        row.AddToClassList("list-row");
+        if (isHeader) row.AddToClassList("list-row--header");
 
         foreach (var text in new[] { c0, c1, c2, c3 })
         {
             var label = new Label(text);
-            label.style.flexGrow = 1;
-            label.style.fontSize = 13;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
-            if (isHeader) { label.style.color = new StyleColor(MutedColor); label.style.unityFontStyleAndWeight = FontStyle.Bold; }
+            label.AddToClassList("list-row__cell");
             row.Add(label);
         }
         return row;
@@ -588,17 +580,19 @@ public class TrainingGameController : MonoBehaviour
     {
         _aiThrowsContainer.Clear();
         foreach (var slot in _aiDartSlots) slot.text = "";
-        _aiLastScoreLabel.text = "";
-        _aiScoreLabel.text     = "501";
+        _aiLastScoreLabel.text = "last –";
+        if (_aiAvgLabel != null) _aiAvgLabel.text = "avg –";
+        SetAiScore(DartRules.StartScore);
     }
 
     private void SetIdleDisplay()
     {
         _state = State.Idle;
-        _turnLabel.text     = "Neues Spiel starten";
+        _turnLabel.text     = "Start a new game";
         _feedbackLabel.text = "";
-        _playerScoreLabel.text = "501";
-        _aiScoreLabel.text     = "501";
+        SetPlayerScore(DartRules.StartScore);
+        SetAiScore(DartRules.StartScore);
+        RefreshPlateMeta();
         SetInputEnabled(false);
         RebuildFinishes(DartRules.StartScore);
         RebuildRecentList();
