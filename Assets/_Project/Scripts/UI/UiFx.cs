@@ -51,10 +51,11 @@ public static class UiFx
 
     // ── Panels / overlays ────────────────────────────────────────────────────
 
-    /// <summary>Fades <paramref name="from"/> out (120 ms) and slides <paramref name="to"/> in (220 ms).</summary>
+    /// <summary>Fades <paramref name="from"/> out (120 ms) and slides <paramref name="to"/> in (220 ms).
+    /// Switching to the already-visible panel is a no-op.</summary>
     public static void SwitchPanel(VisualElement from, VisualElement to)
     {
-        if (from == to) { if (to != null) Show(to); return; }
+        if (from == to) { if (to != null && to.resolvedStyle.display == DisplayStyle.None) Show(to); return; }
         if (from != null) Hide(from);
         if (to   != null) Show(to);
     }
