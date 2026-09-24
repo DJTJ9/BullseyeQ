@@ -59,7 +59,7 @@ public class FiveOhOneStatsPresenter
             return;
         }
 
-        _recentContainer.Add(MakeRow("Darts", "Avg", "→Fin", "CO%", isHeader: true));
+        _recentContainer.Add(MakeRow("Darts", "Avg", "Fin", "CO%", isHeader: true));
 
         // Newest first for readability.
         for (int i = recent.Count - 1; i >= 0; i--)

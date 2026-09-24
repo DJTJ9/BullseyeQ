@@ -309,7 +309,7 @@ public class FiveOhOneController : MonoBehaviour
         var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
         scoredLabel.AddToClassList("list-row__score");
 
-        string remText = visit.busted ? "Bust" : visit.checkout ? $"{remAfter} ✓" : remAfter.ToString();
+        string remText = visit.busted ? "Bust" : visit.checkout ? "Out" : remAfter.ToString();
         var remLabel = new Label(remText);
         remLabel.AddToClassList("list-row__rem");
         if (visit.busted)   remLabel.AddToClassList("list-row__rem--bust");
