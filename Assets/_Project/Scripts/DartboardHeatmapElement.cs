@@ -3,9 +3,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// Custom <see cref="VisualElement"/> that renders a dartboard heatmap using Painter2D.
-/// Call <see cref="UpdateHeatmap"/> with the latest hit-count dictionary to refresh the display.
-/// Colors range from dark grey (no hits) through blue to red (most hits).
+/// Dartboard heatmap drawn with Painter2D. Fills every field without a stroke, then draws the wire grid
+/// once on top (20 radials + rings, 1.5 px, full opacity) so no gaps appear between sectors.
+/// Keeps the board square (side = min(width, height − legend)), places the 20 numbers around the double ring,
+/// shows a min/max legend below and a hover tooltip with field + hits.
+/// Call <see cref="UpdateHeatmap"/> with the latest hit-count dictionary to refresh.
 /// </summary>
 public class DartboardHeatmapElement : VisualElement
 {
@@ -18,20 +20,55 @@ public class DartboardHeatmapElement : VisualElement
     const float RTrebleOuter = 0.629f;
     const float RDoubleInner = 0.953f;
 
+    const float BoardFactor      = 0.40f;  // board radius / square side — leaves room for the number ring
+    const float NumberRingFactor = 1.14f;  // number radius / board radius
+    const float LegendHeight     = 22f;
+    const float LegendWidth      = 120f;
+    const int   LegendSteps      = 24;
+    const float WireWidth        = 1.5f;
+
     private Dictionary<string, int> _hitCounts = new();
     private int _maxHits;
 
-    /// <summary>Registers the draw callback and stretches the element to fill its parent.</summary>
+    private readonly Label[] _numbers = new Label[20];
+    private readonly Label _legendMin;
+    private readonly Label _legendMax;
+    private readonly Label _tooltip;
+
+    private struct Geometry { public Vector2 center; public float radius; public float width; public float height; }
+
     public DartboardHeatmapElement()
     {
         generateVisualContent += Draw;
         style.flexGrow = 1;
-        style.width = Length.Percent(100);
+        style.width    = Length.Percent(100);
+
+        for (int i = 0; i < 20; i++)
+        {
+            var lbl = new Label(BoardNumbers[i].ToString()) { pickingMode = PickingMode.Ignore };
+            lbl.AddToClassList("heatmap-number");
+            _numbers[i] = lbl;
+            Add(lbl);
+        }
+
+        _legendMin = new Label("0") { pickingMode = PickingMode.Ignore };
+        _legendMin.AddToClassList("heatmap-legend-label");
+        Add(_legendMin);
+
+        _legendMax = new Label("") { pickingMode = PickingMode.Ignore };
+        _legendMax.AddToClassList("heatmap-legend-label");
+        Add(_legendMax);
+
+        _tooltip = new Label { pickingMode = PickingMode.Ignore };
+        _tooltip.AddToClassList("chart-tooltip");
+        Add(_tooltip);
+
+        RegisterCallback<GeometryChangedEvent>(_ => LayoutOverlay());
+        RegisterCallback<PointerMoveEvent>(OnPointerMove);
+        RegisterCallback<PointerLeaveEvent>(_ => _tooltip.style.display = DisplayStyle.None);
     }
 
-    /// <summary>
-    /// Replaces the hit-count data and triggers a repaint.
-    /// </summary>
+    /// <summary>Replaces the hit-count data and triggers a repaint.</summary>
     /// <param name="hitCounts">Map of field keys (e.g. "T20", "D5", "Bull") to hit counts.</param>
     public void UpdateHeatmap(Dictionary<string, int> hitCounts)
     {
@@ -39,41 +76,139 @@ public class DartboardHeatmapElement : VisualElement
         _maxHits = 0;
         foreach (var v in _hitCounts.Values)
             if (v > _maxHits) _maxHits = v;
+        _legendMax.text = _maxHits > 0 ? _maxHits.ToString() : "";
+        _legendMin.text = _maxHits > 0 ? "0" : "";
         MarkDirtyRepaint();
     }
 
-    private void Draw(MeshGenerationContext ctx)
-    {
-        float w = resolvedStyle.width;
-        float h = resolvedStyle.height;
-        if (w <= 0 || h <= 0) return;
+    // ── Geometry ─────────────────────────────────────────────────────────────
 
-        float boardRadius = Mathf.Min(w, h) * 0.46f;
-        var center = new Vector2(w / 2f, h / 2f);
-        var p = ctx.painter2D;
+    private Geometry GetGeometry()
+    {
+        float w = resolvedStyle.width, h = resolvedStyle.height;
+        float availH = h - LegendHeight;
+        float side = Mathf.Min(w, availH);
+        return new Geometry
+        {
+            width = w, height = h,
+            radius = side > 0 ? side * BoardFactor : 0f,
+            center = new Vector2(w * 0.5f, availH * 0.5f)
+        };
+    }
+
+    /// <summary>
+    /// Maps a local position to a field key ("S20", "T20", "D20", "25", "Bull") or null outside the board.
+    /// Pure function so it can be unit-tested; y grows downwards like UI Toolkit coordinates.
+    /// </summary>
+    public static string FieldKeyAt(Vector2 local, Vector2 center, float boardRadius)
+    {
+        if (boardRadius <= 0f) return null;
+        var d = local - center;
+        float dist = d.magnitude / boardRadius;
+        if (dist > 1f) return null;
+        if (dist <= RBullseye) return "Bull";
+        if (dist <= RBull) return "25";
+
+        // Painter2D angles: 0° = east, clockwise (y down). Sector i is centred at i*18° − 90°.
+        float deg = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg + 90f + 9f;
+        deg = (deg % 360f + 360f) % 360f;
+        int n = BoardNumbers[(int)(deg / 18f) % 20];
+
+        if (dist <= RTrebleInner) return $"S{n}";
+        if (dist <= RTrebleOuter) return $"T{n}";
+        if (dist <= RDoubleInner) return $"S{n}";
+        return $"D{n}";
+    }
+
+    private void LayoutOverlay()
+    {
+        var g = GetGeometry();
+        if (g.radius <= 0f) return;
 
         for (int i = 0; i < 20; i++)
         {
+            var pos = g.center + Dir(i * 18f - 90f) * g.radius * NumberRingFactor;
+            _numbers[i].style.left = pos.x - 12f;
+            _numbers[i].style.top  = pos.y - 8f;
+        }
+
+        float x0 = g.width * 0.5f - LegendWidth * 0.5f;
+        _legendMin.style.left = x0 - 16f;
+        _legendMax.style.left = x0 + LegendWidth + 6f;
+    }
+
+    // ── Drawing ──────────────────────────────────────────────────────────────
+
+    private void Draw(MeshGenerationContext ctx)
+    {
+        var g = GetGeometry();
+        if (g.radius <= 0f) return;
+        var p = ctx.painter2D;
+        float r = g.radius;
+
+        // 1. Fills — no strokes at all.
+        for (int i = 0; i < 20; i++)
+        {
             int n = BoardNumbers[i];
-            // Painter2D: 0° = east, clockwise. Dartboard north-top requires a -90° offset.
+            bool alt = (i & 1) == 1;
             float startDeg = i * 18f - 9f - 90f;
             float endDeg   = i * 18f + 9f - 90f;
 
-            DrawAnnularSector(p, center, RBull * boardRadius, RTrebleInner * boardRadius,
-                startDeg, endDeg, GetHeatColor($"S{n}"));
-            DrawAnnularSector(p, center, RTrebleInner * boardRadius, RTrebleOuter * boardRadius,
-                startDeg, endDeg, GetHeatColor($"T{n}"));
-            DrawAnnularSector(p, center, RTrebleOuter * boardRadius, RDoubleInner * boardRadius,
-                startDeg, endDeg, GetHeatColor($"S{n}"));
-            DrawAnnularSector(p, center, RDoubleInner * boardRadius, boardRadius,
-                startDeg, endDeg, GetHeatColor($"D{n}"));
+            FillAnnularSector(p, g.center, RBull * r, RTrebleInner * r, startDeg, endDeg, HeatFor($"S{n}", alt));
+            FillAnnularSector(p, g.center, RTrebleInner * r, RTrebleOuter * r, startDeg, endDeg, HeatFor($"T{n}", alt));
+            FillAnnularSector(p, g.center, RTrebleOuter * r, RDoubleInner * r, startDeg, endDeg, HeatFor($"S{n}", alt));
+            FillAnnularSector(p, g.center, RDoubleInner * r, r, startDeg, endDeg, HeatFor($"D{n}", alt));
+        }
+        FillCircle(p, g.center, RBull * r, HeatFor("25", false));
+        FillCircle(p, g.center, RBullseye * r, HeatFor("Bull", true));
+
+        // 2. Wire grid once on top.
+        p.strokeColor = UiTheme.Line;
+        p.lineWidth   = WireWidth;
+        p.lineCap     = LineCap.Butt;
+
+        p.BeginPath();
+        for (int i = 0; i < 20; i++)
+        {
+            var dir = Dir(i * 18f - 9f - 90f);
+            p.MoveTo(g.center + dir * (RBull * r));
+            p.LineTo(g.center + dir * r);
+        }
+        p.Stroke();
+
+        foreach (float rf in new[] { RBullseye, RBull, RTrebleInner, RTrebleOuter, RDoubleInner, 1f })
+        {
+            p.BeginPath();
+            p.Arc(g.center, rf * r, 0f, 360f, ArcDirection.Clockwise);
+            p.ClosePath();
+            p.Stroke();
         }
 
-        DrawFilledCircle(p, center, RBull * boardRadius, GetHeatColor("25"));
-        DrawFilledCircle(p, center, RBullseye * boardRadius, GetHeatColor("Bull"));
+        // 3. Legend ramp bar.
+        if (_maxHits <= 0) return;
+        float x0 = g.width * 0.5f - LegendWidth * 0.5f;
+        float y0 = g.height - LegendHeight + 8f;
+        float stepW = LegendWidth / LegendSteps;
+        for (int k = 0; k < LegendSteps; k++)
+        {
+            p.BeginPath();
+            p.MoveTo(new Vector2(x0 + k * stepW, y0));
+            p.LineTo(new Vector2(x0 + (k + 1) * stepW, y0));
+            p.LineTo(new Vector2(x0 + (k + 1) * stepW, y0 + 6f));
+            p.LineTo(new Vector2(x0 + k * stepW, y0 + 6f));
+            p.ClosePath();
+            p.fillColor = UiTheme.HeatColor(k + 1, LegendSteps, false);
+            p.Fill();
+        }
     }
 
-    private void DrawAnnularSector(Painter2D p, Vector2 center, float r1, float r2,
+    private Color HeatFor(string key, bool altSector)
+    {
+        _hitCounts.TryGetValue(key, out int hits);
+        return UiTheme.HeatColor(hits, _maxHits, altSector);
+    }
+
+    private static void FillAnnularSector(Painter2D p, Vector2 center, float r1, float r2,
         float startDeg, float endDeg, Color fill)
     {
         p.BeginPath();
@@ -84,21 +219,15 @@ public class DartboardHeatmapElement : VisualElement
         p.ClosePath();
         p.fillColor = fill;
         p.Fill();
-        p.strokeColor = new Color(0f, 0f, 0f, 0.35f);
-        p.lineWidth = 0.6f;
-        p.Stroke();
     }
 
-    private void DrawFilledCircle(Painter2D p, Vector2 center, float r, Color fill)
+    private static void FillCircle(Painter2D p, Vector2 center, float r, Color fill)
     {
         p.BeginPath();
         p.Arc(center, r, 0f, 360f, ArcDirection.Clockwise);
         p.ClosePath();
         p.fillColor = fill;
         p.Fill();
-        p.strokeColor = new Color(0f, 0f, 0f, 0.35f);
-        p.lineWidth = 0.6f;
-        p.Stroke();
     }
 
     private static Vector2 Dir(float deg)
@@ -107,16 +236,18 @@ public class DartboardHeatmapElement : VisualElement
         return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
     }
 
-    /// <summary>
-    /// Maps a field key to a heat color. Returns dark grey for zero hits,
-    /// and interpolates blue → red as hits approach <c>_maxHits</c>.
-    /// </summary>
-    private Color GetHeatColor(string key)
-    {
-        if (_maxHits == 0 || !_hitCounts.TryGetValue(key, out int hits) || hits == 0)
-            return new Color(0.2f, 0.2f, 0.2f);
+    // ── Hover tooltip ────────────────────────────────────────────────────────
 
-        float t = (float)hits / _maxHits;
-        return Color.Lerp(new Color(0.1f, 0.35f, 0.9f), new Color(0.95f, 0.1f, 0.05f), t);
+    private void OnPointerMove(PointerMoveEvent evt)
+    {
+        var g = GetGeometry();
+        string key = FieldKeyAt(evt.localPosition, g.center, g.radius);
+        if (key == null) { _tooltip.style.display = DisplayStyle.None; return; }
+
+        _hitCounts.TryGetValue(key, out int hits);
+        _tooltip.text = $"{key}  {hits}";
+        _tooltip.style.display = DisplayStyle.Flex;
+        _tooltip.style.left = Mathf.Clamp(evt.localPosition.x + 12f, 0f, g.width - 64f);
+        _tooltip.style.top  = Mathf.Clamp(evt.localPosition.y - 26f, 0f, g.height - 22f);
     }
 }
