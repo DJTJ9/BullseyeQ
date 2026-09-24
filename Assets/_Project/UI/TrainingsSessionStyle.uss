@@ -653,6 +653,9 @@
     transition-duration: var(--bq-dur-pop), var(--bq-dur-shake), var(--bq-dur-flash), var(--bq-dur-flash);
 }
 
+/* Flash entry stays instant on the plate; exit eases via .score-plate's own transition once both classes drop. */
+.score-plate.bq-fx--flash { transition-duration: 0s; }
+
 /* ── Root overlays ────────────────────────────────────────────────────── */
 
 .modal-overlay {
