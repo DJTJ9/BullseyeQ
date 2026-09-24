@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// MonoBehaviour that drives the Scoring tab UI.
+/// MonoBehaviour that drives the Scoring tab UI and the app-level screen router.
 /// Handles dart input, the throw-history list, the session-control buttons,
-/// and delegates round recording and stats display.
+/// sidebar navigation (with the sliding rail marker) and the Sessions sub-tabs.
 /// </summary>
 public class DartInputController : MonoBehaviour
 {
+    private VisualElement _root;
     private TextField[] _fields;
     private Label _feedbackLabel;
     private ScrollView _roundsScroll;
@@ -22,9 +23,12 @@ public class DartInputController : MonoBehaviour
 
     private Button[] _navButtons;
     private VisualElement[] _panels;
+    private VisualElement _navMarker;
+    private int _activePanel = -1;
 
     private Button[]          _sessionTabBtns;
     private VisualElement[]   _sessionTabPanels;
+    private int               _activeSessionTab = -1;
     private TextField         _foField0;
     private CheckOutController _checkOutController;
 
@@ -37,7 +41,8 @@ public class DartInputController : MonoBehaviour
     /// <summary>Queries all UI elements and registers input and button callbacks.</summary>
     void OnEnable()
     {
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        _root = GetComponent<UIDocument>().rootVisualElement;
+        var root = _root;
 
         _fields = new[]
         {
@@ -58,14 +63,6 @@ public class DartInputController : MonoBehaviour
         _btnRemoveLast.clicked   += OnRemoveLast;
         _btnNewSession.clicked   += OnNewSession;
         _btnResetSession.clicked += OnResetSession;
-
-        foreach (var field in _fields)
-        {
-            // Force white background on the inner input element to avoid green section bleed-through.
-            var inputEl = field.Q(className: "unity-base-field__input");
-            if (inputEl != null)
-                inputEl.style.backgroundColor = Color.white;
-        }
 
         for (int i = 0; i < _fields.Length; i++)
         {
@@ -112,6 +109,7 @@ public class DartInputController : MonoBehaviour
             logoImage.image = _logoTexture;
 
         // Sidebar navigation
+        _navMarker = root.Q<VisualElement>("nav-marker");
         _navButtons = new Button[6];
         _navButtons[0] = root.Q<Button>("nav-overview");
         _navButtons[1] = root.Q<Button>("nav-training-game");
@@ -134,6 +132,14 @@ public class DartInputController : MonoBehaviour
             if (_navButtons[idx] != null)
                 _navButtons[idx].clicked += () => ShowPanel(idx);
         }
+
+        // Keep the rail marker aligned when the sidebar lays out (first frame, resize).
+        var sidebar = root.Q<VisualElement>("sidebar");
+        sidebar?.RegisterCallback<GeometryChangedEvent>(_ =>
+        {
+            if (_activePanel >= 0) UiFx.MoveNavMarker(_navMarker, _navButtons[_activePanel]);
+        });
+
         _overviewPresenter     = new OverviewPresenter(root);
         _statsPresenter2       = new StatsPresenter(root);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
@@ -142,6 +148,7 @@ public class DartInputController : MonoBehaviour
         var btnQuit = root.Q<Button>("nav-quit");
         if (btnQuit != null) btnQuit.clicked += AppControl.Quit;
 
+        ShowSessionTab(0);
         ShowPanel(0);
     }
 
@@ -172,9 +179,9 @@ public class DartInputController : MonoBehaviour
 
     private void ShowSessionTab(int index)
     {
-        for (int i = 0; i < _sessionTabPanels.Length; i++)
-            if (_sessionTabPanels[i] != null)
-                _sessionTabPanels[i].style.display = i == index ? DisplayStyle.Flex : DisplayStyle.None;
+        var from = _activeSessionTab >= 0 ? _sessionTabPanels[_activeSessionTab] : null;
+        UiFx.SwitchPanel(from, _sessionTabPanels[index]);
+        _activeSessionTab = index;
 
         for (int i = 0; i < _sessionTabBtns.Length; i++)
         {
@@ -190,11 +197,10 @@ public class DartInputController : MonoBehaviour
 
     private void ShowPanel(int index)
     {
-        for (int i = 0; i < _panels.Length; i++)
-        {
-            if (_panels[i] == null) continue;
-            _panels[i].style.display = i == index ? DisplayStyle.Flex : DisplayStyle.None;
-        }
+        var from = _activePanel >= 0 ? _panels[_activePanel] : null;
+        UiFx.SwitchPanel(from, _panels[index]);
+        _activePanel = index;
+
         for (int i = 0; i < _navButtons.Length; i++)
         {
             if (_navButtons[i] == null) continue;
@@ -203,6 +209,8 @@ public class DartInputController : MonoBehaviour
             else
                 _navButtons[i].RemoveFromClassList("nav-item--active");
         }
+        UiFx.MoveNavMarker(_navMarker, _navButtons[index]);
+
         if (index == 2) FocusField(0);
 
         var profile = DataManager.Instance.Profile;
@@ -225,7 +233,7 @@ public class DartInputController : MonoBehaviour
 
         if (!DartArrow.TryParse(input, out DartArrow arrow))
         {
-            _feedbackLabel.text = $"Invalid input: \"{input}\" – allowed: 1–20, 25, with + (Triple) or - (Double)";
+            _feedbackLabel.text = $"Invalid input: \"{input}\" – allowed: 1–20, 25, with + (triple) or - (double)";
             _fields[index].SetValueWithoutNotify("");
             FocusField(index);
             return;
@@ -244,7 +252,9 @@ public class DartInputController : MonoBehaviour
             DataManager.Instance.AddRoundToCurrentSession(round);
 
             var session = DataManager.Instance.CurrentScoringSession;
-            AddRoundRow(session.rounds.Count, round);
+            var row = AddRoundRow(session.rounds.Count, round);
+            UiFx.FlashRow(row);
+            if (round.totalScore == 180) UiFx.ShowBanner(_root, "180!");
             RefreshStats();
 
             foreach (var f in _fields) f.SetValueWithoutNotify("");
@@ -306,28 +316,22 @@ public class DartInputController : MonoBehaviour
             _statsPresenter.Refresh(session, DataManager.Instance.Profile);
     }
 
-    private void AddRoundRow(int roundNumber, ScoringRound round)
+    private VisualElement AddRoundRow(int roundNumber, ScoringRound round)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.justifyContent = Justify.SpaceBetween;
-        row.style.paddingTop = 4;
-        row.style.paddingBottom = 4;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(new Color(0.85f, 0.85f, 0.85f));
+        row.AddToClassList("list-row");
 
         var numberLabel = new Label($"#{roundNumber}");
-        numberLabel.style.color = new StyleColor(new Color(0.5f, 0.5f, 0.5f));
-        numberLabel.style.width = 32;
+        numberLabel.AddToClassList("list-row__num");
 
         var dartsLabel = new Label(
             $"{round.arrows[0].score}  +  {round.arrows[1].score}  +  {round.arrows[2].score}"
         );
+        dartsLabel.AddToClassList("list-row__darts");
 
         var totalLabel = new Label(round.totalScore.ToString());
-        totalLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        totalLabel.style.width = 40;
-        totalLabel.style.unityTextAlign = TextAnchor.MiddleRight;
+        totalLabel.AddToClassList("list-row__rem");
+        if (round.totalScore == 180) totalLabel.AddToClassList("list-row__rem--checkout");
 
         row.Add(numberLabel);
         row.Add(dartsLabel);
@@ -335,6 +339,7 @@ public class DartInputController : MonoBehaviour
         _roundsContainer.Add(row);
 
         _roundsScroll?.ScrollTo(row);
+        return row;
     }
 
     private void FocusField(int index)
