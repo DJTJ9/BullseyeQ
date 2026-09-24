@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // Testet UiTheme.HeatColor (Heat-Ramp-Mapping) und UiFx.TickValue (Zähler-Interpolation).
 [TestFixture]
@@ -72,4 +73,39 @@ public class UiThemeTests
 
     [Test]
     public void TickValue_CountsUpToo()             => Assert.AreEqual(25, UiFx.TickValue(0, 100, 0.25f));
+
+    // --- UiFx reduced motion ---
+
+    [Test]
+    public void NoMotion_WalksAncestorChain()
+    {
+        var root = new VisualElement(); var mid = new VisualElement(); var leaf = new VisualElement();
+        root.Add(mid); mid.Add(leaf);
+        Assert.IsFalse(UiFx.NoMotion(leaf), "no class anywhere");
+        root.AddToClassList("bq-no-motion");
+        Assert.IsTrue(UiFx.NoMotion(leaf), "class on root ancestor");
+    }
+
+    [Test]
+    public void SetReducedMotion_TogglesRootClass()
+    {
+        var root = new VisualElement();
+        UiFx.SetReducedMotion(root, true);
+        Assert.IsTrue(root.ClassListContains("bq-no-motion"));
+        UiFx.SetReducedMotion(root, false);
+        Assert.IsFalse(root.ClassListContains("bq-no-motion"));
+    }
+
+    [Test]
+    public void ApplyPersistedReducedMotion_ReadsPlayerPrefs()
+    {
+        var root = new VisualElement();
+        PlayerPrefs.SetInt(UiFx.ReduceMotionPrefKey, 1);
+        UiFx.ApplyPersistedReducedMotion(root);
+        Assert.IsTrue(root.ClassListContains("bq-no-motion"), "pref on");
+        PlayerPrefs.SetInt(UiFx.ReduceMotionPrefKey, 0);
+        UiFx.ApplyPersistedReducedMotion(root);
+        Assert.IsFalse(root.ClassListContains("bq-no-motion"), "pref off");
+        PlayerPrefs.DeleteKey(UiFx.ReduceMotionPrefKey);
+    }
 }

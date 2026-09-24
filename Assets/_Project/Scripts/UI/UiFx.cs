@@ -28,6 +28,10 @@ public static class UiFx
 
     static IVisualElementScheduledItem _bannerHide;
 
+    // Tracks a scheduled SwitchPanel enter so a rapid second switch can cancel a stale
+    // Show() that would otherwise land on a target that is no longer current.
+    static IVisualElementScheduledItem _pendingShow;
+
     /// <summary>True when the element's panel root has reduced motion enabled.</summary>
     public static bool NoMotion(VisualElement el)
     {
@@ -51,13 +55,20 @@ public static class UiFx
 
     // ── Panels / overlays ────────────────────────────────────────────────────
 
-    /// <summary>Fades <paramref name="from"/> out (120 ms) and slides <paramref name="to"/> in (220 ms).
+    /// <summary>Fades <paramref name="from"/> out first (120 ms exit), then slides <paramref name="to"/> in
+    /// (220 ms enter) once the exit finishes, so the two panels never overlap and squash the shared flex row.
     /// Switching to the already-visible panel is a no-op.</summary>
     public static void SwitchPanel(VisualElement from, VisualElement to)
     {
+        _pendingShow?.Pause();
+        _pendingShow = null;
+
         if (from == to) { if (to != null && to.resolvedStyle.display == DisplayStyle.None) Show(to); return; }
         if (from != null) Hide(from);
-        if (to   != null) Show(to);
+        if (to == null) return;
+
+        if (from == null || NoMotion(to)) Show(to);
+        else _pendingShow = to.schedule.Execute(() => Show(to)).StartingIn(ExitMs);
     }
 
     /// <summary>display:flex with enter animation (opacity 0 / translate 16px → identity).</summary>
@@ -139,6 +150,15 @@ public static class UiFx
         el.RemoveFromClassList(ShakeR);
     }
 
+    /// <summary>Removes <c>bq-fx</c> only when no other fx class still needs it — Pop, Shake and FlashRow
+    /// share the class on the same element, so whichever finishes last must be the one to drop it.</summary>
+    static void ReleaseFx(VisualElement el)
+    {
+        if (el.ClassListContains(PopClass) || el.ClassListContains(ShakeL) ||
+            el.ClassListContains(ShakeR) || el.ClassListContains(FlashClass)) return;
+        el.RemoveFromClassList(FxClass);
+    }
+
     /// <summary>scale 1 → 1.06 → 1 (180 ms total).</summary>
     public static void Pop(VisualElement el)
     {
@@ -153,7 +173,7 @@ public static class UiFx
             step++;
             if (step == 1) { el.RemoveFromClassList(PopClass); return; } // 90 ms → ease back starts
             item.Pause();
-            el.RemoveFromClassList(FxClass);                            // 180 ms → animation done
+            ReleaseFx(el);                                              // 180 ms → animation done
             _running.Remove(el);
         }).Every(PopHalfMs);
         _running[el] = item;
@@ -174,7 +194,7 @@ public static class UiFx
             if (step >= ShakeSteps)
             {
                 item.Pause();
-                el.RemoveFromClassList(FxClass);
+                ReleaseFx(el);
                 _running.Remove(el);
                 return;
             }
@@ -190,8 +210,13 @@ public static class UiFx
         if (el == null || NoMotion(el)) return;
         el.AddToClassList(FxClass);
         el.AddToClassList(FlashClass);                                 // 0 s → instant highlight
-        el.schedule.Execute(() => el.RemoveFromClassList(FlashClass)); // next frame → 400 ms fade
-        el.schedule.Execute(() => el.RemoveFromClassList(FxClass)).StartingIn(FlashMs); // fade done
+        // FlashClass stays on until the fade is done: it also guards ReleaseFx (Pop/Shake finishing
+        // in between must not strip bq-fx out from under this element's still-running flash).
+        el.schedule.Execute(() =>
+        {
+            el.RemoveFromClassList(FlashClass);
+            ReleaseFx(el);
+        }).StartingIn(FlashMs);
     }
 
     // ── Lower third banner ───────────────────────────────────────────────────

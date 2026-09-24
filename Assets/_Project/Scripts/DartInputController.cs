@@ -45,7 +45,9 @@ public class DartInputController : MonoBehaviour
         var root = _root;
 
         // Must precede the first panel switch below, so Show() sees the correct NoMotion state.
-        UiFx.ApplyPersistedReducedMotion(_root);
+        // Applied to the same element SettingsController toggles (#root, one level below the
+        // UIDocument's rootVisualElement) so a later un-tick clears the same ancestor this set.
+        UiFx.ApplyPersistedReducedMotion(_root.Q<VisualElement>("root") ?? _root);
 
         _fields = new[]
         {

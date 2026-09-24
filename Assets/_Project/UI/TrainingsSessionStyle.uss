@@ -647,6 +647,12 @@
 .bq-fx--shake-r { translate: 6px 0; }
 .bq-fx--flash   { background-color: var(--bq-live-dim); transition-duration: 0s; }
 
+/* Plate keeps its edge transition while bq-fx is attached (bust edge blink). */
+.score-plate.bq-fx {
+    transition-property: scale, translate, background-color, border-left-color;
+    transition-duration: var(--bq-dur-pop), var(--bq-dur-shake), var(--bq-dur-flash), var(--bq-dur-flash);
+}
+
 /* ── Root overlays ────────────────────────────────────────────────────── */
 
 .modal-overlay {
