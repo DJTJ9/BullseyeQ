@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 public static class UiFx
 {
     public const string NoMotionClass = "bq-no-motion";
+    public const string ReduceMotionPrefKey = "bq_reduce_motion";
     const string EnterClass  = "content-panel--enter";
     const string ExitClass   = "content-panel--exit";
     const string FxClass     = "bq-fx";
@@ -39,6 +40,13 @@ public static class UiFx
     {
         if (reduced) root.AddToClassList(NoMotionClass);
         else         root.RemoveFromClassList(NoMotionClass);
+    }
+
+    /// <summary>Reads the persisted reduce-motion preference and applies it to <paramref name="root"/>.</summary>
+    public static void ApplyPersistedReducedMotion(VisualElement root)
+    {
+        bool reduced = PlayerPrefs.GetInt(ReduceMotionPrefKey, 0) == 1;
+        SetReducedMotion(root, reduced);
     }
 
     // ── Panels / overlays ────────────────────────────────────────────────────

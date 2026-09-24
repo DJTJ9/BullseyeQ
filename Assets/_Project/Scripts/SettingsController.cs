@@ -8,8 +8,6 @@ using UnityEngine.UIElements;
 /// </summary>
 public class SettingsController : MonoBehaviour
 {
-    private const string ReduceMotionKey = "bq_reduce_motion";
-
     private VisualElement _modalOverlay;
     private Action        _pendingAction;
 
@@ -20,9 +18,9 @@ public class SettingsController : MonoBehaviour
 
         _modalOverlay = root.Q<VisualElement>("modal-overlay");
 
-        bool reduced = PlayerPrefs.GetInt(ReduceMotionKey, 0) == 1;
-        if (appRoot != null) UiFx.SetReducedMotion(appRoot, reduced);
+        if (appRoot != null) UiFx.ApplyPersistedReducedMotion(appRoot);
 
+        bool reduced = PlayerPrefs.GetInt(UiFx.ReduceMotionPrefKey, 0) == 1;
         var toggle = root.Q<Toggle>("settings-toggle-motion");
         if (toggle != null)
         {
@@ -30,7 +28,7 @@ public class SettingsController : MonoBehaviour
             toggle.RegisterValueChangedCallback(evt =>
             {
                 if (appRoot != null) UiFx.SetReducedMotion(appRoot, evt.newValue);
-                PlayerPrefs.SetInt(ReduceMotionKey, evt.newValue ? 1 : 0);
+                PlayerPrefs.SetInt(UiFx.ReduceMotionPrefKey, evt.newValue ? 1 : 0);
                 PlayerPrefs.Save();
             });
         }

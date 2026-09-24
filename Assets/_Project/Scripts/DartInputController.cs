@@ -44,6 +44,9 @@ public class DartInputController : MonoBehaviour
         _root = GetComponent<UIDocument>().rootVisualElement;
         var root = _root;
 
+        // Must precede the first panel switch below, so Show() sees the correct NoMotion state.
+        UiFx.ApplyPersistedReducedMotion(_root);
+
         _fields = new[]
         {
             root.Q<TextField>("dart-field-0"),
