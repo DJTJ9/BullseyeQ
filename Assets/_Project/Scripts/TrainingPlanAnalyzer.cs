@@ -40,12 +40,12 @@ public static class TrainingPlanAnalyzer
         if (m.threeDartAverage < 35f)
             candidates.Add((30, Rec(TrainingFocus.Scoring,
                 "Build your scoring",
-                $"Avg {m.threeDartAverage:F1} points (target: ≥ 35)",
+                $"Avg {m.threeDartAverage:F1} points (target: 35+)",
                 "Training Sessions › Scoring")));
         else if (m.threeDartAverage < 50f)
             candidates.Add((20, Rec(TrainingFocus.Scoring,
                 "Raise your scoring",
-                $"Avg {m.threeDartAverage:F1} points (target: ≥ 50)",
+                $"Avg {m.threeDartAverage:F1} points (target: 50+)",
                 "Training Sessions › 501")));
 
         // Checkout — only meaningful once player regularly reaches finishes
@@ -57,12 +57,12 @@ public static class TrainingPlanAnalyzer
             if (m.checkoutRate < 0.12f)
                 candidates.Add((30, Rec(TrainingFocus.Checkout,
                     "Doubles need work",
-                    $"Checkout rate {m.checkoutRate:P0} (target: ≥ 15 %)",
+                    $"Checkout rate {m.checkoutRate:P0} (target: 15 %+)",
                     "Training Sessions › Doubles › Five Checkouts")));
             else if (m.checkoutRate < 0.20f)
                 candidates.Add((20, Rec(TrainingFocus.Checkout,
                     "Sharpen your doubles",
-                    $"Checkout rate {m.checkoutRate:P0} (target: ≥ 20 %)",
+                    $"Checkout rate {m.checkoutRate:P0} (target: 20 %+)",
                     "Training Sessions › Doubles › Checkout Challenge")));
         }
 
@@ -72,12 +72,12 @@ public static class TrainingPlanAnalyzer
             if (m.tripleHitRate < 0.15f)
                 candidates.Add((25, Rec(TrainingFocus.Triple,
                     "Train the treble zone",
-                    $"Triple rate {m.tripleHitRate:P0} (target: ≥ 15 %)",
+                    $"Triple rate {m.tripleHitRate:P0} (target: 15 %+)",
                     "Training Sessions › Scoring")));
             else if (m.tripleHitRate < 0.25f)
                 candidates.Add((15, Rec(TrainingFocus.Triple,
                     "Improve T20 consistency",
-                    $"Triple rate {m.tripleHitRate:P0} (target: ≥ 25 %)",
+                    $"Triple rate {m.tripleHitRate:P0} (target: 25 %+)",
                     "Training Sessions › Scoring")));
         }
 
@@ -85,7 +85,7 @@ public static class TrainingPlanAnalyzer
         if (m.wastedDartRate > 0.45f && m.threeDartAverage >= 35f)
             candidates.Add((15, Rec(TrainingFocus.Consistency,
                 "Fewer wasted darts",
-                $"Wasted rate {m.wastedDartRate:P0} (target: ≤ 35 %)",
+                $"Wasted rate {m.wastedDartRate:P0} (target: max. 35 %)",
                 "Training Sessions › Scoring")));
 
         var top = candidates
