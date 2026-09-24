@@ -11,12 +11,17 @@ using UnityEngine.UIElements;
 /// </summary>
 public class FiveOhOneController : MonoBehaviour
 {
+    private VisualElement _root;
     private TextField[] _fields;
+    private VisualElement _fieldsRow;
     private Label _feedbackLabel;
     private Label _currentScoreLabel;
+    private Label _plateAvgLabel;
+    private VisualElement _plate;
     private ScrollView _throwsScroll;
     private VisualElement _throwsContainer;
     private VisualElement _finishesContainer;
+    private VisualElement _lastThrowRow;
 
     private Button _btnRemoveLast;
     private Button _btnNewSession;
@@ -30,6 +35,9 @@ public class FiveOhOneController : MonoBehaviour
     /// <summary>Committed remaining at the start of the current visit.</summary>
     private int _visitStartRemaining;
 
+    /// <summary>Last value shown on the big score label — start point for the tick animation.</summary>
+    private int _shownRemaining = DartRules.StartScore;
+
     /// <summary>True once the leg has been won; input is locked until a new session starts.</summary>
     private bool _legFinished;
 
@@ -40,7 +48,8 @@ public class FiveOhOneController : MonoBehaviour
     {
         // The 501 leg is created by GameManager after the profile is loaded (see GameManager.Awake).
         // We must NOT create it here: OnEnable can run before LoadProfile, which would orphan the leg.
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        _root = GetComponent<UIDocument>().rootVisualElement;
+        var root = _root;
 
         _fields = new[]
         {
@@ -48,8 +57,11 @@ public class FiveOhOneController : MonoBehaviour
             root.Q<TextField>("fo-dart-field-1"),
             root.Q<TextField>("fo-dart-field-2")
         };
+        _fieldsRow         = root.Q<VisualElement>("fo-fields-row");
         _feedbackLabel     = root.Q<Label>("fo-feedback-label");
         _currentScoreLabel = root.Q<Label>("fo-current-score");
+        _plateAvgLabel     = root.Q<Label>("fo-plate-avg");
+        _plate             = root.Q<VisualElement>("fo-plate");
         _throwsScroll      = root.Q<ScrollView>("fo-throws-scroll");
         _throwsContainer   = root.Q<VisualElement>("fo-throws-container");
         _finishesContainer = root.Q<VisualElement>("fo-finishes-container");
@@ -63,13 +75,6 @@ public class FiveOhOneController : MonoBehaviour
         _btnRemoveLast.clicked   += OnRemoveLast;
         _btnNewSession.clicked   += OnNewSession;
         _btnResetSession.clicked += OnResetSession;
-
-        foreach (var field in _fields)
-        {
-            var inputEl = field.Q(className: "unity-base-field__input");
-            if (inputEl != null)
-                inputEl.style.backgroundColor = Color.white;
-        }
 
         for (int i = 0; i < _fields.Length; i++)
         {
@@ -85,7 +90,6 @@ public class FiveOhOneController : MonoBehaviour
                 }
             }, TrickleDown.TrickleDown);
         }
-
     }
 
     /// <summary>
@@ -106,7 +110,7 @@ public class FiveOhOneController : MonoBehaviour
     {
         if (_legFinished)
         {
-            _feedbackLabel.text = "Leg beendet – „New Session“ drücken.";
+            _feedbackLabel.text = "Leg finished – press New session.";
             return;
         }
 
@@ -117,7 +121,7 @@ public class FiveOhOneController : MonoBehaviour
         {
             if (!DartArrow.TryParse(_fields[i].value, out var a))
             {
-                _feedbackLabel.text = $"Dart {i + 1} ungültig: \"{_fields[i].value}\" – erlaubt: 1–20, 25, mit + (Triple) oder - (Double)";
+                _feedbackLabel.text = $"Dart {i + 1} invalid: \"{_fields[i].value}\" – allowed: 1–20, 25, with + (triple) or - (double)";
                 FocusField(i);
                 return;
             }
@@ -136,17 +140,22 @@ public class FiveOhOneController : MonoBehaviour
                 CommitVisit(darts.GetRange(0, i + 1), busted: false, checkout: true);
                 DataManager.Instance.EndAndSaveFiveOhOne();
                 _legFinished = true;
-                _feedbackLabel.text = "Checkout! 🎯";
+                _feedbackLabel.text = "Checkout!";
+                UiFx.ShowBanner(_root, "Checkout!");
                 ClearFields();
                 RefreshAll();
+                UiFx.FlashRow(_lastThrowRow);
                 return;
             }
             if (result == DartResult.Bust)
             {
                 CommitVisit(darts.GetRange(0, i + 1), busted: true, checkout: false);
-                _feedbackLabel.text = "BUST – Visit zählt 0.";
+                _feedbackLabel.text = "Bust – visit counts 0.";
+                UiFx.Shake(_fieldsRow);
+                UiFx.FlashRow(_plate);
                 ClearFields();
                 RefreshAll();
+                UiFx.FlashRow(_lastThrowRow);
                 FocusField(0);
                 return;
             }
@@ -159,11 +168,12 @@ public class FiveOhOneController : MonoBehaviour
             CommitVisit(darts, busted: false, checkout: false);
             ClearFields();
             RefreshAll();
+            UiFx.FlashRow(_lastThrowRow);
             FocusField(0);
         }
         else
         {
-            _currentScoreLabel.text = running.ToString();
+            SetRemaining(running);
             RebuildFinishes(running);
             FocusField(index + 1);
         }
@@ -175,6 +185,8 @@ public class FiveOhOneController : MonoBehaviour
         var visit = new FiveOhOneVisit(darts, busted, checkout);
         DataManager.Instance.AddVisitToCurrentFiveOhOne(visit);
         _visitStartRemaining = Session.remaining;
+        UiFx.Pop(_plate);
+        if (!busted && visit.scoredPoints == 180) UiFx.ShowBanner(_root, "180!");
     }
 
     /// <summary>Clears the last dart still being entered, or else removes the last committed visit.</summary>
@@ -237,10 +249,19 @@ public class FiveOhOneController : MonoBehaviour
     private void RefreshAll()
     {
         int live = LiveRemaining();
-        _currentScoreLabel.text = live.ToString();
+        SetRemaining(live);
+        if (_plateAvgLabel != null)
+            _plateAvgLabel.text = Session.totalDartsThrown > 0 ? $"avg {Session.threeDartAverage:F1}" : "avg –";
         RebuildThrows();
         RebuildFinishes(live);
         _statsPresenter.Refresh(Session, DataManager.Instance.Profile);
+    }
+
+    /// <summary>Ticks the big score label from its last shown value to <paramref name="value"/>.</summary>
+    private void SetRemaining(int value)
+    {
+        UiFx.TickNumber(_currentScoreLabel, _shownRemaining, value);
+        _shownRemaining = value;
     }
 
     /// <summary>The remaining score including any leading darts entered but not yet committed.</summary>
@@ -270,38 +291,29 @@ public class FiveOhOneController : MonoBehaviour
             lastRow = AddThrowRow(i + 1, v, remAfter);
         }
 
+        _lastThrowRow = lastRow;
         if (lastRow != null) _throwsScroll?.ScrollTo(lastRow);
     }
 
     private VisualElement AddThrowRow(int number, FiveOhOneVisit visit, int remAfter)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.alignItems = Align.Center;
-        row.style.paddingTop = 4;
-        row.style.paddingBottom = 4;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(new Color(0.85f, 0.85f, 0.85f));
+        row.AddToClassList("list-row");
 
         var numberLabel = new Label($"#{number}");
-        numberLabel.style.color = new StyleColor(new Color(0.5f, 0.5f, 0.5f));
-        numberLabel.style.width = 28;
+        numberLabel.AddToClassList("list-row__num");
 
-        var darts = string.Join("  ", visit.arrows.Select(DartArrow.FieldKey));
-        var dartsLabel = new Label(darts);
-        dartsLabel.style.flexGrow = 1;
+        var dartsLabel = new Label(string.Join("  ", visit.arrows.Select(DartArrow.FieldKey)));
+        dartsLabel.AddToClassList("list-row__darts");
 
         var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
-        scoredLabel.style.width = 36;
-        scoredLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        scoredLabel.style.color = new StyleColor(new Color(0.5f, 0.5f, 0.5f));
+        scoredLabel.AddToClassList("list-row__score");
 
-        string remText = visit.busted ? "BUST" : visit.checkout ? $"{remAfter} ✓" : remAfter.ToString();
+        string remText = visit.busted ? "Bust" : visit.checkout ? $"{remAfter} ✓" : remAfter.ToString();
         var remLabel = new Label(remText);
-        remLabel.style.width = 64;
-        remLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        remLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        if (visit.busted) remLabel.style.color = new StyleColor(new Color(0.8f, 0.2f, 0.2f));
+        remLabel.AddToClassList("list-row__rem");
+        if (visit.busted)   remLabel.AddToClassList("list-row__rem--bust");
+        if (visit.checkout) remLabel.AddToClassList("list-row__rem--checkout");
 
         row.Add(numberLabel);
         row.Add(dartsLabel);
@@ -319,32 +331,22 @@ public class FiveOhOneController : MonoBehaviour
 
         if (routes == null || routes.Count == 0)
         {
-            var none = new Label(remaining > 170 ? "Score zu hoch für ein Finish." : "Kein Finish mit ≤3 Darts möglich.");
-            none.style.color = new StyleColor(new Color(0.67f, 0.67f, 0.67f));
-            none.style.unityFontStyleAndWeight = FontStyle.Italic;
+            var none = new Label(remaining > 170 ? "Score too high for a finish." : "No finish with 3 darts.");
+            none.AddToClassList("placeholder-text");
             _finishesContainer.Add(none);
             return;
         }
 
-        var header = new Label($"Rest {remaining}");
-        header.style.fontSize = 14;
-        header.style.color = new StyleColor(new Color(0.5f, 0.5f, 0.5f));
-        header.style.unityTextAlign = TextAnchor.MiddleCenter;
-        header.style.marginBottom = 6;
+        var header = new Label($"Remaining {remaining}");
+        header.AddToClassList("finish-header");
         _finishesContainer.Add(header);
 
         // First route is the recommended one (highlighted); the rest are alternatives.
         for (int i = 0; i < routes.Count; i++)
         {
-            bool primary = i == 0;
             var routeLabel = new Label(routes[i]);
-            routeLabel.style.fontSize = primary ? 28 : 20;
-            routeLabel.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
-            routeLabel.style.color = new StyleColor(primary
-                ? new Color(46f / 255f, 125f / 255f, 50f / 255f)
-                : new Color(0.35f, 0.35f, 0.35f));
-            routeLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            routeLabel.style.marginTop = primary ? 0 : 2;
+            routeLabel.AddToClassList("finish-route");
+            if (i == 0) routeLabel.AddToClassList("finish-route--primary");
             _finishesContainer.Add(routeLabel);
         }
     }

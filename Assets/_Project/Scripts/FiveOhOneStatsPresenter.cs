@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
 /// Binds 501 statistics to the right-hand stats panel, the heatmap, and the
-/// "last 5 legs" list in the centre column. Missing stats are shown as "n.a.".
+/// "recent legs" list in the centre column. Missing stats are shown as "n.a.".
 /// Call <see cref="Refresh"/> after every change to keep the display in sync.
 /// </summary>
 public class FiveOhOneStatsPresenter
@@ -17,10 +16,6 @@ public class FiveOhOneStatsPresenter
     private readonly Label _checkout;
     private readonly DartboardHeatmapElement _heatmap;
     private readonly VisualElement _recentContainer;
-
-    private static readonly Color RowBorder = new(0.85f, 0.85f, 0.85f);
-    private static readonly Color Muted     = new(0.5f, 0.5f, 0.5f);
-    private static readonly Color Placeholder = new(0.67f, 0.67f, 0.67f);
 
     /// <summary>Queries all 501 stat elements from <paramref name="root"/> and injects the heatmap.</summary>
     public FiveOhOneStatsPresenter(VisualElement root)
@@ -38,8 +33,6 @@ public class FiveOhOneStatsPresenter
     }
 
     /// <summary>Updates the stat labels, heatmap and recent-legs list from the current leg and profile.</summary>
-    /// <param name="session">The active 501 leg.</param>
-    /// <param name="profile">The player profile (used for the recent-legs list).</param>
     public void Refresh(FiveOhOneSession session, PlayerProfile profile)
     {
         _darts.text         = session.totalDartsThrown.ToString();
@@ -60,14 +53,13 @@ public class FiveOhOneStatsPresenter
 
         if (recent.Count == 0)
         {
-            var empty = new Label("Noch keine abgeschlossenen Sessions.");
-            empty.style.color = Placeholder;
-            empty.style.unityFontStyleAndWeight = FontStyle.Italic;
+            var empty = new Label("No finished legs yet.");
+            empty.AddToClassList("placeholder-text");
             _recentContainer.Add(empty);
             return;
         }
 
-        _recentContainer.Add(MakeRow("Darts", "Ø", "→Fin", "CO%", isHeader: true));
+        _recentContainer.Add(MakeRow("Darts", "Avg", "→Fin", "CO%", isHeader: true));
 
         // Newest first for readability.
         for (int i = recent.Count - 1; i >= 0; i--)
@@ -85,27 +77,13 @@ public class FiveOhOneStatsPresenter
     private static VisualElement MakeRow(string c0, string c1, string c2, string c3, bool isHeader)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.justifyContent = Justify.SpaceBetween;
-        row.style.paddingTop = 3;
-        row.style.paddingBottom = 3;
-        if (!isHeader)
-        {
-            row.style.borderBottomWidth = 1;
-            row.style.borderBottomColor = new StyleColor(RowBorder);
-        }
+        row.AddToClassList("list-row");
+        if (isHeader) row.AddToClassList("list-row--header");
 
         foreach (var text in new[] { c0, c1, c2, c3 })
         {
             var label = new Label(text);
-            label.style.flexGrow = 1;
-            label.style.fontSize = 13;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
-            if (isHeader)
-            {
-                label.style.color = new StyleColor(Muted);
-                label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            }
+            label.AddToClassList("list-row__cell");
             row.Add(label);
         }
         return row;
