@@ -25,11 +25,6 @@ public class OverviewPresenter
 
     private readonly DartboardHeatmapElement _heatmap;
 
-    private static readonly Color RowBorder = new Color(0.88f, 0.90f, 0.93f);
-    private static readonly Color Muted     = new Color(0.55f, 0.60f, 0.67f);
-    private static readonly Color Positive  = new Color(0.18f, 0.72f, 0.42f);
-    private static readonly Color Negative  = new Color(0.90f, 0.25f, 0.25f);
-
     public OverviewPresenter(VisualElement root)
     {
         _lifetimeAvg  = root.Q<Label>("ov-lifetime-avg");
@@ -71,15 +66,18 @@ public class OverviewPresenter
 
         if (_trend != null)
         {
+            _trend.RemoveFromClassList("hero-value--positive");
+            _trend.RemoveFromClassList("hero-value--negative");
+            _trend.RemoveFromClassList("hero-value--muted");
             if (completedScoring.Count < 6 || rollingPrev == 0)
             {
                 _trend.text = "–";
-                _trend.style.color = new StyleColor(Muted);
+                _trend.AddToClassList("hero-value--muted");
             }
             else
             {
-                _trend.text        = (trend >= 0 ? "+" : "") + trend.ToString("F1");
-                _trend.style.color = new StyleColor(trend >= 0 ? Positive : Negative);
+                _trend.text = (trend >= 0 ? "+" : "") + trend.ToString("F1");
+                _trend.AddToClassList(trend >= 0 ? "hero-value--positive" : "hero-value--negative");
             }
         }
 
@@ -93,7 +91,6 @@ public class OverviewPresenter
             .DefaultIfEmpty(0)
             .Max();
         int total180s = profile.sessions.OfType<ScoringSession>().Sum(s => s.count180);
-
         int total140s = profile.sessions.OfType<ScoringSession>().Sum(s => s.count140Plus);
         int total100s = profile.sessions.OfType<ScoringSession>().Sum(s => s.count100Plus);
 
@@ -114,14 +111,13 @@ public class OverviewPresenter
 
         if (completed.Count == 0)
         {
-            var empty = new Label("Noch keine abgeschlossenen Sessions.");
-            empty.style.color = new StyleColor(new Color(0.60f, 0.65f, 0.72f));
-            empty.style.unityFontStyleAndWeight = FontStyle.Italic;
+            var empty = new Label("No finished sessions yet.");
+            empty.AddToClassList("placeholder-text");
             _recentContainer.Add(empty);
             return;
         }
 
-        _recentContainer.Add(MakeRow("Datum", "Rounds", "Ø Score", "Triple%", isHeader: true));
+        _recentContainer.Add(MakeRow("Date", "Visits", "Avg", "Triple %", isHeader: true));
 
         int start = Mathf.Max(0, completed.Count - 5);
         for (int i = completed.Count - 1; i >= start; i--)
@@ -137,29 +133,16 @@ public class OverviewPresenter
         }
     }
 
-    private VisualElement MakeRow(string c0, string c1, string c2, string c3, bool isHeader)
+    private static VisualElement MakeRow(string c0, string c1, string c2, string c3, bool isHeader)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.paddingTop    = 4;
-        row.style.paddingBottom = 4;
-        if (!isHeader)
-        {
-            row.style.borderBottomWidth = 1;
-            row.style.borderBottomColor = new StyleColor(RowBorder);
-        }
+        row.AddToClassList("list-row");
+        if (isHeader) row.AddToClassList("list-row--header");
 
         foreach (var text in new[] { c0, c1, c2, c3 })
         {
             var lbl = new Label(text);
-            lbl.style.flexGrow       = 1;
-            lbl.style.fontSize       = 13;
-            lbl.style.unityTextAlign = TextAnchor.MiddleCenter;
-            if (isHeader)
-            {
-                lbl.style.color = new StyleColor(Muted);
-                lbl.style.unityFontStyleAndWeight = FontStyle.Bold;
-            }
+            lbl.AddToClassList("list-row__cell");
             row.Add(lbl);
         }
         return row;
