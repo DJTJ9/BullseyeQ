@@ -13,6 +13,7 @@ public class CheckOutController : MonoBehaviour
     // ── Mode panels + tabs ────────────────────────────────────────────────────
     private Button[]        _modeTabs;
     private VisualElement[] _modePanels;
+    private int             _activeMode = -1;
 
     // ── Target Double ─────────────────────────────────────────────────────────
     private TextField[] _tdFields;
@@ -161,12 +162,6 @@ public class CheckOutController : MonoBehaviour
         _fiveBtnNew?.RegisterCallback<ClickEvent>(_ => NewSession(CheckOutMode.FiveCheckouts));
         _fiveBtnReset?.RegisterCallback<ClickEvent>(_ => ResetSession(CheckOutMode.FiveCheckouts));
 
-        foreach (var f in _tdFields.Concat(_chFields).Concat(_fiveFields))
-        {
-            var inputEl = f?.Q(className: "unity-base-field__input");
-            if (inputEl != null) inputEl.style.backgroundColor = Color.white;
-        }
-
         SwitchMode(0);
     }
 
@@ -184,9 +179,9 @@ public class CheckOutController : MonoBehaviour
 
     private void SwitchMode(int index)
     {
-        for (int i = 0; i < _modePanels.Length; i++)
-            if (_modePanels[i] != null)
-                _modePanels[i].style.display = i == index ? DisplayStyle.Flex : DisplayStyle.None;
+        var from = _activeMode >= 0 ? _modePanels[_activeMode] : null;
+        UiFx.SwitchPanel(from, _modePanels[index]);
+        _activeMode = index;
 
         for (int i = 0; i < _modeTabs.Length; i++)
         {
@@ -217,13 +212,8 @@ public class CheckOutController : MonoBehaviour
         foreach (var field in DoubleFields)
         {
             string f = field;
-            var btn = new Button();
-            btn.text = f;
-            btn.style.width  = 50;
-            btn.style.height = 30;
-            btn.style.marginRight  = 4;
-            btn.style.marginBottom = 4;
-            btn.style.fontSize = 12;
+            var btn = new Button { text = f };
+            btn.AddToClassList("field-grid-button");
             btn.RegisterCallback<ClickEvent>(_ => SelectTargetField(f));
             _tdFieldGrid.Add(btn);
         }
@@ -234,14 +224,13 @@ public class CheckOutController : MonoBehaviour
     {
         _tdTargetField = field;
         if (_tdSelected != null) _tdSelected.text = field;
-        // Highlight active button
         if (_tdFieldGrid == null) return;
         foreach (var child in _tdFieldGrid.Children())
         {
             if (child is Button b)
             {
-                if (b.text == field) b.AddToClassList("stats-inner-tab--active");
-                else                 b.RemoveFromClassList("stats-inner-tab--active");
+                if (b.text == field) b.AddToClassList("field-grid-button--active");
+                else                 b.RemoveFromClassList("field-grid-button--active");
             }
         }
         FocusTd(0);
@@ -252,7 +241,7 @@ public class CheckOutController : MonoBehaviour
         if (!DartArrow.TryParse(_tdFields[index].value, out DartArrow arrow))
         {
             if (_tdFeedback != null)
-                _tdFeedback.text = $"Ungültige Eingabe: \"{_tdFields[index].value}\"";
+                _tdFeedback.text = $"Invalid input: \"{_tdFields[index].value}\"";
             _tdFields[index].SetValueWithoutNotify("");
             FocusTd(index);
             return;
@@ -280,23 +269,22 @@ public class CheckOutController : MonoBehaviour
     private void AddTdRow(CheckOutRound round)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.justifyContent = Justify.SpaceBetween;
-        row.style.paddingTop = 3; row.style.paddingBottom = 3;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(new Color(0.88f, 0.90f, 0.93f));
+        row.AddToClassList("list-row");
 
         string dartsStr = string.Join("  ", round.darts.Select(DartArrow.FieldKey));
-        string hitsStr  = round.darts.Count(d => DartArrow.FieldKey(d) == round.targetField).ToString();
+        int hits = round.darts.Count(d => DartArrow.FieldKey(d) == round.targetField);
 
-        var dartsLbl = new Label(dartsStr);  dartsLbl.style.flexGrow = 1; dartsLbl.style.fontSize = 12;
-        var hitsLbl  = new Label($"Hits: {hitsStr}");
-        hitsLbl.style.fontSize = 12;
-        hitsLbl.style.color    = new StyleColor(new Color(0.18f, 0.72f, 0.42f));
+        var dartsLbl = new Label(dartsStr);
+        dartsLbl.AddToClassList("list-row__darts");
+
+        var hitsLbl = new Label($"Hits {hits}");
+        hitsLbl.AddToClassList("list-row__rem");
+        hitsLbl.AddToClassList(hits > 0 ? "list-row__rem--checkout" : "list-row__rem--bust");
 
         row.Add(dartsLbl); row.Add(hitsLbl);
         _tdRoundsContainer?.Add(row);
         _tdRoundsScroll?.ScrollTo(row);
+        UiFx.FlashRow(row);
     }
 
     private void RefreshTd()
@@ -313,7 +301,7 @@ public class CheckOutController : MonoBehaviour
 
         if (!DartArrow.TryParse(_chFields[index].value, out DartArrow arrow))
         {
-            if (_chFeedback != null) _chFeedback.text = $"Ungültige Eingabe: \"{_chFields[index].value}\"";
+            if (_chFeedback != null) _chFeedback.text = $"Invalid input: \"{_chFields[index].value}\"";
             _chFields[index].SetValueWithoutNotify("");
             FocusCh(index);
             return;
@@ -337,7 +325,6 @@ public class CheckOutController : MonoBehaviour
             return;
         }
 
-        // Continue
         if (index < 2)
         {
             FocusCh(index + 1);
@@ -361,12 +348,12 @@ public class CheckOutController : MonoBehaviour
         {
             Session.currentScore     = score + 10;
             Session.sessionHighScore = Mathf.Max(Session.sessionHighScore, Session.currentScore);
-            if (_chFeedback != null) _chFeedback.text = $"Checkout! Score: {Session.currentScore}";
+            if (_chFeedback != null) _chFeedback.text = $"Checkout! Score {Session.currentScore}";
         }
         else
         {
             Session.currentScore = Mathf.Max(21, score - 1);
-            if (_chFeedback != null) _chFeedback.text = "Kein Checkout.";
+            if (_chFeedback != null) _chFeedback.text = "No checkout.";
         }
 
         AddChHistoryRow(score, dartsUsed, succeeded);
@@ -380,22 +367,21 @@ public class CheckOutController : MonoBehaviour
     private void AddChHistoryRow(int score, int darts, bool success)
     {
         var row = new VisualElement();
-        row.style.flexDirection = FlexDirection.Row;
-        row.style.justifyContent = Justify.SpaceBetween;
-        row.style.paddingTop = 3; row.style.paddingBottom = 3;
-        row.style.borderBottomWidth = 1;
-        row.style.borderBottomColor = new StyleColor(new Color(0.88f, 0.90f, 0.93f));
+        row.AddToClassList("list-row");
 
-        var scoreLbl = new Label(score.ToString()); scoreLbl.style.width = 36; scoreLbl.style.fontSize = 13;
-        var dartLbl  = new Label($"{darts}D");      dartLbl.style.fontSize = 13;
-        var resLbl   = new Label(success ? "✓" : "✗");
-        resLbl.style.fontSize = 13;
-        resLbl.style.color    = new StyleColor(success
-            ? new Color(0.18f, 0.72f, 0.42f)
-            : new Color(0.90f, 0.25f, 0.25f));
+        var scoreLbl = new Label(score.ToString());
+        scoreLbl.AddToClassList("list-row__darts");
+
+        var dartLbl = new Label($"{darts}D");
+        dartLbl.AddToClassList("list-row__score");
+
+        var resLbl = new Label(success ? "Hit" : "Miss");
+        resLbl.AddToClassList("list-row__rem");
+        resLbl.AddToClassList(success ? "list-row__rem--checkout" : "list-row__rem--bust");
 
         row.Add(scoreLbl); row.Add(dartLbl); row.Add(resLbl);
         _chHistoryContainer?.Add(row);
+        UiFx.FlashRow(row);
     }
 
     private void RefreshCh()
@@ -465,34 +451,15 @@ public class CheckOutController : MonoBehaviour
             bool done   = i < (completed?.Length ?? 0) && completed[i];
 
             var card = new VisualElement();
-            card.style.flexDirection  = FlexDirection.Row;
-            card.style.justifyContent = Justify.SpaceBetween;
-            card.style.alignItems     = Align.Center;
-            card.style.paddingTop     = 8; card.style.paddingBottom = 8;
-            card.style.paddingLeft    = 12; card.style.paddingRight = 12;
-            card.style.marginBottom   = 4;
-            card.style.borderTopLeftRadius     = 6;
-            card.style.borderTopRightRadius    = 6;
-            card.style.borderBottomLeftRadius  = 6;
-            card.style.borderBottomRightRadius = 6;
-            
-            var bColor = active
-                ? new Color(0.31f, 0.80f, 0.77f)
-                : done
-                    ? new Color(0.18f, 0.72f, 0.42f)
-                    : new Color(0.88f, 0.90f, 0.93f);
-            card.style.backgroundColor   = new StyleColor(done ? new Color(0.18f, 0.72f, 0.42f, 0.08f) : Color.white);
+            card.AddToClassList("five-card");
+            if (done)        card.AddToClassList("five-card--done");
+            else if (active) card.AddToClassList("five-card--active");
 
             var scoreLbl = new Label(scores[i].ToString());
-            scoreLbl.style.fontSize = 18;
-            scoreLbl.style.unityFontStyleAndWeight = FontStyle.Bold;
+            scoreLbl.AddToClassList("five-card__score");
 
-            var statusLbl = new Label(done ? "✓" : active ? "▶" : "○");
-            statusLbl.style.fontSize = 16;
-            statusLbl.style.color    = new StyleColor(done
-                ? new Color(0.18f, 0.72f, 0.42f)
-                : active ? new Color(0.31f, 0.80f, 0.77f)
-                : new Color(0.75f, 0.78f, 0.83f));
+            var statusLbl = new Label(done ? "Done" : active ? "Now" : "-");
+            statusLbl.AddToClassList("five-card__status");
 
             card.Add(scoreLbl); card.Add(statusLbl);
             _fiveCardsContainer.Add(card);
@@ -504,13 +471,13 @@ public class CheckOutController : MonoBehaviour
         if (Session?.mode != CheckOutMode.FiveCheckouts) return;
         if (Session.assignedScores == null || Session.assignedScores.Length == 0)
         {
-            if (_fiveFeedback != null) _fiveFeedback.text = "Wähle zuerst eine Schwierigkeit.";
+            if (_fiveFeedback != null) _fiveFeedback.text = "Pick a difficulty first.";
             return;
         }
 
         if (!DartArrow.TryParse(_fiveFields[index].value, out DartArrow arrow))
         {
-            if (_fiveFeedback != null) _fiveFeedback.text = $"Ungültige Eingabe: \"{_fiveFields[index].value}\"";
+            if (_fiveFeedback != null) _fiveFeedback.text = $"Invalid input: \"{_fiveFields[index].value}\"";
             _fiveFields[index].SetValueWithoutNotify("");
             FocusFive(index);
             return;
@@ -549,7 +516,7 @@ public class CheckOutController : MonoBehaviour
         if (succeeded)
         {
             Session.completedScores[_fiveActiveIdx] = true;
-            if (_fiveFeedback != null) _fiveFeedback.text = "Checkout! ✓";
+            if (_fiveFeedback != null) _fiveFeedback.text = "Checkout!";
             DataManager.Instance.SaveProfile();
 
             // Move to next incomplete score
@@ -561,14 +528,14 @@ public class CheckOutController : MonoBehaviour
             if (allDone)
             {
                 _fiveActiveIdx = Session.assignedScores.Length - 1;
-                if (_fiveFeedback != null) _fiveFeedback.text = "Alle 5 geschafft! 🎯";
+                if (_fiveFeedback != null) _fiveFeedback.text = "All five done!";
                 DataManager.Instance.EndAndSaveCheckOut();
                 DataManager.Instance.StartNewCheckOutSession(CheckOutMode.FiveCheckouts);
             }
         }
         else
         {
-            if (_fiveFeedback != null) _fiveFeedback.text = "Nicht geschafft.";
+            if (_fiveFeedback != null) _fiveFeedback.text = "Missed.";
             DataManager.Instance.SaveProfile();
         }
 
