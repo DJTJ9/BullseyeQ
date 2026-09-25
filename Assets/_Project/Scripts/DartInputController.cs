@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// MonoBehaviour that drives the Scoring tab UI and the app-level screen router.
 /// Handles dart input, the throw-history list, the session-control buttons,
-/// sidebar navigation (with the sliding rail marker) and the Sessions sub-tabs.
+/// the main menu ⇄ full-screen window navigation (marker, Esc, arrow keys) and the Sessions sub-tabs.
 /// </summary>
 public class DartInputController : MonoBehaviour
 {
@@ -23,9 +23,17 @@ public class DartInputController : MonoBehaviour
     private SessionStatsPresenter _statsPresenter;
 
     private Button[] _navButtons;
+    private Button[] _menuItems;            // nav buttons + quit, in arrow-key order
     private VisualElement[] _panels;
     private VisualElement _navMarker;
-    private int _activePanel = -1;
+    private VisualElement _markerTarget;
+    private VisualElement _mainMenu;
+    private VisualElement _window;
+    private VisualElement _windowRule;
+    private Label _windowTitle;
+    private VisualElement _modalOverlay;
+    private VisualElement _gameOverOverlay;
+    private readonly WindowNav _nav = new WindowNav();
 
     private Button[]          _sessionTabBtns;
     private VisualElement[]   _sessionTabPanels;
@@ -115,7 +123,15 @@ public class DartInputController : MonoBehaviour
         if (logoImage != null && _logoTexture != null)
             logoImage.image = _logoTexture;
 
-        // Sidebar navigation
+        // Main menu ⇄ window shell
+        _mainMenu        = root.Q<VisualElement>("main-menu");
+        _window          = root.Q<VisualElement>("window");
+        _windowRule      = root.Q<VisualElement>("window-rule");
+        _windowTitle     = root.Q<Label>("window-title");
+        _modalOverlay    = root.Q<VisualElement>("modal-overlay");
+        _gameOverOverlay = root.Q<VisualElement>("tg-game-over-overlay");
+        root.Q<Button>("window-back").clicked += ShowMenu;
+
         _navMarker = root.Q<VisualElement>("nav-marker");
         _navButtons = new Button[6];
         _navButtons[0] = root.Q<Button>("nav-overview");
@@ -136,30 +152,39 @@ public class DartInputController : MonoBehaviour
         for (int i = 0; i < _navButtons.Length; i++)
         {
             int idx = i;
-            if (_navButtons[idx] != null)
-                _navButtons[idx].clicked += () => ShowPanel(idx);
+            _navButtons[idx].clicked += () => ShowPanel(idx);
         }
 
-        // Keep the rail marker aligned when the menu lays out (first frame, resize).
-        var menuList = root.Q<VisualElement>("menu-list");
-        menuList?.RegisterCallback<GeometryChangedEvent>(_ =>
+        var btnQuit = root.Q<Button>("nav-quit");
+        btnQuit.clicked += AppControl.Quit;
+
+        _menuItems = new[]
         {
-            if (_activePanel >= 0) UiFx.MoveNavMarker(_navMarker, _navButtons[_activePanel]);
-        });
+            _navButtons[0], _navButtons[1], _navButtons[2], _navButtons[3], _navButtons[4], _navButtons[5], btnQuit,
+        };
+        foreach (var item in _menuItems)
+        {
+            var target = item;
+            target.RegisterCallback<PointerEnterEvent>(_ => MoveMarkerTo(target));
+            target.RegisterCallback<FocusInEvent>(_ => MoveMarkerTo(target));
+        }
+
+        // Keep the marker aligned when the menu lays out (first frame, resize, back from a window).
+        var menuList = root.Q<VisualElement>("menu-list");
+        menuList.RegisterCallback<GeometryChangedEvent>(_ => UiFx.MoveNavMarker(_navMarker, _markerTarget));
+        menuList.RegisterCallback<NavigationMoveEvent>(OnMenuMove);
 
         _overviewPresenter     = new OverviewPresenter(root);
         _statsPresenter2       = new StatsPresenter(root);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();
 
-        var btnQuit = root.Q<Button>("nav-quit");
-        if (btnQuit != null) btnQuit.clicked += AppControl.Quit;
-
-        // The UXML display state is an editor preview only — hide everything, then show the start panels.
+        // The UXML display state is an editor preview only — hide everything, then start in the main menu.
         UiRows.HideAll(_panels);
         UiRows.HideAll(_sessionTabPanels);
+        UiRows.HideAll(_window);
         ShowSessionTab(0);
-        ShowPanel(0);
+        _markerTarget = _navButtons[_nav.LastOpened];
     }
 
     private void NavigateFromPlan(TrainingNavTarget target)
@@ -201,27 +226,42 @@ public class DartInputController : MonoBehaviour
         }
 
         if (index == 0) FocusField(0);
-        if (index == 1) _foField0?.schedule.Execute(() => _foField0.Focus());
+        if (index == 1) _foField0?.schedule.Execute(() => { if (_nav.Active == 2) _foField0.Focus(); });
         if (index == 2) _checkOutController?.RefreshAll();
     }
 
     private void ShowPanel(int index)
     {
-        var from = _activePanel >= 0 ? _panels[_activePanel] : null;
-        UiFx.SwitchPanel(from, _panels[index]);
-        _activePanel = index;
+        int previous = _nav.Open(index);
+        _windowTitle.text = _navButtons[index].text;
+
+        if (previous == WindowNav.Menu)
+        {
+            // The window is hidden, so the target panel swaps in underneath it; SwitchPanel(null, …) also
+            // cancels a stale pending switch from an earlier window → window jump.
+            UiRows.HideAll(_panels);
+            UiFx.SwitchPanel(null, _panels[index]);
+            _root.focusController?.focusedElement?.Blur(); // the clicked menu item is about to be hidden
+            UiFx.OpenWindow(_mainMenu, _window, _windowRule);
+        }
+        else if (previous != index)
+        {
+            UiFx.SwitchPanel(_panels[previous], _panels[index]);
+        }
 
         for (int i = 0; i < _navButtons.Length; i++)
         {
-            if (_navButtons[i] == null) continue;
-            if (i == index)
-                _navButtons[i].AddToClassList("menu-item--active");
-            else
-                _navButtons[i].RemoveFromClassList("menu-item--active");
+            if (i == index) _navButtons[i].AddToClassList("menu-item--active");
+            else            _navButtons[i].RemoveFromClassList("menu-item--active");
         }
-        UiFx.MoveNavMarker(_navMarker, _navButtons[index]);
+        _markerTarget = _navButtons[index];
 
-        if (index == 2) FocusField(0);
+        if (index == 2)
+        {
+            // From the menu the window only displays after the menu exit; a field can't take focus before that.
+            if (previous == WindowNav.Menu) _fields[0].schedule.Execute(() => FocusField(0)).StartingIn(UiFx.LayerExitMs);
+            else FocusField(0);
+        }
 
         var profile = DataManager.Instance.Profile;
         if (index == 0) _overviewPresenter?.Refresh(profile);
@@ -229,12 +269,68 @@ public class DartInputController : MonoBehaviour
         if (index == 4) _statsPresenter2?.Refresh(profile);
     }
 
-    /// <summary>Rebuilds the history list and stats after the first frame so the UI is fully built.</summary>
+    /// <summary>Window → main menu; the marker and focus return to the last opened item. Panel state is kept.</summary>
+    private void ShowMenu()
+    {
+        if (!_nav.Close()) return;
+        UiFx.CloseWindow(_window, _mainMenu);
+        _markerTarget = _navButtons[_nav.LastOpened];
+        FocusMenuItem();
+    }
+
+    /// <summary>Focuses the last opened menu item once the menu is visible again (after the window exit).</summary>
+    private void FocusMenuItem()
+    {
+        var item = _navButtons[_nav.LastOpened];
+        item.schedule.Execute(() => { if (!_nav.InWindow) item.Focus(); }).StartingIn(UiFx.LayerExitMs);
+    }
+
+    private void MoveMarkerTo(VisualElement item)
+    {
+        _markerTarget = item;
+        UiFx.MoveNavMarker(_navMarker, item);
+    }
+
+    /// <summary>↑/↓ in the menu: focus moves through the items (wrapping), the marker follows via FocusInEvent.</summary>
+    private void OnMenuMove(NavigationMoveEvent evt)
+    {
+        if (_nav.InWindow) return;
+        int delta = evt.direction == NavigationMoveEvent.Direction.Up   ? -1
+                  : evt.direction == NavigationMoveEvent.Direction.Down ?  1 : 0;
+        if (delta == 0) return;
+
+        int current = System.Array.IndexOf(_menuItems, evt.target as Button);
+        if (current < 0) current = System.Array.IndexOf(_menuItems, _markerTarget as Button);
+        _menuItems[WindowNav.Step(current, delta, _menuItems.Length)].Focus();
+        _root.focusController.IgnoreEvent(evt);
+        evt.StopPropagation();
+    }
+
+    /// <summary>Esc (key or navigation cancel): back to the menu, even from a focused dart field — unless a modal is showing.</summary>
+    private void OnEscape(EventBase evt)
+    {
+        bool modalOpen = IsShown(_modalOverlay) || IsShown(_gameOverOverlay);
+        if (!_nav.CanEscape(modalOpen)) return;
+        ShowMenu();
+        evt.StopPropagation();
+    }
+
+    private static bool IsShown(VisualElement el) => el != null && el.resolvedStyle.display == DisplayStyle.Flex;
+
+    /// <summary>Rebuilds the history list and stats after the first frame so the UI is fully built,
+    /// then hooks Esc and focuses the menu.</summary>
     void Start()
     {
         RebuildHistory();
         RefreshStats();
         _overviewPresenter?.Refresh(DataManager.Instance.Profile);
+
+        // Keyboard events reach the panel's visual tree even when nothing is focused; TrickleDown runs
+        // before a focused TextField sees the key.
+        var tree = _root.panel?.visualTree ?? _root;
+        tree.RegisterCallback<KeyDownEvent>(evt => { if (evt.keyCode == KeyCode.Escape) OnEscape(evt); }, TrickleDown.TrickleDown);
+        tree.RegisterCallback<NavigationCancelEvent>(OnEscape, TrickleDown.TrickleDown);
+        FocusMenuItem();
     }
 
     private void OnFieldSubmit(int index)
@@ -344,6 +440,6 @@ public class DartInputController : MonoBehaviour
 
     private void FocusField(int index)
     {
-        _fields[index].schedule.Execute(() => _fields[index].Focus());
+        _fields[index].schedule.Execute(() => { if (_nav.Active == 2) _fields[index].Focus(); });
     }
 }
