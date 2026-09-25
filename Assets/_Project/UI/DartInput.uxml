@@ -51,7 +51,14 @@
                             <ui:Label text="Avg" class="list-row__cell"/>
                             <ui:Label text="Triple %" class="list-row__cell"/>
                         </ui:VisualElement>
-                        <ui:VisualElement name="ov-recent-container"/>
+                        <ui:VisualElement name="ov-recent-container">
+                            <ui:VisualElement class="list-row">
+                                <ui:Label name="cell0" text="2026-09-25" class="list-row__cell"/>
+                                <ui:Label name="cell1" text="12" class="list-row__cell"/>
+                                <ui:Label name="cell2" text="58.3" class="list-row__cell"/>
+                                <ui:Label name="cell3" text="14%" class="list-row__cell"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
                         <ui:VisualElement class="divider"/>
                         <ui:Label text="Personal bests" class="section-title"/>
                         <ui:VisualElement class="stat-row">
@@ -611,7 +618,20 @@
                         <ui:Label text="Not enough data yet" class="empty-state__title"/>
                         <ui:Label text="Complete at least 3 sessions to get a personalised training plan." class="empty-state__text"/>
                     </ui:VisualElement>
-                    <ui:VisualElement name="tp-rec-container"/>
+                    <ui:VisualElement name="tp-rec-container">
+                        <ui:VisualElement class="plan-card">
+                            <ui:VisualElement name="accent" class="plan-card__accent"/>
+                            <ui:VisualElement class="plan-card__content">
+                                <ui:VisualElement class="plan-card__header">
+                                    <ui:Label name="badge" text="1 – Priority" class="plan-card__badge"/>
+                                    <ui:Label name="title" text="Checkout practice" class="plan-card__title"/>
+                                </ui:VisualElement>
+                                <ui:Label name="reason" text="Checkout rate 18% over your last 10 legs." class="plan-card__reason"/>
+                                <ui:Label name="action" text="Play Five Checkouts on Medium." class="plan-card__action"/>
+                            </ui:VisualElement>
+                            <ui:Button name="button" text="Train now" class="text-button plan-card__button"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>
 
@@ -644,11 +664,24 @@
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Score distribution" class="section-title"/>
                             <ui:Label name="score-dist-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="score-dist-container"/>
+                            <ui:VisualElement name="score-dist-container">
+                                <ui:VisualElement class="bar-row">
+                                    <ui:Label name="label" text="180" class="bar-row__label"/>
+                                    <ui:VisualElement name="track" class="bar-row__track">
+                                        <ui:VisualElement name="fill" class="bar-row__fill"/>
+                                    </ui:VisualElement>
+                                    <ui:Label name="count" text="12  8%" class="bar-row__count"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Lifetime" class="section-title"/>
                             <ui:Label name="scoring-lifetime-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="scoring-lifetime-container"/>
+                            <ui:VisualElement name="scoring-lifetime-container">
+                                <ui:VisualElement class="stat-row">
+                                    <ui:Label name="label" text="Total sessions" class="stat-row__label"/>
+                                    <ui:Label name="value" text="24" class="stat-row__value"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
@@ -666,7 +699,15 @@
                                     <ui:Label text="Visits" class="list-row__cell list-row__cell--fixed hist-scoring__visits"/>
                                     <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="scoring-history-container"/>
+                                <ui:VisualElement name="scoring-history-container">
+                                    <ui:VisualElement class="list-row">
+                                        <ui:Label name="cell0" text="2026-09-25" class="list-row__cell list-row__cell--fixed hist-scoring__date"/>
+                                        <ui:Label name="cell1" text="58.3" class="list-row__cell list-row__cell--fixed hist-scoring__avg"/>
+                                        <ui:Label name="cell2" text="1" class="list-row__cell list-row__cell--fixed hist-scoring__180"/>
+                                        <ui:Label name="cell3" text="12" class="list-row__cell list-row__cell--fixed list-row__cell--muted hist-scoring__visits"/>
+                                        <ui:Button name="delete" text="X" class="icon-button"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:ScrollView>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -687,7 +728,12 @@
                         <ui:VisualElement class="col-main">
                             <ui:Label text="501 stats" class="section-title"/>
                             <ui:Label name="fo-stats-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="fo-stats-container"/>
+                            <ui:VisualElement name="fo-stats-container">
+                                <ui:VisualElement class="stat-row">
+                                    <ui:Label name="label" text="Legs played" class="stat-row__label"/>
+                                    <ui:Label name="value" text="18" class="stat-row__value"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
@@ -705,7 +751,15 @@
                                     <ui:Label text="Result" class="list-row__cell list-row__cell--fixed hist-fo__result"/>
                                     <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="fo-history-container"/>
+                                <ui:VisualElement name="fo-history-container">
+                                    <ui:VisualElement class="list-row">
+                                        <ui:Label name="cell0" text="2026-09-25" class="list-row__cell list-row__cell--fixed hist-fo__date"/>
+                                        <ui:Label name="cell1" text="62.6" class="list-row__cell list-row__cell--fixed hist-fo__3da"/>
+                                        <ui:Label name="cell2" text="50%" class="list-row__cell list-row__cell--fixed hist-fo__co"/>
+                                        <ui:Label name="cell3" text="Finished" class="list-row__cell list-row__cell--fixed hist-fo__result"/>
+                                        <ui:Button name="delete" text="X" class="icon-button"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:ScrollView>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -726,11 +780,24 @@
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Mode distribution" class="section-title"/>
                             <ui:Label name="co-dist-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="co-dist-container"/>
+                            <ui:VisualElement name="co-dist-container">
+                                <ui:VisualElement class="bar-row">
+                                    <ui:Label name="label" text="Target" class="bar-row__label"/>
+                                    <ui:VisualElement name="track" class="bar-row__track">
+                                        <ui:VisualElement name="fill" class="bar-row__fill"/>
+                                    </ui:VisualElement>
+                                    <ui:Label name="count" text="4  40%" class="bar-row__count"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Lifetime" class="section-title"/>
                             <ui:Label name="co-lifetime-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="co-lifetime-container"/>
+                            <ui:VisualElement name="co-lifetime-container">
+                                <ui:VisualElement class="stat-row">
+                                    <ui:Label name="label" text="Total sessions" class="stat-row__label"/>
+                                    <ui:Label name="value" text="10" class="stat-row__value"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
@@ -748,7 +815,15 @@
                                     <ui:Label text="Attempts" class="list-row__cell list-row__cell--fixed hist-co__attempts"/>
                                     <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="co-history-container"/>
+                                <ui:VisualElement name="co-history-container">
+                                    <ui:VisualElement class="list-row">
+                                        <ui:Label name="cell0" text="2026-09-25" class="list-row__cell list-row__cell--fixed hist-co__date"/>
+                                        <ui:Label name="cell1" text="Target" class="list-row__cell list-row__cell--fixed hist-co__mode"/>
+                                        <ui:Label name="cell2" text="33%" class="list-row__cell list-row__cell--fixed hist-co__hit"/>
+                                        <ui:Label name="cell3" text="12" class="list-row__cell list-row__cell--fixed list-row__cell--muted hist-co__attempts"/>
+                                        <ui:Button name="delete" text="X" class="icon-button"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:ScrollView>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -769,7 +844,12 @@
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Training game stats" class="section-title"/>
                             <ui:Label name="tg-stats-empty" text="No data yet" class="placeholder-text"/>
-                            <ui:VisualElement name="tg-stats-container"/>
+                            <ui:VisualElement name="tg-stats-container">
+                                <ui:VisualElement class="stat-row">
+                                    <ui:Label name="label" text="Matches played" class="stat-row__label"/>
+                                    <ui:Label name="value" text="7" class="stat-row__value"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Overall heatmap" class="section-title"/>
                             <ui:VisualElement name="stats-tg-heatmap" class="heatmap-slot">
@@ -788,7 +868,16 @@
                                     <ui:Label text="Result" class="list-row__cell list-row__cell--fixed hist-tg__result"/>
                                     <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="tg-history-container"/>
+                                <ui:VisualElement name="tg-history-container">
+                                    <ui:VisualElement class="list-row">
+                                        <ui:Label name="cell0" text="2026-09-25" class="list-row__cell list-row__cell--fixed hist-tg__date"/>
+                                        <ui:Label name="cell1" text="55.7" class="list-row__cell list-row__cell--fixed hist-tg__you"/>
+                                        <ui:Label name="cell2" text="52.1" class="list-row__cell list-row__cell--fixed list-row__cell--muted hist-tg__ai"/>
+                                        <ui:Label name="cell3" text="33%" class="list-row__cell list-row__cell--fixed hist-tg__co"/>
+                                        <ui:Label name="cell4" text="Win" class="list-row__cell list-row__cell--fixed hist-tg__result"/>
+                                        <ui:Button name="delete" text="X" class="icon-button"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:ScrollView>
                         </ui:VisualElement>
                     </ui:VisualElement>

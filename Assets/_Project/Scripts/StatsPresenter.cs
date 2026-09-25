@@ -48,7 +48,7 @@ public class StatsPresenter
     private readonly VisualElement           _foHistoryContainer;
     private readonly VisualElement           _coHistoryContainer;
 
-    private readonly UiTemplates _templates;
+    private readonly Dictionary<VisualElement, VisualElement> _protos = new();
 
     // Static empty states and table headers from the panel UXML, switched per refresh.
     private readonly VisualElement _scoreDistEmpty, _scoringLifetimeEmpty, _foStatsEmpty;
@@ -56,9 +56,8 @@ public class StatsPresenter
     private readonly VisualElement _scoringHistoryEmpty, _foHistoryEmpty, _coHistoryEmpty, _tgHistoryEmpty;
     private readonly VisualElement _scoringHistoryHeader, _foHistoryHeader, _coHistoryHeader, _tgHistoryHeader;
 
-    public StatsPresenter(VisualElement root, UiTemplates templates)
+    public StatsPresenter(VisualElement root)
     {
-        _templates = templates;
         _tabPanels = new[]
         {
             root.Q<VisualElement>("stats-scoring-panel"),
@@ -133,6 +132,16 @@ public class StatsPresenter
         _coHistoryHeader      = root.Q("co-history-header");
         _tgHistoryHeader      = root.Q("tg-history-header");
 
+        // Every list's UXML example row becomes its clone source.
+        foreach (var list in new[]
+        {
+            _scoreDistContainer, _scoringLifetimeContainer, _scoringHistoryContainer,
+            _foStatsContainer, _foHistoryContainer,
+            _coDistContainer, _coLifetimeContainer, _coHistoryContainer,
+            _tgStatsContainer, _tgHistoryContainer,
+        })
+            if (list != null) _protos[list] = UiRows.TakeTemplate(list);
+
         UiRows.HideAll(_tabPanels);
         ShowInnerTab(0);
     }
@@ -202,7 +211,7 @@ public class StatsPresenter
     {
         float pct = total > 0 ? (float)count / total : 0f;
 
-        var row = UiTemplates.Row(_templates.BarRow);
+        var row = UiClone.Deep(_protos[parent]);
         row.Q<Label>("label").text = labelText;
 
         var fill = row.Q("fill");
@@ -271,7 +280,7 @@ public class StatsPresenter
 
     private void AddStatRow(VisualElement parent, string label, string value)
     {
-        var row = UiTemplates.Row(_templates.StatRow);
+        var row = UiClone.Deep(_protos[parent]);
         row.Q<Label>("label").text = label;
         row.Q<Label>("value").text = value;
         parent.Add(row);
@@ -339,7 +348,7 @@ public class StatsPresenter
             var m = recent[i];
             string coText = m.playerCheckoutRate >= 0f ? $"{m.playerCheckoutRate * 100:F0}%" : "n.a.";
 
-            var row = AddHistoryRow(_tgHistoryContainer, _templates.HistoryRow_TrainingGame,
+            var row = AddHistoryRow(_tgHistoryContainer,
                 () => { DataManager.Instance.DeleteTrainingGameMatch(m); Refresh(DataManager.Instance.Profile); },
                 m.endTime.Length > 10 ? m.endTime[..10] : m.endTime,
                 m.playerAverage.ToString("F1"),
@@ -441,7 +450,7 @@ public class StatsPresenter
         for (int i = sessions.Count - 1; i >= 0; i--)
         {
             var s = sessions[i];
-            AddHistoryRow(_scoringHistoryContainer, _templates.HistoryRow_Scoring,
+            AddHistoryRow(_scoringHistoryContainer,
                 () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
                 s.date.Length > 10 ? s.date[..10] : s.date,
                 s.averageScore.ToString("F1"),
@@ -460,7 +469,7 @@ public class StatsPresenter
             var s = legs[i];
             string coText = s.checkoutRate.HasValue ? $"{s.checkoutRate.Value * 100:F0}%" : "n.a.";
 
-            var row = AddHistoryRow(_foHistoryContainer, _templates.HistoryRow_FiveOhOne,
+            var row = AddHistoryRow(_foHistoryContainer,
                 () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
                 s.date.Length > 10 ? s.date[..10] : s.date,
                 s.threeDartAverage.ToString("F1"),
@@ -485,7 +494,7 @@ public class StatsPresenter
                 CheckOutMode.FiveCheckouts     => "Five",
                 _                              => "–"
             };
-            AddHistoryRow(_coHistoryContainer, _templates.HistoryRow_Doubles,
+            AddHistoryRow(_coHistoryContainer,
                 () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
                 s.date.Length > 10 ? s.date[..10] : s.date,
                 modeText,
@@ -496,9 +505,9 @@ public class StatsPresenter
 
     // ── History row helper ───────────────────────────────────────────────────
 
-    private static VisualElement AddHistoryRow(VisualElement container, VisualTreeAsset tpl, System.Action onDelete, params string[] cells)
+    private VisualElement AddHistoryRow(VisualElement container, System.Action onDelete, params string[] cells)
     {
-        var row = UiRows.Cells(tpl, cells);
+        var row = UiRows.Cells(_protos[container], cells);
         row.Q<Button>("delete").clicked += onDelete;
         container.Add(row);
         return row;

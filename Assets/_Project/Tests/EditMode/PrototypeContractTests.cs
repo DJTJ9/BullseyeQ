@@ -23,6 +23,9 @@ public class PrototypeContractTests
 
     static readonly string[] Visit = { "num", "darts", "score", "rem" };
     static readonly string[] Cell4 = { "cell0", "cell1", "cell2", "cell3" };
+    static readonly string[] Bar  = { "label", "track", "fill", "count" };
+    static readonly string[] Stat = { "label", "value" };
+    static readonly string[] Hist = { "cell0", "cell1", "cell2", "cell3", "delete" };
 
     static readonly object[] Cases =
     {
@@ -34,6 +37,18 @@ public class PrototypeContractTests
         new object[] { "tg-recent-sessions-container", Cell4 },
         new object[] { "co-td-rounds-container",       new[] { "darts", "hits" } },
         new object[] { "co-ch-history-container",      new[] { "score", "darts", "result" } },
+        new object[] { "ov-recent-container",          Cell4 },
+        new object[] { "tp-rec-container",             new[] { "accent", "badge", "title", "reason", "action", "button" } },
+        new object[] { "score-dist-container",         Bar },
+        new object[] { "co-dist-container",            Bar },
+        new object[] { "scoring-lifetime-container",   Stat },
+        new object[] { "fo-stats-container",           Stat },
+        new object[] { "co-lifetime-container",        Stat },
+        new object[] { "tg-stats-container",           Stat },
+        new object[] { "scoring-history-container",    Hist },
+        new object[] { "fo-history-container",         Hist },
+        new object[] { "co-history-container",         Hist },
+        new object[] { "tg-history-container",         new[] { "cell0", "cell1", "cell2", "cell3", "cell4", "delete" } },
     };
 
     VisualElement _root;

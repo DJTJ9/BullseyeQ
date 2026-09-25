@@ -15,7 +15,7 @@ public class OverviewPresenter
     private readonly Label _trend;
 
     private readonly VisualElement _recentContainer;
-    private readonly UiTemplates _templates;
+    private readonly VisualElement _recentProto;
     private readonly VisualElement _recentEmpty;
     private readonly VisualElement _recentHeader;
 
@@ -28,15 +28,15 @@ public class OverviewPresenter
 
     private readonly DartboardHeatmapElement _heatmap;
 
-    public OverviewPresenter(VisualElement root, UiTemplates templates)
+    public OverviewPresenter(VisualElement root)
     {
-        _templates = templates;
         _lifetimeAvg  = root.Q<Label>("ov-lifetime-avg");
         _sessionCount = root.Q<Label>("ov-session-count");
         _rollingAvg   = root.Q<Label>("ov-rolling-avg");
         _trend        = root.Q<Label>("ov-trend");
 
         _recentContainer = root.Q<VisualElement>("ov-recent-container");
+        if (_recentContainer != null) _recentProto = UiRows.TakeTemplate(_recentContainer);
         _recentEmpty     = root.Q<VisualElement>("ov-recent-empty");
         _recentHeader    = root.Q<VisualElement>("ov-recent-header");
 
@@ -119,7 +119,7 @@ public class OverviewPresenter
         {
             var s = completed[i];
             string dateStr = s.date.Length >= 10 ? s.date[..10] : s.date;
-            _recentContainer.Add(UiRows.Cells(_templates.CellRow4,
+            _recentContainer.Add(UiRows.Cells(_recentProto,
                 dateStr,
                 s.rounds.Count.ToString(),
                 s.averageScore.ToString("F1"),

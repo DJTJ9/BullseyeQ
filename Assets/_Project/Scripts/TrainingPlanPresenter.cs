@@ -5,13 +5,13 @@ public class TrainingPlanPresenter
     private readonly VisualElement _noDataEl;
     private readonly VisualElement _recContainer;
     private readonly System.Action<TrainingNavTarget> _onNavigate;
-    private readonly UiTemplates _templates;
+    private readonly VisualElement _cardProto;
 
-    public TrainingPlanPresenter(VisualElement root, UiTemplates templates, System.Action<TrainingNavTarget> onNavigate = null)
+    public TrainingPlanPresenter(VisualElement root, System.Action<TrainingNavTarget> onNavigate = null)
     {
         _noDataEl     = root.Q("tp-no-data");
         _recContainer = root.Q("tp-rec-container");
-        _templates    = templates;
+        _cardProto    = UiRows.TakeTemplate(_recContainer);
         _onNavigate   = onNavigate;
     }
 
@@ -36,7 +36,7 @@ public class TrainingPlanPresenter
 
     private VisualElement BuildCard(TrainingRecommendation rec)
     {
-        var card = UiTemplates.Row(_templates.PlanCard);
+        var card = UiClone.Deep(_cardProto);
         card.AddToClassList(FocusClass(rec.focus));
         card.Q<Label>("badge").text  = PriorityLabel(rec.priority);
         card.Q<Label>("title").text  = rec.title;
