@@ -49,8 +49,17 @@ public class StatsPresenter
     private readonly VisualElement           _foHistoryContainer;
     private readonly VisualElement           _coHistoryContainer;
 
-    public StatsPresenter(VisualElement root)
+    private readonly UiTemplates _templates;
+
+    // Static empty states and table headers from the panel UXML, switched per refresh.
+    private readonly VisualElement _scoreDistEmpty, _scoringLifetimeEmpty, _foStatsEmpty;
+    private readonly VisualElement _coDistEmpty, _coLifetimeEmpty, _tgStatsEmpty;
+    private readonly VisualElement _scoringHistoryEmpty, _foHistoryEmpty, _coHistoryEmpty, _tgHistoryEmpty;
+    private readonly VisualElement _scoringHistoryHeader, _foHistoryHeader, _coHistoryHeader, _tgHistoryHeader;
+
+    public StatsPresenter(VisualElement root, UiTemplates templates)
     {
+        _templates = templates;
         _tabPanels = new[]
         {
             root.Q<VisualElement>("stats-scoring-panel"),
@@ -114,6 +123,21 @@ public class StatsPresenter
         _tgHeatmap = new DartboardHeatmapElement();
         root.Q<VisualElement>("stats-tg-heatmap")?.Add(_tgHeatmap);
 
+        _scoreDistEmpty       = root.Q("score-dist-empty");
+        _scoringLifetimeEmpty = root.Q("scoring-lifetime-empty");
+        _foStatsEmpty         = root.Q("fo-stats-empty");
+        _coDistEmpty          = root.Q("co-dist-empty");
+        _coLifetimeEmpty      = root.Q("co-lifetime-empty");
+        _tgStatsEmpty         = root.Q("tg-stats-empty");
+        _scoringHistoryEmpty  = root.Q("scoring-history-empty");
+        _foHistoryEmpty       = root.Q("fo-history-empty");
+        _coHistoryEmpty       = root.Q("co-history-empty");
+        _tgHistoryEmpty       = root.Q("tg-history-empty");
+        _scoringHistoryHeader = root.Q("scoring-history-header");
+        _foHistoryHeader      = root.Q("fo-history-header");
+        _coHistoryHeader      = root.Q("co-history-header");
+        _tgHistoryHeader      = root.Q("tg-history-header");
+
         ShowInnerTab(0);
     }
 
@@ -164,10 +188,8 @@ public class StatsPresenter
     private void BuildScoreDistribution(List<ScoringSession> sessions)
     {
         if (_scoreDistContainer == null) return;
-        _scoreDistContainer.Clear();
-
         int totalRounds = sessions.Sum(s => s.rounds.Count);
-        if (totalRounds == 0) { AddPlaceholder(_scoreDistContainer); return; }
+        if (!UiRows.ResetList(_scoreDistContainer, _scoreDistEmpty, null, totalRounds > 0)) return;
 
         int c180 = sessions.Sum(s => s.count180);
         int c140 = sessions.Sum(s => s.count140Plus);
@@ -180,31 +202,18 @@ public class StatsPresenter
         AddBar(_scoreDistContainer, "<100", cLow, totalRounds, "bar-row__fill--muted");
     }
 
-    private static void AddBar(VisualElement parent, string labelText, int count, int total, string fillClass)
+    private void AddBar(VisualElement parent, string labelText, int count, int total, string fillClass)
     {
         float pct = total > 0 ? (float)count / total : 0f;
 
-        var row = new VisualElement();
-        row.AddToClassList("bar-row");
+        var row = UiTemplates.Row(_templates.BarRow);
+        row.Q<Label>("label").text = labelText;
 
-        var lbl = new Label(labelText);
-        lbl.AddToClassList("bar-row__label");
-
-        var track = new VisualElement();
-        track.AddToClassList("bar-row__track");
-
-        var fill = new VisualElement();
-        fill.AddToClassList("bar-row__fill");
+        var fill = row.Q("fill");
         fill.AddToClassList(fillClass);
         fill.style.width = Length.Percent(pct * 100f);
-        track.Add(fill);
 
-        var countLbl = new Label($"{count}  {pct * 100:F0}%");
-        countLbl.AddToClassList("bar-row__count");
-
-        row.Add(lbl);
-        row.Add(track);
-        row.Add(countLbl);
+        row.Q<Label>("count").text = $"{count}  {pct * 100:F0}%";
         parent.Add(row);
     }
 
@@ -213,9 +222,7 @@ public class StatsPresenter
     private void BuildScoringLifetime(PlayerProfile profile, List<ScoringSession> sessions)
     {
         if (_scoringLifetimeContainer == null) return;
-        _scoringLifetimeContainer.Clear();
-
-        if (sessions.Count == 0) { AddPlaceholder(_scoringLifetimeContainer); return; }
+        if (!UiRows.ResetList(_scoringLifetimeContainer, _scoringLifetimeEmpty, null, sessions.Count > 0)) return;
 
         int bestRound = profile.sessions
             .OfType<ScoringSession>()
@@ -241,9 +248,7 @@ public class StatsPresenter
     private void BuildFoStats(List<FiveOhOneSession> legs)
     {
         if (_foStatsContainer == null) return;
-        _foStatsContainer.Clear();
-
-        if (legs.Count == 0) { AddPlaceholder(_foStatsContainer); return; }
+        if (!UiRows.ResetList(_foStatsContainer, _foStatsEmpty, null, legs.Count > 0)) return;
 
         var withFin = legs.Where(l => l.dartsToFinishPossible.HasValue).ToList();
         float avgDtF = withFin.Count > 0 ? (float)withFin.Average(l => l.dartsToFinishPossible!.Value) : 0f;
@@ -268,27 +273,12 @@ public class StatsPresenter
         AddStatRow(_foStatsContainer, "Min darts to finish",  minDtF > 0 ? minDtF.ToString() : "n.a.");
     }
 
-    private static void AddStatRow(VisualElement parent, string label, string value)
+    private void AddStatRow(VisualElement parent, string label, string value)
     {
-        var row = new VisualElement();
-        row.AddToClassList("stat-row");
-
-        var lbl = new Label(label);
-        lbl.AddToClassList("stat-row__label");
-
-        var val = new Label(value);
-        val.AddToClassList("stat-row__value");
-
-        row.Add(lbl);
-        row.Add(val);
+        var row = UiTemplates.Row(_templates.StatRow);
+        row.Q<Label>("label").text = label;
+        row.Q<Label>("value").text = value;
         parent.Add(row);
-    }
-
-    private static void AddPlaceholder(VisualElement parent)
-    {
-        var lbl = new Label("No data yet");
-        lbl.AddToClassList("placeholder-text");
-        parent.Add(lbl);
     }
 
     // ── Training Game ────────────────────────────────────────────────────────
@@ -320,10 +310,9 @@ public class StatsPresenter
     private void BuildTgStats(PlayerProfile profile)
     {
         if (_tgStatsContainer == null) return;
-        _tgStatsContainer.Clear();
 
         var matches = profile.trainingGameMatches;
-        if (matches.Count == 0) { AddPlaceholder(_tgStatsContainer); return; }
+        if (!UiRows.ResetList(_tgStatsContainer, _tgStatsEmpty, null, matches.Count > 0)) return;
 
         float winRate      = profile.TrainingGameWinRate() * 100f;
         float avgPlayerAvg = matches.Average(m => m.playerAverage);
@@ -346,27 +335,22 @@ public class StatsPresenter
     private void BuildTgHistory(PlayerProfile profile)
     {
         if (_tgHistoryContainer == null) return;
-        _tgHistoryContainer.Clear();
-
         var recent = profile.RecentMatches(10);
-        if (recent.Count == 0) { AddPlaceholder(_tgHistoryContainer); return; }
-
-        _tgHistoryContainer.Add(BuildHistoryHeader(new[] { ("Date", 110), ("You", 60), ("AI", 60), ("CO%", 50), ("Result", 55), ("", 30) }));
+        if (!UiRows.ResetList(_tgHistoryContainer, _tgHistoryEmpty, _tgHistoryHeader, recent.Count > 0)) return;
 
         for (int i = recent.Count - 1; i >= 0; i--)
         {
-            var m   = recent[i];
-            var row = BuildHistoryRow();
-
+            var m = recent[i];
             string coText = m.playerCheckoutRate >= 0f ? $"{m.playerCheckoutRate * 100:F0}%" : "n.a.";
 
-            AddCell(row, m.endTime.Length > 10 ? m.endTime[..10] : m.endTime, 110, null);
-            AddCell(row, m.playerAverage.ToString("F1"), 60, null);
-            AddCell(row, m.aiAverage.ToString("F1"), 60, "list-row__cell--muted");
-            AddCell(row, coText, 50, null);
-            AddCell(row, m.playerWon ? "Win" : "Loss", 55, m.playerWon ? "list-row__cell--hit" : "list-row__cell--live");
-            AddDeleteButton(row, () => { DataManager.Instance.DeleteTrainingGameMatch(m); Refresh(DataManager.Instance.Profile); });
-            _tgHistoryContainer.Add(row);
+            var row = AddHistoryRow(_tgHistoryContainer, _templates.HistoryRow_TrainingGame,
+                () => { DataManager.Instance.DeleteTrainingGameMatch(m); Refresh(DataManager.Instance.Profile); },
+                m.endTime.Length > 10 ? m.endTime[..10] : m.endTime,
+                m.playerAverage.ToString("F1"),
+                m.aiAverage.ToString("F1"),
+                coText,
+                m.playerWon ? "Win" : "Loss");
+            row.Q<Label>("cell4").AddToClassList(m.playerWon ? "list-row__cell--hit" : "list-row__cell--live");
         }
     }
 
@@ -408,8 +392,7 @@ public class StatsPresenter
     private void BuildCoDistribution(List<CheckOutSession> sessions)
     {
         if (_coDistContainer == null) return;
-        _coDistContainer.Clear();
-        if (sessions.Count == 0) { AddPlaceholder(_coDistContainer); return; }
+        if (!UiRows.ResetList(_coDistContainer, _coDistEmpty, null, sessions.Count > 0)) return;
 
         int td  = sessions.Count(s => s.mode == CheckOutMode.TargetDouble);
         int ch  = sessions.Count(s => s.mode == CheckOutMode.CheckoutChallenge);
@@ -423,8 +406,7 @@ public class StatsPresenter
     private void BuildCoLifetime(List<CheckOutSession> sessions)
     {
         if (_coLifetimeContainer == null) return;
-        _coLifetimeContainer.Clear();
-        if (sessions.Count == 0) { AddPlaceholder(_coLifetimeContainer); return; }
+        if (!UiRows.ResetList(_coLifetimeContainer, _coLifetimeEmpty, null, sessions.Count > 0)) return;
 
         int total  = sessions.Sum(s => s.totalAttempts);
         int hits   = sessions.Sum(s => s.totalHits);
@@ -460,55 +442,48 @@ public class StatsPresenter
     private void BuildScoringHistory(List<ScoringSession> sessions)
     {
         if (_scoringHistoryContainer == null) return;
-        _scoringHistoryContainer.Clear();
-        if (sessions.Count == 0) { AddPlaceholder(_scoringHistoryContainer); return; }
+        if (!UiRows.ResetList(_scoringHistoryContainer, _scoringHistoryEmpty, _scoringHistoryHeader, sessions.Count > 0)) return;
 
-        _scoringHistoryContainer.Add(BuildHistoryHeader(new[] { ("Date", 90), ("Avg", 60), ("180s", 40), ("Visits", 55), ("", 30) }));
         for (int i = sessions.Count - 1; i >= 0; i--)
         {
-            var s   = sessions[i];
-            var row = BuildHistoryRow();
-            AddCell(row, s.date.Length > 10 ? s.date[..10] : s.date, 90, null);
-            AddCell(row, s.averageScore.ToString("F1"), 60, null);
-            AddCell(row, s.count180.ToString(), 40, null);
-            AddCell(row, s.rounds.Count.ToString(), 55, "list-row__cell--muted");
-            AddDeleteButton(row, () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); });
-            _scoringHistoryContainer.Add(row);
+            var s = sessions[i];
+            AddHistoryRow(_scoringHistoryContainer, _templates.HistoryRow_Scoring,
+                () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
+                s.date.Length > 10 ? s.date[..10] : s.date,
+                s.averageScore.ToString("F1"),
+                s.count180.ToString(),
+                s.rounds.Count.ToString());
         }
     }
 
     private void BuildFoHistory(List<FiveOhOneSession> legs)
     {
         if (_foHistoryContainer == null) return;
-        _foHistoryContainer.Clear();
-        if (legs.Count == 0) { AddPlaceholder(_foHistoryContainer); return; }
+        if (!UiRows.ResetList(_foHistoryContainer, _foHistoryEmpty, _foHistoryHeader, legs.Count > 0)) return;
 
-        _foHistoryContainer.Add(BuildHistoryHeader(new[] { ("Date", 90), ("3DA", 55), ("CO%", 45), ("Result", 65), ("", 30) }));
         for (int i = legs.Count - 1; i >= 0; i--)
         {
-            var s   = legs[i];
-            var row = BuildHistoryRow();
+            var s = legs[i];
             string coText = s.checkoutRate.HasValue ? $"{s.checkoutRate.Value * 100:F0}%" : "n.a.";
-            AddCell(row, s.date.Length > 10 ? s.date[..10] : s.date, 90, null);
-            AddCell(row, s.threeDartAverage.ToString("F1"), 55, null);
-            AddCell(row, coText, 45, null);
-            AddCell(row, s.wonLeg ? "Finished" : "Open", 65, s.wonLeg ? "list-row__cell--hit" : "list-row__cell--muted");
-            AddDeleteButton(row, () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); });
-            _foHistoryContainer.Add(row);
+
+            var row = AddHistoryRow(_foHistoryContainer, _templates.HistoryRow_FiveOhOne,
+                () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
+                s.date.Length > 10 ? s.date[..10] : s.date,
+                s.threeDartAverage.ToString("F1"),
+                coText,
+                s.wonLeg ? "Finished" : "Open");
+            row.Q<Label>("cell3").AddToClassList(s.wonLeg ? "list-row__cell--hit" : "list-row__cell--muted");
         }
     }
 
     private void BuildCoHistory(List<CheckOutSession> sessions)
     {
         if (_coHistoryContainer == null) return;
-        _coHistoryContainer.Clear();
-        if (sessions.Count == 0) { AddPlaceholder(_coHistoryContainer); return; }
+        if (!UiRows.ResetList(_coHistoryContainer, _coHistoryEmpty, _coHistoryHeader, sessions.Count > 0)) return;
 
-        _coHistoryContainer.Add(BuildHistoryHeader(new[] { ("Date", 90), ("Mode", 65), ("Hit%", 45), ("Attempts", 60), ("", 30) }));
         for (int i = sessions.Count - 1; i >= 0; i--)
         {
-            var s   = sessions[i];
-            var row = BuildHistoryRow();
+            var s = sessions[i];
             string modeText = s.mode switch
             {
                 CheckOutMode.TargetDouble      => "Target",
@@ -516,54 +491,22 @@ public class StatsPresenter
                 CheckOutMode.FiveCheckouts     => "Five",
                 _                              => "–"
             };
-            AddCell(row, s.date.Length > 10 ? s.date[..10] : s.date, 90, null);
-            AddCell(row, modeText, 65, null);
-            AddCell(row, $"{s.hitRate * 100:F0}%", 45, null);
-            AddCell(row, s.totalAttempts.ToString(), 60, "list-row__cell--muted");
-            AddDeleteButton(row, () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); });
-            _coHistoryContainer.Add(row);
+            AddHistoryRow(_coHistoryContainer, _templates.HistoryRow_Doubles,
+                () => { DataManager.Instance.DeleteSession(s); Refresh(DataManager.Instance.Profile); },
+                s.date.Length > 10 ? s.date[..10] : s.date,
+                modeText,
+                $"{s.hitRate * 100:F0}%",
+                s.totalAttempts.ToString());
         }
     }
 
-    // ── History row helpers ──────────────────────────────────────────────────
+    // ── History row helper ───────────────────────────────────────────────────
 
-    private static VisualElement BuildHistoryHeader((string, int)[] columns)
+    private static VisualElement AddHistoryRow(VisualElement container, VisualTreeAsset tpl, System.Action onDelete, params string[] cells)
     {
-        var header = new VisualElement();
-        header.AddToClassList("list-row");
-        header.AddToClassList("list-row--header");
-        foreach (var (text, width) in columns)
-        {
-            var lbl = new Label(text);
-            lbl.AddToClassList("list-row__cell");
-            lbl.AddToClassList("list-row__cell--fixed");
-            lbl.style.width = width;
-            header.Add(lbl);
-        }
-        return header;
-    }
-
-    private static VisualElement BuildHistoryRow()
-    {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
+        var row = UiRows.Cells(tpl, cells);
+        row.Q<Button>("delete").clicked += onDelete;
+        container.Add(row);
         return row;
-    }
-
-    private static void AddCell(VisualElement row, string text, int width, string modifierClass)
-    {
-        var lbl = new Label(text);
-        lbl.AddToClassList("list-row__cell");
-        lbl.AddToClassList("list-row__cell--fixed");
-        if (modifierClass != null) lbl.AddToClassList(modifierClass);
-        lbl.style.width = width;
-        row.Add(lbl);
-    }
-
-    private static void AddDeleteButton(VisualElement row, System.Action onClick)
-    {
-        var btn = new Button(onClick) { text = "X" };
-        btn.AddToClassList("icon-button");
-        row.Add(btn);
     }
 }

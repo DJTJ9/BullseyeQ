@@ -9,9 +9,11 @@
         </ui:VisualElement>
         <ui:VisualElement class="col-main">
             <ui:Label text="Mode distribution" class="section-title"/>
+            <ui:Label name="co-dist-empty" text="No data yet" class="placeholder-text"/>
             <ui:VisualElement name="co-dist-container"/>
             <ui:VisualElement class="divider"/>
             <ui:Label text="Lifetime" class="section-title"/>
+            <ui:Label name="co-lifetime-empty" text="No data yet" class="placeholder-text"/>
             <ui:VisualElement name="co-lifetime-container"/>
         </ui:VisualElement>
         <ui:VisualElement class="col-side">
@@ -20,6 +22,14 @@
             <ui:VisualElement class="divider"/>
             <ui:Label text="Session history" class="section-title"/>
             <ui:ScrollView name="co-history-scroll" class="scroll">
+                <ui:Label name="co-history-empty" text="No data yet" class="placeholder-text"/>
+                <ui:VisualElement name="co-history-header" class="list-row list-row--header">
+                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-co__date"/>
+                    <ui:Label text="Mode" class="list-row__cell list-row__cell--fixed hist-co__mode"/>
+                    <ui:Label text="Hit%" class="list-row__cell list-row__cell--fixed hist-co__hit"/>
+                    <ui:Label text="Attempts" class="list-row__cell list-row__cell--fixed hist-co__attempts"/>
+                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                </ui:VisualElement>
                 <ui:VisualElement name="co-history-container"/>
             </ui:ScrollView>
         </ui:VisualElement>

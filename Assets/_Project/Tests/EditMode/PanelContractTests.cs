@@ -59,6 +59,10 @@ public class PanelContractTests
         "chart-fo-avg", "chart-fo-checkout", "fo-stats-container", "stats-fo-heatmap", "fo-history-container",
         "chart-co-hitrate", "chart-co-highscore", "co-dist-container", "co-lifetime-container", "stats-co-heatmap", "co-history-container",
         "chart-tg-winrate", "chart-tg-avg", "tg-stats-container", "stats-tg-heatmap", "tg-history-container",
+        "score-dist-empty", "scoring-lifetime-empty", "scoring-history-empty", "scoring-history-header",
+        "fo-stats-empty", "fo-history-empty", "fo-history-header",
+        "co-dist-empty", "co-lifetime-empty", "co-history-empty", "co-history-header",
+        "tg-stats-empty", "tg-history-empty", "tg-history-header",
         // Settings
         "settings-toggle-motion", "settings-btn-reset-stats",
     };

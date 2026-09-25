@@ -9,6 +9,7 @@
         </ui:VisualElement>
         <ui:VisualElement class="col-main">
             <ui:Label text="Training game stats" class="section-title"/>
+            <ui:Label name="tg-stats-empty" text="No data yet" class="placeholder-text"/>
             <ui:VisualElement name="tg-stats-container"/>
             <ui:VisualElement class="divider"/>
             <ui:Label text="Overall heatmap" class="section-title"/>
@@ -17,6 +18,15 @@
         <ui:VisualElement class="col-main col-main--wide col-main--last">
             <ui:Label text="Match history (last 10)" class="section-title"/>
             <ui:ScrollView name="tg-history-scroll" class="scroll">
+                <ui:Label name="tg-history-empty" text="No data yet" class="placeholder-text"/>
+                <ui:VisualElement name="tg-history-header" class="list-row list-row--header">
+                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-tg__date"/>
+                    <ui:Label text="You" class="list-row__cell list-row__cell--fixed hist-tg__you"/>
+                    <ui:Label text="AI" class="list-row__cell list-row__cell--fixed hist-tg__ai"/>
+                    <ui:Label text="CO%" class="list-row__cell list-row__cell--fixed hist-tg__co"/>
+                    <ui:Label text="Result" class="list-row__cell list-row__cell--fixed hist-tg__result"/>
+                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                </ui:VisualElement>
                 <ui:VisualElement name="tg-history-container"/>
             </ui:ScrollView>
         </ui:VisualElement>

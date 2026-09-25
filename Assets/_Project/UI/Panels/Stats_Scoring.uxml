@@ -11,9 +11,11 @@
         </ui:VisualElement>
         <ui:VisualElement class="col-main">
             <ui:Label text="Score distribution" class="section-title"/>
+            <ui:Label name="score-dist-empty" text="No data yet" class="placeholder-text"/>
             <ui:VisualElement name="score-dist-container"/>
             <ui:VisualElement class="divider"/>
             <ui:Label text="Lifetime" class="section-title"/>
+            <ui:Label name="scoring-lifetime-empty" text="No data yet" class="placeholder-text"/>
             <ui:VisualElement name="scoring-lifetime-container"/>
         </ui:VisualElement>
         <ui:VisualElement class="col-side">
@@ -22,6 +24,14 @@
             <ui:VisualElement class="divider"/>
             <ui:Label text="Session history" class="section-title"/>
             <ui:ScrollView name="scoring-history-scroll" class="scroll">
+                <ui:Label name="scoring-history-empty" text="No data yet" class="placeholder-text"/>
+                <ui:VisualElement name="scoring-history-header" class="list-row list-row--header">
+                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-scoring__date"/>
+                    <ui:Label text="Avg" class="list-row__cell list-row__cell--fixed hist-scoring__avg"/>
+                    <ui:Label text="180s" class="list-row__cell list-row__cell--fixed hist-scoring__180"/>
+                    <ui:Label text="Visits" class="list-row__cell list-row__cell--fixed hist-scoring__visits"/>
+                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                </ui:VisualElement>
                 <ui:VisualElement name="scoring-history-container"/>
             </ui:ScrollView>
         </ui:VisualElement>

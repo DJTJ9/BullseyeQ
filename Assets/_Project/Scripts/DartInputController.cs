@@ -147,7 +147,7 @@ public class DartInputController : MonoBehaviour
         });
 
         _overviewPresenter     = new OverviewPresenter(root);
-        _statsPresenter2       = new StatsPresenter(root);
+        _statsPresenter2       = new StatsPresenter(root, _templates);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();
 
