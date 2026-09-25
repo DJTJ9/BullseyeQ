@@ -68,6 +68,8 @@ public class CheckOutController : MonoBehaviour
         (21, 40), (41, 80), (81, 120), (121, 170)
     };
 
+    [SerializeField] private UiTemplates _templates;
+
     private static CheckOutSession Session => DataManager.Instance.CurrentCheckOutSession;
 
     void OnEnable()
@@ -268,20 +270,15 @@ public class CheckOutController : MonoBehaviour
 
     private void AddTdRow(CheckOutRound round)
     {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
-
-        string dartsStr = string.Join("  ", round.darts.Select(DartArrow.FieldKey));
         int hits = round.darts.Count(d => DartArrow.FieldKey(d) == round.targetField);
 
-        var dartsLbl = new Label(dartsStr);
-        dartsLbl.AddToClassList("list-row__darts");
+        var row = UiTemplates.Row(_templates.TdRow);
+        row.Q<Label>("darts").text = string.Join("  ", round.darts.Select(DartArrow.FieldKey));
 
-        var hitsLbl = new Label($"Hits {hits}");
-        hitsLbl.AddToClassList("list-row__rem");
+        var hitsLbl = row.Q<Label>("hits");
+        hitsLbl.text = $"Hits {hits}";
         hitsLbl.AddToClassList(hits > 0 ? "list-row__rem--checkout" : "list-row__rem--bust");
 
-        row.Add(dartsLbl); row.Add(hitsLbl);
         _tdRoundsContainer?.Add(row);
         _tdRoundsScroll?.ScrollTo(row);
         UiFx.FlashRow(row);
@@ -366,20 +363,14 @@ public class CheckOutController : MonoBehaviour
 
     private void AddChHistoryRow(int score, int darts, bool success)
     {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
+        var row = UiTemplates.Row(_templates.ChHistoryRow);
+        row.Q<Label>("score").text = score.ToString();
+        row.Q<Label>("darts").text = $"{darts}D";
 
-        var scoreLbl = new Label(score.ToString());
-        scoreLbl.AddToClassList("list-row__darts");
+        var result = row.Q<Label>("result");
+        result.text = success ? "Hit" : "Miss";
+        result.AddToClassList(success ? "list-row__rem--checkout" : "list-row__rem--bust");
 
-        var dartLbl = new Label($"{darts}D");
-        dartLbl.AddToClassList("list-row__score");
-
-        var resLbl = new Label(success ? "Hit" : "Miss");
-        resLbl.AddToClassList("list-row__rem");
-        resLbl.AddToClassList(success ? "list-row__rem--checkout" : "list-row__rem--bust");
-
-        row.Add(scoreLbl); row.Add(dartLbl); row.Add(resLbl);
         _chHistoryContainer?.Add(row);
         UiFx.FlashRow(row);
     }
@@ -450,18 +441,12 @@ public class CheckOutController : MonoBehaviour
             bool active = i == _fiveActiveIdx;
             bool done   = i < (completed?.Length ?? 0) && completed[i];
 
-            var card = new VisualElement();
-            card.AddToClassList("five-card");
+            var card = UiTemplates.Row(_templates.FiveCard);
             if (done)        card.AddToClassList("five-card--done");
             else if (active) card.AddToClassList("five-card--active");
 
-            var scoreLbl = new Label(scores[i].ToString());
-            scoreLbl.AddToClassList("five-card__score");
-
-            var statusLbl = new Label(done ? "Done" : active ? "Now" : "-");
-            statusLbl.AddToClassList("five-card__status");
-
-            card.Add(scoreLbl); card.Add(statusLbl);
+            card.Q<Label>("score").text  = scores[i].ToString();
+            card.Q<Label>("status").text = done ? "Done" : active ? "Now" : "-";
             _fiveCardsContainer.Add(card);
         }
     }
