@@ -1,0 +1,88 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="score-bug">
+        <ui:VisualElement name="fo-plate" class="score-plate">
+            <ui:Label text="YOU" class="score-plate__name"/>
+            <ui:VisualElement class="score-plate__body">
+                <ui:Label name="fo-current-score" text="501" class="score-plate__rest"/>
+                <ui:VisualElement class="score-plate__sub">
+                    <ui:Label name="fo-plate-avg" text="avg –" class="score-plate__meta"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="fo-bottom-section" class="columns">
+        <ui:VisualElement name="fo-finishes-section" class="col-side col-side--left panel panel--grow">
+            <ui:Label text="Possible finishes" class="section-title"/>
+            <ui:ScrollView name="fo-finishes-scroll" class="scroll">
+                <ui:VisualElement name="fo-finishes-container">
+                    <ui:Label text="No finish yet." class="placeholder-text"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="fo-center-section" class="col-main">
+            <ui:VisualElement name="fo-input-section" class="panel">
+                <ui:VisualElement name="fo-fields-row" class="fields-row">
+                    <ui:TextField name="fo-dart-field-0" label="Dart 1" class="dart-field"/>
+                    <ui:TextField name="fo-dart-field-1" label="Dart 2" class="dart-field"/>
+                    <ui:TextField name="fo-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                </ui:VisualElement>
+                <ui:Label name="fo-feedback-label" text="" class="feedback"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="list-block">
+                <ui:VisualElement name="fo-throws-header" class="list-header">
+                    <ui:Label text="Throws" class="list-title"/>
+                    <ui:Button name="fo-btn-remove-last" text="Undo last" class="text-button text-button--small"/>
+                </ui:VisualElement>
+                <ui:ScrollView name="fo-throws-scroll" class="scroll">
+                    <ui:VisualElement name="fo-throws-container"/>
+                </ui:ScrollView>
+                <ui:VisualElement class="divider"/>
+                <ui:Label text="Recent legs" class="section-title"/>
+                <ui:ScrollView name="fo-recent-sessions-scroll" class="scroll scroll--fixed">
+                    <ui:VisualElement name="fo-recent-sessions-container">
+                        <ui:Label text="No finished legs yet." class="placeholder-text"/>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:VisualElement name="fo-session-buttons" class="button-row">
+                    <ui:Button name="fo-btn-new-session" text="New session" class="text-button text-button--primary button-row__gap"/>
+                    <ui:Button name="fo-btn-reset-session" text="Reset session" class="text-button text-button--danger"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="fo-stats-section" class="col-side panel panel--grow">
+            <ui:Label text="Session stats" class="section-title"/>
+            <ui:VisualElement class="stat-grid">
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-darts" text="–" class="stat-value"/>
+                    <ui:Label text="Darts" class="stat-caption"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-avg" text="–" class="stat-value"/>
+                    <ui:Label text="3-dart avg" class="stat-caption"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="stat-grid">
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-triple" text="–" class="stat-value"/>
+                    <ui:Label text="Triple rate" class="stat-caption"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-wasted" text="–" class="stat-value"/>
+                    <ui:Label text="Wasted darts" class="stat-caption"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="stat-grid">
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-darts-to-finish" text="–" class="stat-value"/>
+                    <ui:Label text="Darts to finish" class="stat-caption"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="fo-stat-checkout" text="–" class="stat-value"/>
+                    <ui:Label text="Checkout rate" class="stat-caption"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="fo-heatmap-container" class="heatmap-slot"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

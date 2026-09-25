@@ -1,0 +1,81 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:Label text="Training game" class="panel-title"/>
+    <ui:VisualElement class="score-bug">
+        <ui:VisualElement name="tg-player-plate" class="score-plate">
+            <ui:Label text="YOU" class="score-plate__name"/>
+            <ui:VisualElement class="score-plate__body">
+                <ui:Label name="tg-current-score" text="501" class="score-plate__rest"/>
+                <ui:VisualElement class="score-plate__sub">
+                    <ui:Label name="tg-player-avg" text="avg –" class="score-plate__meta"/>
+                    <ui:Label name="tg-player-last" text="last –" class="score-plate__meta"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="tg-ai-plate" class="score-plate score-plate--ai">
+            <ui:Label text="AI" class="score-plate__name"/>
+            <ui:VisualElement class="score-plate__body">
+                <ui:Label name="tg-ai-score" text="501" class="score-plate__rest"/>
+                <ui:VisualElement class="score-plate__sub">
+                    <ui:Label name="tg-ai-avg" text="avg –" class="score-plate__meta"/>
+                    <ui:Label name="tg-ai-last-score" text="last –" class="score-plate__meta"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="tg-bottom-section" class="columns">
+        <ui:VisualElement name="tg-finishes-section" class="col-side col-side--left panel panel--grow">
+            <ui:Label text="Possible finishes" class="section-title"/>
+            <ui:ScrollView name="tg-finishes-scroll" class="scroll">
+                <ui:VisualElement name="tg-finishes-container">
+                    <ui:Label text="No finish yet." class="placeholder-text"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="tg-center-section" class="col-main">
+            <ui:VisualElement name="tg-input-section" class="panel">
+                <ui:Label name="tg-turn-label" text="" class="turn-label"/>
+                <ui:VisualElement name="tg-fields-row" class="fields-row">
+                    <ui:TextField name="tg-dart-field-0" label="Dart 1" class="dart-field"/>
+                    <ui:TextField name="tg-dart-field-1" label="Dart 2" class="dart-field"/>
+                    <ui:TextField name="tg-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                </ui:VisualElement>
+                <ui:Label name="tg-feedback-label" text="" class="feedback"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="list-block">
+                <ui:VisualElement name="tg-throws-header" class="list-header">
+                    <ui:Label text="Your throws" class="list-title"/>
+                    <ui:Button name="tg-btn-remove-last" text="Undo last" class="text-button text-button--small"/>
+                </ui:VisualElement>
+                <ui:ScrollView name="tg-throws-scroll" class="scroll">
+                    <ui:VisualElement name="tg-throws-container"/>
+                </ui:ScrollView>
+                <ui:VisualElement class="divider"/>
+                <ui:Label text="Recent legs" class="section-title"/>
+                <ui:ScrollView name="tg-recent-sessions-scroll" class="scroll scroll--fixed">
+                    <ui:VisualElement name="tg-recent-sessions-container">
+                        <ui:Label text="No finished legs yet." class="placeholder-text"/>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:VisualElement name="tg-session-buttons" class="button-row">
+                    <ui:Button name="tg-btn-new-game" text="New game" class="text-button text-button--primary button-row__gap"/>
+                    <ui:Button name="tg-btn-reset-game" text="Reset game" class="text-button text-button--danger"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="tg-ai-section" class="col-side panel panel--grow">
+            <ui:VisualElement name="tg-ai-last-visit-block" class="ai-visit">
+                <ui:Label text="Last AI visit" class="stat-caption"/>
+                <ui:VisualElement name="tg-ai-darts-row" class="ai-slots">
+                    <ui:Label name="tg-ai-dart-0" text="" class="ai-slot"/>
+                    <ui:Label name="tg-ai-dart-1" text="" class="ai-slot"/>
+                    <ui:Label name="tg-ai-dart-2" text="" class="ai-slot"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="AI throws" class="section-title"/>
+            <ui:ScrollView name="tg-ai-throws-scroll" class="scroll">
+                <ui:VisualElement name="tg-ai-throws-container"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

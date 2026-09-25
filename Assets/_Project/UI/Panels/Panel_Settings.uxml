@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:Label text="Settings" class="panel-title"/>
+    <ui:VisualElement class="settings-body">
+        <ui:VisualElement class="settings-row">
+            <ui:VisualElement>
+                <ui:Label text="Reduce motion" class="settings-row__label"/>
+                <ui:Label text="Turns off screen transitions and score animations." class="settings-row__hint"/>
+            </ui:VisualElement>
+            <ui:Toggle name="settings-toggle-motion" class="motion-toggle"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="settings-row">
+            <ui:VisualElement>
+                <ui:Label text="Reset stats" class="settings-row__label"/>
+                <ui:Label text="Deletes every session, leg and match." class="settings-row__hint"/>
+            </ui:VisualElement>
+            <ui:Button name="settings-btn-reset-stats" text="Reset stats" class="text-button text-button--danger"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -104,4 +104,16 @@ public class PanelContractTests
         Assert.IsNotNull(panel, name);
         Assert.IsTrue(panel.ClassListContains("sub-panel"), $"#{name} ohne .sub-panel");
     }
+
+    [TestCaseSource(nameof(ContentPanels))]
+    public void ContentPanel_IsTemplateInstance(string name)
+    {
+        Assert.IsInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist kein <ui:Instance>");
+    }
+
+    [TestCaseSource(nameof(SubPanels))]
+    public void SubPanel_IsTemplateInstance(string name)
+    {
+        Assert.IsInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist kein <ui:Instance>");
+    }
 }

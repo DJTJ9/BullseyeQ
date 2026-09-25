@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="columns">
+        <ui:VisualElement class="col-main col-main--wide">
+            <ui:Label text="3-dart average per leg" class="section-title"/>
+            <ui:VisualElement name="chart-fo-avg" class="chart-container"/>
+            <ui:Label text="Checkout rate %" class="section-title"/>
+            <ui:VisualElement name="chart-fo-checkout" class="chart-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main">
+            <ui:Label text="501 stats" class="section-title"/>
+            <ui:VisualElement name="fo-stats-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-side">
+            <ui:Label text="Overall heatmap" class="section-title"/>
+            <ui:VisualElement name="stats-fo-heatmap" class="heatmap-slot"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Session history" class="section-title"/>
+            <ui:ScrollView name="fo-history-scroll" class="scroll">
+                <ui:VisualElement name="fo-history-container"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

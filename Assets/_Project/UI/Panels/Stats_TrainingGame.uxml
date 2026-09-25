@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="columns">
+        <ui:VisualElement class="col-main col-main--wide">
+            <ui:Label text="Win rate trend" class="section-title"/>
+            <ui:VisualElement name="chart-tg-winrate" class="chart-container"/>
+            <ui:Label text="3-dart average (you)" class="section-title"/>
+            <ui:VisualElement name="chart-tg-avg" class="chart-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main">
+            <ui:Label text="Training game stats" class="section-title"/>
+            <ui:VisualElement name="tg-stats-container"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Overall heatmap" class="section-title"/>
+            <ui:VisualElement name="stats-tg-heatmap" class="heatmap-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main col-main--wide col-main--last">
+            <ui:Label text="Match history (last 10)" class="section-title"/>
+            <ui:ScrollView name="tg-history-scroll" class="scroll">
+                <ui:VisualElement name="tg-history-container"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

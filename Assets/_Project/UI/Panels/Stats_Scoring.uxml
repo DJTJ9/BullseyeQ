@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="columns">
+        <ui:VisualElement class="col-main col-main--wide">
+            <ui:Label text="Avg score per session" class="section-title"/>
+            <ui:VisualElement name="chart-avg-score" class="chart-container"/>
+            <ui:Label text="Triple rate %" class="section-title"/>
+            <ui:VisualElement name="chart-triple-rate" class="chart-container"/>
+            <ui:Label text="Wasted darts %" class="section-title"/>
+            <ui:VisualElement name="chart-wasted-rate" class="chart-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main">
+            <ui:Label text="Score distribution" class="section-title"/>
+            <ui:VisualElement name="score-dist-container"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Lifetime" class="section-title"/>
+            <ui:VisualElement name="scoring-lifetime-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-side">
+            <ui:Label text="Overall heatmap" class="section-title"/>
+            <ui:VisualElement name="stats-scoring-heatmap" class="heatmap-slot"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Session history" class="section-title"/>
+            <ui:ScrollView name="scoring-history-scroll" class="scroll">
+                <ui:VisualElement name="scoring-history-container"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

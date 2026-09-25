@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:Label text="Training plan" class="panel-title"/>
+    <ui:Label text="Based on your last 10 sessions" class="section-title"/>
+    <ui:ScrollView class="scroll">
+        <ui:VisualElement name="tp-no-data" class="empty-state">
+            <ui:Label text="Not enough data yet" class="empty-state__title"/>
+            <ui:Label text="Complete at least 3 sessions to get a personalised training plan." class="empty-state__text"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="tp-rec-container"/>
+    </ui:ScrollView>
+</ui:UXML>

@@ -1,0 +1,50 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="columns">
+        <ui:VisualElement class="col-side col-side--left panel panel--grow">
+            <ui:Label text="Pick a double" class="section-title"/>
+            <ui:Label name="co-td-selected-label" text="–" class="stat-value"/>
+            <ui:VisualElement name="co-td-field-grid" class="field-grid"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main">
+            <ui:VisualElement class="panel">
+                <ui:VisualElement class="fields-row">
+                    <ui:TextField name="co-td-dart-field-0" label="Dart 1" class="dart-field"/>
+                    <ui:TextField name="co-td-dart-field-1" label="Dart 2" class="dart-field"/>
+                    <ui:TextField name="co-td-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                </ui:VisualElement>
+                <ui:Label name="co-td-feedback" text="" class="feedback"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="list-block">
+                <ui:VisualElement class="list-header">
+                    <ui:Label text="Attempts" class="list-title"/>
+                </ui:VisualElement>
+                <ui:ScrollView name="co-td-rounds-scroll" class="scroll">
+                    <ui:VisualElement name="co-td-rounds-container"/>
+                </ui:ScrollView>
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="co-td-btn-new" text="New session" class="text-button text-button--primary button-row__gap"/>
+                    <ui:Button name="co-td-btn-reset" text="Reset session" class="text-button text-button--danger"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-side panel panel--grow">
+            <ui:Label text="Session stats" class="section-title"/>
+            <ui:VisualElement class="stat-grid">
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="co-td-stat-hitrate" text="–" class="stat-value"/>
+                    <ui:Label text="Hit rate" class="stat-caption"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="co-td-stat-hits" text="–" class="stat-value"/>
+                    <ui:Label text="Hits" class="stat-caption"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-block">
+                    <ui:Label name="co-td-stat-attempts" text="–" class="stat-value"/>
+                    <ui:Label text="Attempts" class="stat-caption"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="co-td-heatmap-container" class="heatmap-slot"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

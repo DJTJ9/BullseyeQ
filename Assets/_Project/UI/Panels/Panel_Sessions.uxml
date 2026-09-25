@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:Template name="Session_Scoring" src="Session_Scoring.uxml"/>
+    <ui:Template name="Session_FiveOhOne" src="Session_FiveOhOne.uxml"/>
+    <ui:Template name="Session_Doubles" src="Session_Doubles.uxml"/>
+    <ui:Label text="Training sessions" class="panel-title"/>
+    <ui:VisualElement class="tab-strip">
+        <ui:Button name="session-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
+        <ui:Button name="session-tab-fo" text="501" class="stats-inner-tab"/>
+        <ui:Button name="session-tab-doubles" text="Doubles" class="stats-inner-tab"/>
+    </ui:VisualElement>
+
+    <!-- Scoring -->
+    <ui:Instance template="Session_Scoring" name="session-scoring-panel" class="sub-panel"/>
+
+    <!-- 501 -->
+    <ui:Instance template="Session_FiveOhOne" name="session-fo-panel" class="sub-panel"/>
+
+    <!-- Doubles -->
+    <ui:Instance template="Session_Doubles" name="session-doubles-panel" class="sub-panel"/>
+</ui:UXML>

@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="columns">
+        <ui:VisualElement class="col-main col-main--wide">
+            <ui:Label text="Hit rate trend" class="section-title"/>
+            <ui:VisualElement name="chart-co-hitrate" class="chart-container"/>
+            <ui:Label text="High score trend (challenge)" class="section-title"/>
+            <ui:VisualElement name="chart-co-highscore" class="chart-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-main">
+            <ui:Label text="Mode distribution" class="section-title"/>
+            <ui:VisualElement name="co-dist-container"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Lifetime" class="section-title"/>
+            <ui:VisualElement name="co-lifetime-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="col-side">
+            <ui:Label text="Overall heatmap" class="section-title"/>
+            <ui:VisualElement name="stats-co-heatmap" class="heatmap-slot"/>
+            <ui:VisualElement class="divider"/>
+            <ui:Label text="Session history" class="section-title"/>
+            <ui:ScrollView name="co-history-scroll" class="scroll">
+                <ui:VisualElement name="co-history-container"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
