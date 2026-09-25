@@ -447,6 +447,26 @@
 .list-row__cell--hit   { color: var(--bq-hit); }
 .list-row__cell--live  { color: var(--bq-live); }
 
+/* Stats history tables — fixed column widths (static headers + HistoryRow_* templates) */
+.hist__del              { width: 30px; }
+.hist-scoring__date     { width: 90px; }
+.hist-scoring__avg      { width: 60px; }
+.hist-scoring__180      { width: 40px; }
+.hist-scoring__visits   { width: 55px; }
+.hist-fo__date          { width: 90px; }
+.hist-fo__3da           { width: 55px; }
+.hist-fo__co            { width: 45px; }
+.hist-fo__result        { width: 65px; }
+.hist-co__date          { width: 90px; }
+.hist-co__mode          { width: 65px; }
+.hist-co__hit           { width: 45px; }
+.hist-co__attempts      { width: 60px; }
+.hist-tg__date          { width: 110px; }
+.hist-tg__you           { width: 60px; }
+.hist-tg__ai            { width: 60px; }
+.hist-tg__co            { width: 50px; }
+.hist-tg__result        { width: 55px; }
+
 /* Finishes column */
 .finish-header { font-size: 13px; color: var(--bq-muted); -unity-text-align: middle-center; margin-bottom: 6px; }
 .finish-route  {

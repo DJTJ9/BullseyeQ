@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="list-row">
+        <ui:Label name="darts" text="D20  S20  D20" class="list-row__darts"/>
+        <ui:Label name="hits" text="Hits 2" class="list-row__rem"/>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="plan-card">
+        <ui:VisualElement name="accent" class="plan-card__accent"/>
+        <ui:VisualElement class="plan-card__content">
+            <ui:VisualElement class="plan-card__header">
+                <ui:Label name="badge" text="1 – Priority" class="plan-card__badge"/>
+                <ui:Label name="title" text="Title" class="plan-card__title"/>
+            </ui:VisualElement>
+            <ui:Label name="reason" text="Reason" class="plan-card__reason"/>
+            <ui:Label name="action" text="Action" class="plan-card__action"/>
+        </ui:VisualElement>
+        <ui:Button name="button" text="Train now" class="text-button plan-card__button"/>
+    </ui:VisualElement>
+</ui:UXML>

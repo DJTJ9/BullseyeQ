@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
+    <ui:VisualElement class="list-row">
+        <ui:Label name="cell0" text="2026-01-01" class="list-row__cell list-row__cell--fixed hist-tg__date"/>
+        <ui:Label name="cell1" text="60.0" class="list-row__cell list-row__cell--fixed hist-tg__you"/>
+        <ui:Label name="cell2" text="55.0" class="list-row__cell list-row__cell--fixed list-row__cell--muted hist-tg__ai"/>
+        <ui:Label name="cell3" text="40%" class="list-row__cell list-row__cell--fixed hist-tg__co"/>
+        <ui:Label name="cell4" text="Win" class="list-row__cell list-row__cell--fixed hist-tg__result"/>
+        <ui:Button name="delete" text="X" class="icon-button"/>
+    </ui:VisualElement>
+</ui:UXML>
