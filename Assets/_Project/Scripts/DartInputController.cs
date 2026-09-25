@@ -111,7 +111,7 @@ public class DartInputController : MonoBehaviour
         }
 
         // Logo
-        var logoImage = root.Q<Image>("sidebar-logo");
+        var logoImage = root.Q<Image>("menu-logo");
         if (logoImage != null && _logoTexture != null)
             logoImage.image = _logoTexture;
 
@@ -140,9 +140,9 @@ public class DartInputController : MonoBehaviour
                 _navButtons[idx].clicked += () => ShowPanel(idx);
         }
 
-        // Keep the rail marker aligned when the sidebar lays out (first frame, resize).
-        var sidebar = root.Q<VisualElement>("sidebar");
-        sidebar?.RegisterCallback<GeometryChangedEvent>(_ =>
+        // Keep the rail marker aligned when the menu lays out (first frame, resize).
+        var menuList = root.Q<VisualElement>("menu-list");
+        menuList?.RegisterCallback<GeometryChangedEvent>(_ =>
         {
             if (_activePanel >= 0) UiFx.MoveNavMarker(_navMarker, _navButtons[_activePanel]);
         });
@@ -215,9 +215,9 @@ public class DartInputController : MonoBehaviour
         {
             if (_navButtons[i] == null) continue;
             if (i == index)
-                _navButtons[i].AddToClassList("nav-item--active");
+                _navButtons[i].AddToClassList("menu-item--active");
             else
-                _navButtons[i].RemoveFromClassList("nav-item--active");
+                _navButtons[i].RemoveFromClassList("menu-item--active");
         }
         UiFx.MoveNavMarker(_navMarker, _navButtons[index]);
 

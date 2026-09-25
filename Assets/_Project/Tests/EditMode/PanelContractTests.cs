@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 
 // Prüft, dass die flache Shell jedes Element liefert, das ein Controller per Name sucht, jedes Panel seine Hüllenklasse trägt,
 // kein <ui:Instance> mehr existiert und die USS Panels nicht per display:none versteckt (Sichtbarkeit ist Laufzeit-Sache).
+// Hauptmenü (main-menu/menu-list) und Window (window-header + Panels) ersetzen Sidebar und content-area.
 [TestFixture]
 public class PanelContractTests
 {
@@ -16,8 +17,9 @@ public class PanelContractTests
     static readonly string[] RequiredNames =
     {
         // Shell
-        "root", "sidebar", "nav-marker", "sidebar-logo",
+        "root", "main-menu", "menu-logo", "menu-list", "nav-marker",
         "nav-overview", "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings", "nav-quit",
+        "window", "window-header", "window-back", "window-title", "window-esc-hint", "window-rule",
         "tg-game-over-overlay", "tg-game-over-title", "tg-game-over-subtitle", "tg-btn-ok",
         "modal-overlay", "modal-btn-cancel", "modal-btn-yes", "lower-third", "lower-third-label",
         // Overview
@@ -82,6 +84,11 @@ public class PanelContractTests
         "session-scoring-panel", "session-fo-panel", "session-doubles-panel",
         "checkout-target-panel", "checkout-challenge-panel", "checkout-five-panel",
         "stats-scoring-panel", "stats-fo-panel", "stats-doubles-panel", "stats-tg-panel",
+    };
+
+    static readonly string[] MenuItems =
+    {
+        "nav-overview", "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings", "nav-quit",
     };
 
     VisualElement _root;
@@ -154,6 +161,53 @@ public class PanelContractTests
         Assert.Greater(rules.Count, 0, "Regeln für .content-panel/.sub-panel/.modal-overlay nicht gefunden");
         foreach (Match r in rules)
             StringAssert.DoesNotContain("display", r.Groups[2].Value, $"'{r.Groups[1].Value.Trim()}' setzt display");
+    }
+
+    [TestCaseSource(nameof(MenuItems))]
+    public void MenuItem_LivesInMenuListWithClass(string name)
+    {
+        var item = _root.Q(name);
+        Assert.AreEqual("menu-list", item.parent.name, $"#{name} liegt nicht direkt in #menu-list");
+        Assert.IsTrue(item.ClassListContains("menu-item"), $"#{name} ohne .menu-item");
+    }
+
+    [Test]
+    public void NavMarker_LivesInMenuList()
+    {
+        Assert.AreEqual("menu-list", _root.Q("nav-marker").parent.name);
+    }
+
+    [TestCaseSource(nameof(ContentPanels))]
+    public void ContentPanel_LivesInWindow(string name)
+    {
+        Assert.AreEqual("window", _root.Q(name).parent.name, $"#{name} liegt nicht direkt in #window");
+    }
+
+    [Test]
+    public void WindowHeader_IsFirstChildOfWindow()
+    {
+        Assert.AreEqual("window-header", _root.Q("window")[0].name);
+        Assert.AreEqual("window-header", _root.Q("window-rule").parent.name);
+    }
+
+    // Der Titel steht im window-header; ein Panel-eigener Titel wäre doppelt.
+    [Test]
+    public void Shell_HasNoPanelTitles()
+    {
+        Assert.AreEqual(0, _root.Query(className: "panel-title").ToList().Count);
+    }
+
+    [Test]
+    public void Shell_HasNoSidebar()
+    {
+        Assert.IsNull(_root.Q("sidebar"));
+        Assert.IsNull(_root.Q("sidebar-logo"));
+        Assert.IsNull(_root.Q("content-area"));
+        var uss = File.ReadAllText(UssPath);
+        StringAssert.DoesNotContain(".sidebar", uss);
+        StringAssert.DoesNotContain(".nav-item", uss);
+        StringAssert.DoesNotContain(".content-area", uss);
+        StringAssert.DoesNotContain(".panel-title", uss);
     }
 
     static readonly string[] HeatmapSlots =

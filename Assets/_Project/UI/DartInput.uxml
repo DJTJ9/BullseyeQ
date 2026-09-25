@@ -3,25 +3,33 @@
     <ui:VisualElement name="root">
         <StageVignetteElement name="stage-bg"/>
 
-        <!-- ── Sidebar ─────────────────────────────────────────────── -->
-        <ui:VisualElement name="sidebar" class="sidebar">
-            <ui:VisualElement name="nav-marker" class="nav-marker"/>
-            <ui:Image name="sidebar-logo" class="sidebar__logo" src="project://database/Assets/_Project/Art/BullseyeQ-Logo.png"/>
-            <ui:Button name="nav-overview" text="Overview" class="nav-item"/>
-            <ui:Button name="nav-training-game" text="Training game" class="nav-item"/>
-            <ui:Button name="nav-training-sessions" text="Training sessions" class="nav-item"/>
-            <ui:Button name="nav-training-plan" text="Training plan" class="nav-item"/>
-            <ui:Button name="nav-stats" text="Stats &amp; analytics" class="nav-item"/>
-            <ui:Button name="nav-settings" text="Settings" class="nav-item"/>
-            <ui:VisualElement class="scroll"/>
-            <ui:Button name="nav-quit" text="Quit" class="nav-item nav-item--quit"/>
+        <!-- ── Main menu (runtime shows either this or the window) ──── -->
+        <ui:VisualElement name="main-menu" class="main-menu">
+            <ui:Image name="menu-logo" class="menu-logo" src="project://database/Assets/_Project/Art/BullseyeQ-Logo.png"/>
+            <ui:VisualElement name="menu-list" class="menu-list">
+                <ui:VisualElement name="nav-marker" class="nav-marker"/>
+                <ui:Button name="nav-overview" text="Overview" class="menu-item"/>
+                <ui:Button name="nav-training-game" text="Training game" class="menu-item"/>
+                <ui:Button name="nav-training-sessions" text="Training sessions" class="menu-item"/>
+                <ui:Button name="nav-training-plan" text="Training plan" class="menu-item"/>
+                <ui:Button name="nav-stats" text="Stats &amp; analytics" class="menu-item"/>
+                <ui:Button name="nav-settings" text="Settings" class="menu-item"/>
+                <ui:VisualElement class="menu-list__gap"/>
+                <ui:Button name="nav-quit" text="Quit" class="menu-item menu-item--quit"/>
+            </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement name="content-area" class="content-area">
+        <!-- ── Window ──────────────────────────────────────────────── -->
+        <ui:VisualElement name="window" class="window">
+            <ui:VisualElement name="window-header" class="window-header">
+                <ui:Button name="window-back" text="Menu" class="text-button window-back"/>
+                <ui:Label name="window-title" text="Overview" class="window-title"/>
+                <ui:Label name="window-esc-hint" text="Esc" class="window-esc-hint"/>
+                <ui:VisualElement name="window-rule" class="window-rule" picking-mode="Ignore"/>
+            </ui:VisualElement>
 
             <!-- ── Overview ────────────────────────────────────────── -->
             <ui:VisualElement name="panel-overview" class="content-panel">
-                <ui:Label text="Overview" class="panel-title"/>
                 <ui:VisualElement class="hero-row">
                     <ui:VisualElement class="hero">
                         <ui:Label name="ov-lifetime-avg" text="–" class="hero-value"/>
@@ -97,7 +105,6 @@
 
             <!-- ── Training game ───────────────────────────────────── -->
             <ui:VisualElement name="panel-training-game" class="content-panel" style="display: none;">
-                <ui:Label text="Training game" class="panel-title"/>
                 <ui:VisualElement class="score-bug">
                     <ui:VisualElement name="tg-player-plate" class="score-plate">
                         <ui:Label text="YOU" class="score-plate__name"/>
@@ -205,7 +212,6 @@
 
             <!-- ── Training sessions ───────────────────────────────── -->
             <ui:VisualElement name="panel-training-sessions" class="content-panel" style="display: none;">
-                <ui:Label text="Training sessions" class="panel-title"/>
                 <ui:VisualElement class="tab-strip">
                     <ui:Button name="session-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
                     <ui:Button name="session-tab-fo" text="501" class="stats-inner-tab"/>
@@ -611,7 +617,6 @@
 
             <!-- ── Training plan ───────────────────────────────────── -->
             <ui:VisualElement name="panel-training-plan" class="content-panel" style="display: none;">
-                <ui:Label text="Training plan" class="panel-title"/>
                 <ui:Label text="Based on your last 10 sessions" class="section-title"/>
                 <ui:ScrollView class="scroll">
                     <ui:VisualElement name="tp-no-data" class="empty-state">
@@ -637,7 +642,6 @@
 
             <!-- ── Stats & analytics ───────────────────────────────── -->
             <ui:VisualElement name="panel-stats" class="content-panel" style="display: none;">
-                <ui:Label text="Stats &amp; analytics" class="panel-title"/>
                 <ui:VisualElement class="tab-strip">
                     <ui:Button name="stats-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
                     <ui:Button name="stats-tab-fo" text="501" class="stats-inner-tab"/>
@@ -886,7 +890,6 @@
 
             <!-- ── Settings ────────────────────────────────────────── -->
             <ui:VisualElement name="panel-settings" class="content-panel" style="display: none;">
-                <ui:Label text="Settings" class="panel-title"/>
                 <ui:VisualElement class="settings-body">
                     <ui:VisualElement class="settings-row">
                         <ui:VisualElement>
@@ -906,7 +909,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <!-- ── Root-level overlays (cover the sidebar too) ─────────── -->
+        <!-- ── Root-level overlays (cover menu and window) ───────────── -->
         <ui:VisualElement name="tg-game-over-overlay" class="modal-overlay" style="display: none;">
             <ui:VisualElement class="modal-box">
                 <ui:Label name="tg-game-over-title" text="" class="game-over-title"/>

@@ -37,6 +37,7 @@
     --bq-fs-3xl: 48px;
     --bq-fs-4xl: 68px;
     --bq-fs-5xl: 116px;
+    --bq-fs-menu: 44px;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────── */
@@ -76,47 +77,62 @@
 }
 .unity-scroll-view__content-viewport { padding-right: 4px; }
 
-/* ── Sidebar ──────────────────────────────────────────────────────────── */
+/* ── Main menu ────────────────────────────────────────────────────────── */
+/* Text colour/font rules carry #root: `#root .unity-text-element` (1,1,0) would
+   otherwise override a plain class selector. */
 
-.sidebar {
-    width: 200px;
-    flex-shrink: 0;
-    flex-direction: column;
-    padding-top: 16px;
-    padding-bottom: 16px;
-}
-
-.sidebar__logo {
-    width: 200px;
-    height: 112px;
-    flex-shrink: 0;
-    margin-bottom: 20px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.nav-item {
+.main-menu {
+    flex-grow: 1;
     flex-direction: row;
     align-items: center;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 24px;
+    padding-left: 64px;
+    padding-right: 64px;
+}
+
+.menu-logo {
+    width: 55%;
+    height: 70%;
+    flex-shrink: 0;
+    margin-right: 48px;
+}
+
+.menu-list {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.menu-item {
+    height: 72px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 28px;
     padding-right: 16px;
     margin: 0;
     border-width: 0;
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
-    color: var(--bq-muted);
-    font-size: var(--bq-fs-md);
-    -unity-font-definition: url("/Assets/_Project/Fonts/BarlowCondensed-Medium.ttf");
+    font-size: var(--bq-fs-menu);
     -unity-text-align: middle-left;
-    transition-property: color, background-color;
+    transition-property: color;
     transition-duration: 150ms;
 }
 
-.nav-item:hover        { color: var(--bq-text); background-color: var(--bq-hover); }
-.nav-item--active      { color: var(--bq-text); }
-.nav-item--quit        { color: var(--bq-live); margin-bottom: 8px; }
-.nav-item--quit:hover  { color: var(--bq-live); background-color: var(--bq-live-dim); }
+#root .menu-item {
+    color: var(--bq-muted);
+    -unity-font-definition: url("/Assets/_Project/Fonts/BarlowCondensed-Medium.ttf");
+}
+#root .menu-item:hover,
+#root .menu-item:focus,
+#root .menu-item--active      { color: var(--bq-text); }
+#root .menu-item--quit        { color: rgba(229, 32, 43, 0.7); }
+#root .menu-item--quit:hover,
+#root .menu-item--quit:focus  { color: var(--bq-live); }
+
+.menu-list__gap { height: 36px; flex-shrink: 0; }
 
 .nav-marker {
     position: absolute;
@@ -130,21 +146,73 @@
     transition-timing-function: ease-out;
 }
 
-/* ── Content panels + transitions ─────────────────────────────────────── */
+/* ── Window ───────────────────────────────────────────────────────────── */
 
-.content-area {
+.window {
     flex-grow: 1;
     flex-direction: column;
     min-width: 0;
 }
 
+.window-header {
+    height: 88px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 48px;
+    padding-right: 48px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--bq-line);
+}
+
+.window-header .window-back,
+.window-header .window-back:hover {
+    border-left-width: 4px;
+    border-left-color: var(--bq-live);
+}
+
+#root .window-title {
+    flex-grow: 1;
+    margin-left: 24px;
+    font-size: var(--bq-fs-2xl);
+    color: var(--bq-text);
+    -unity-font-definition: url("/Assets/_Project/Fonts/BarlowCondensed-SemiBoldItalic.ttf");
+}
+
+#root .window-esc-hint {
+    font-size: var(--bq-fs-sm);
+    color: var(--bq-muted);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-width: 1px;
+    border-color: var(--bq-line);
+    border-radius: var(--bq-radius);
+}
+
+/* Red rule under the header: the menu marker "thrown" into the window (UiFx.SweepRule). Hidden at rest. */
+.window-rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--bq-live);
+    transform-origin: left;
+    scale: 0 1;
+    opacity: 0;
+}
+
+/* ── Content panels + transitions ─────────────────────────────────────── */
+
 .content-panel {
     flex-grow: 1;
     flex-direction: column;
-    padding-top: 24px;
-    padding-bottom: 20px;
-    padding-left: 28px;
-    padding-right: 28px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 48px;
+    padding-right: 48px;
     min-height: 0;
 }
 
@@ -171,13 +239,6 @@
 .content-panel--exit {
     opacity: 0;
     transition-duration: var(--bq-dur-exit);
-}
-
-.panel-title {
-    font-size: var(--bq-fs-xl);
-    color: var(--bq-text);
-    -unity-font-definition: url("/Assets/_Project/Fonts/BarlowCondensed-SemiBoldItalic.ttf");
-    margin-bottom: 16px;
 }
 
 .section-title {
@@ -776,7 +837,7 @@
 
 /* ── Reduced motion: every transition-bearing selector → 0 s ─────────── */
 
-.bq-no-motion .nav-item,
+.bq-no-motion .menu-item,
 .bq-no-motion .nav-marker,
 .bq-no-motion .content-panel,
 .bq-no-motion .sub-panel,
