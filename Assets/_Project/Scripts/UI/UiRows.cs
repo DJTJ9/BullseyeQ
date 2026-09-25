@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine.UIElements;
 
@@ -9,8 +10,33 @@ public static class UiRows
 {
     /// <summary>One 501 / training-game visit: number, darts, points scored, remaining (or Bust / Out).</summary>
     public static VisualElement Visit(VisualTreeAsset tpl, int number, FiveOhOneVisit visit, int remAfter)
+        => FillVisit(UiTemplates.Row(tpl), number, visit, remAfter);
+
+    /// <summary>Instantiates <paramref name="tpl"/> and writes <paramref name="texts"/> into its cell0…cellN labels.</summary>
+    public static VisualElement Cells(VisualTreeAsset tpl, params string[] texts)
+        => FillCells(UiTemplates.Row(tpl), texts);
+
+    /// <summary>Removes and returns the example row (first child) that <paramref name="container"/> carries in the UXML,
+    /// leaving the container empty. Call once at init; clone the result for every runtime row.</summary>
+    public static VisualElement TakeTemplate(VisualElement container)
     {
-        var row = UiTemplates.Row(tpl);
+        if (container == null || container.childCount == 0)
+            throw new InvalidOperationException($"UiRows.TakeTemplate: #{container?.name} has no example row in the UXML");
+        var proto = container[0];
+        container.Clear();
+        return proto;
+    }
+
+    /// <summary>One 501 / training-game visit cloned from the list's example row.</summary>
+    public static VisualElement Visit(VisualElement proto, int number, FiveOhOneVisit visit, int remAfter)
+        => FillVisit(UiClone.Deep(proto), number, visit, remAfter);
+
+    /// <summary>Clones <paramref name="proto"/> and writes <paramref name="texts"/> into its cell0…cellN labels.</summary>
+    public static VisualElement Cells(VisualElement proto, params string[] texts)
+        => FillCells(UiClone.Deep(proto), texts);
+
+    static VisualElement FillVisit(VisualElement row, int number, FiveOhOneVisit visit, int remAfter)
+    {
         row.Q<Label>("num").text   = $"#{number}";
         row.Q<Label>("darts").text = string.Join("  ", visit.arrows.Select(DartArrow.FieldKey));
         row.Q<Label>("score").text = visit.busted ? "0" : visit.scoredPoints.ToString();
@@ -22,10 +48,8 @@ public static class UiRows
         return row;
     }
 
-    /// <summary>Instantiates <paramref name="tpl"/> and writes <paramref name="texts"/> into its cell0…cellN labels.</summary>
-    public static VisualElement Cells(VisualTreeAsset tpl, params string[] texts)
+    static VisualElement FillCells(VisualElement row, string[] texts)
     {
-        var row = UiTemplates.Row(tpl);
         for (int i = 0; i < texts.Length; i++)
             row.Q<Label>($"cell{i}").text = texts[i];
         return row;

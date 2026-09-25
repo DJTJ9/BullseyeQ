@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -139,5 +140,58 @@ public class UiRowsTests
 
         Assert.IsTrue(result);
         Assert.AreEqual(DisplayStyle.None, empty.style.display.value);
+    }
+
+    static VisualElement Proto(params string[] names)
+    {
+        var row = new VisualElement();
+        row.AddToClassList("list-row");
+        foreach (var n in names) row.Add(new Label("sample") { name = n });
+        return row;
+    }
+
+    [Test]
+    public void TakeTemplate_ReturnsExampleRowAndEmptiesContainer()
+    {
+        var container = new VisualElement();
+        var example = Proto("cell0");
+        container.Add(example);
+
+        var proto = UiRows.TakeTemplate(container);
+
+        Assert.AreSame(example, proto);
+        Assert.IsNull(proto.parent);
+        Assert.AreEqual(0, container.childCount);
+    }
+
+    [Test]
+    public void TakeTemplate_EmptyContainer_Throws()
+    {
+        Assert.Throws<InvalidOperationException>(() => UiRows.TakeTemplate(new VisualElement { name = "x" }));
+    }
+
+    [Test]
+    public void Visit_FromPrototype_FillsCloneAndLeavesPrototype()
+    {
+        var proto = Proto("num", "darts", "score", "rem");
+
+        var row = UiRows.Visit(proto, 2, Visit(true, false, "20+"), 40);
+
+        Assert.AreNotSame(proto, row);
+        Assert.AreEqual("#2",   row.Q<Label>("num").text);
+        Assert.AreEqual("Bust", row.Q<Label>("rem").text);
+        Assert.IsTrue(row.Q<Label>("rem").ClassListContains("list-row__rem--bust"));
+        Assert.AreEqual("sample", proto.Q<Label>("rem").text);
+        Assert.IsFalse(proto.Q<Label>("rem").ClassListContains("list-row__rem--bust"));
+    }
+
+    [Test]
+    public void Cells_FromPrototype_FillsCellsInOrder()
+    {
+        var row = UiRows.Cells(Proto("cell0", "cell1"), "a", "b");
+
+        Assert.AreEqual("a", row.Q<Label>("cell0").text);
+        Assert.AreEqual("b", row.Q<Label>("cell1").text);
+        Assert.IsTrue(row.ClassListContains("list-row"));
     }
 }
