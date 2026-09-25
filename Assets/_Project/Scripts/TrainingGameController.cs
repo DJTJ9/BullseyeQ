@@ -112,6 +112,7 @@ public class TrainingGameController : MonoBehaviour
         _aiThrowsContainer = root.Q<VisualElement>("tg-ai-throws-container");
         _aiThrowsScroll    = root.Q<ScrollView>("tg-ai-throws-scroll");
         _gameOverOverlay   = root.Q<VisualElement>("tg-game-over-overlay");
+        UiRows.HideAll(_gameOverOverlay);
         _gameOverTitle     = root.Q<Label>("tg-game-over-title");
         _gameOverSubtitle  = root.Q<Label>("tg-game-over-subtitle");
         _btnRemoveLast     = root.Q<Button>("tg-btn-remove-last");

@@ -194,4 +194,17 @@ public class UiRowsTests
         Assert.AreEqual("b", row.Q<Label>("cell1").text);
         Assert.IsTrue(row.ClassListContains("list-row"));
     }
+
+    [Test]
+    public void HideAll_SetsDisplayNone_IgnoresNull()
+    {
+        var a = new VisualElement();
+        var b = new VisualElement();
+        b.style.display = DisplayStyle.Flex;
+
+        UiRows.HideAll(a, null, b);
+
+        Assert.AreEqual(DisplayStyle.None, a.style.display.value);
+        Assert.AreEqual(DisplayStyle.None, b.style.display.value);
+    }
 }

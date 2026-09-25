@@ -138,6 +138,7 @@ public class StatsPresenter
         _coHistoryHeader      = root.Q("co-history-header");
         _tgHistoryHeader      = root.Q("tg-history-header");
 
+        UiRows.HideAll(_tabPanels);
         ShowInnerTab(0);
     }
 

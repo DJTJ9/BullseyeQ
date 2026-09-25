@@ -164,6 +164,7 @@ public class CheckOutController : MonoBehaviour
         _fiveBtnNew?.RegisterCallback<ClickEvent>(_ => NewSession(CheckOutMode.FiveCheckouts));
         _fiveBtnReset?.RegisterCallback<ClickEvent>(_ => ResetSession(CheckOutMode.FiveCheckouts));
 
+        UiRows.HideAll(_modePanels);
         SwitchMode(0);
     }
 

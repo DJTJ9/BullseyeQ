@@ -96,4 +96,11 @@ public static class UiRows
     {
         if (el != null) el.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
     }
+
+    /// <summary>display:none on every element; null-safe. Owners hide their panels / modals at init so the
+    /// UXML display state stays a pure editor preview.</summary>
+    public static void HideAll(params VisualElement[] elements)
+    {
+        foreach (var el in elements) SetVisible(el, false);
+    }
 }

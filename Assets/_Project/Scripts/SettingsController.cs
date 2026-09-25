@@ -17,6 +17,7 @@ public class SettingsController : MonoBehaviour
         var appRoot = root.Q<VisualElement>("root");
 
         _modalOverlay = root.Q<VisualElement>("modal-overlay");
+        UiRows.HideAll(_modalOverlay);
 
         if (appRoot != null) UiFx.ApplyPersistedReducedMotion(appRoot);
 

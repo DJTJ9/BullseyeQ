@@ -154,6 +154,9 @@ public class DartInputController : MonoBehaviour
         var btnQuit = root.Q<Button>("nav-quit");
         if (btnQuit != null) btnQuit.clicked += AppControl.Quit;
 
+        // The UXML display state is an editor preview only — hide everything, then show the start panels.
+        UiRows.HideAll(_panels);
+        UiRows.HideAll(_sessionTabPanels);
         ShowSessionTab(0);
         ShowPanel(0);
     }
