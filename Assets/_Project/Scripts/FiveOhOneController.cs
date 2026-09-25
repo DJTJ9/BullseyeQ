@@ -43,7 +43,7 @@ public class FiveOhOneController : MonoBehaviour
     /// <summary>True once the leg has been won; input is locked until a new session starts.</summary>
     private bool _legFinished;
 
-    [SerializeField] private UiTemplates _templates;
+    private VisualElement _throwProto;
 
     private static FiveOhOneSession Session => DataManager.Instance.CurrentFiveOhOneSession;
 
@@ -68,6 +68,7 @@ public class FiveOhOneController : MonoBehaviour
         _plate             = root.Q<VisualElement>("fo-plate");
         _throwsScroll      = root.Q<ScrollView>("fo-throws-scroll");
         _throwsContainer   = root.Q<VisualElement>("fo-throws-container");
+        _throwProto        = UiRows.TakeTemplate(_throwsContainer);
         _finishesContainer = root.Q<VisualElement>("fo-finishes-container");
         _finishHeader      = root.Q<Label>("fo-finish-header");
         _finishesEmpty     = root.Q<Label>("fo-finishes-empty");
@@ -76,7 +77,7 @@ public class FiveOhOneController : MonoBehaviour
         _btnNewSession   = root.Q<Button>("fo-btn-new-session");
         _btnResetSession = root.Q<Button>("fo-btn-reset-session");
 
-        _statsPresenter = new FiveOhOneStatsPresenter(root, _templates);
+        _statsPresenter = new FiveOhOneStatsPresenter(root);
 
         _btnRemoveLast.clicked   += OnRemoveLast;
         _btnNewSession.clicked   += OnNewSession;
@@ -303,7 +304,7 @@ public class FiveOhOneController : MonoBehaviour
 
     private VisualElement AddThrowRow(int number, FiveOhOneVisit visit, int remAfter)
     {
-        var row = UiRows.Visit(_templates.VisitRow, number, visit, remAfter);
+        var row = UiRows.Visit(_throwProto, number, visit, remAfter);
         _throwsContainer.Add(row);
         return row;
     }

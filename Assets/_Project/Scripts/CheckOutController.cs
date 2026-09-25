@@ -61,7 +61,7 @@ public class CheckOutController : MonoBehaviour
         (21, 40), (41, 80), (81, 120), (121, 170)
     };
 
-    [SerializeField] private UiTemplates _templates;
+    private VisualElement _tdRowProto, _chRowProto;
 
     private static CheckOutSession Session => DataManager.Instance.CurrentCheckOutSession;
 
@@ -98,6 +98,7 @@ public class CheckOutController : MonoBehaviour
         _tdFieldGrid      = root.Q<VisualElement>("co-td-field-grid");
         _tdRoundsContainer = root.Q<VisualElement>("co-td-rounds-container");
         _tdRoundsScroll    = root.Q<ScrollView>("co-td-rounds-scroll");
+        _tdRowProto        = UiRows.TakeTemplate(_tdRoundsContainer);
         _tdBtnNew          = root.Q<Button>("co-td-btn-new");
         _tdBtnReset        = root.Q<Button>("co-td-btn-reset");
 
@@ -120,6 +121,7 @@ public class CheckOutController : MonoBehaviour
         _chHighscore       = root.Q<Label>("co-ch-highscore");
         _chRoute           = root.Q<Label>("co-ch-route");
         _chHistoryContainer = root.Q<VisualElement>("co-ch-history-container");
+        _chRowProto         = UiRows.TakeTemplate(_chHistoryContainer);
         _chBtnNew           = root.Q<Button>("co-ch-btn-new");
         _chBtnReset         = root.Q<Button>("co-ch-btn-reset");
 
@@ -263,7 +265,7 @@ public class CheckOutController : MonoBehaviour
     {
         int hits = round.darts.Count(d => DartArrow.FieldKey(d) == round.targetField);
 
-        var row = UiTemplates.Row(_templates.TdRow);
+        var row = UiClone.Deep(_tdRowProto);
         row.Q<Label>("darts").text = string.Join("  ", round.darts.Select(DartArrow.FieldKey));
 
         var hitsLbl = row.Q<Label>("hits");
@@ -354,7 +356,7 @@ public class CheckOutController : MonoBehaviour
 
     private void AddChHistoryRow(int score, int darts, bool success)
     {
-        var row = UiTemplates.Row(_templates.ChHistoryRow);
+        var row = UiClone.Deep(_chRowProto);
         row.Q<Label>("score").text = score.ToString();
         row.Q<Label>("darts").text = $"{darts}D";
 

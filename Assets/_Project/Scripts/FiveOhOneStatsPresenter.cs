@@ -16,14 +16,13 @@ public class FiveOhOneStatsPresenter
     private readonly Label _checkout;
     private readonly DartboardHeatmapElement _heatmap;
     private readonly VisualElement _recentContainer;
-    private readonly UiTemplates _templates;
+    private readonly VisualElement _recentProto;
     private readonly VisualElement _recentEmpty;
     private readonly VisualElement _recentHeader;
 
     /// <summary>Queries all 501 stat elements from <paramref name="root"/> and the heatmap from the UXML.</summary>
-    public FiveOhOneStatsPresenter(VisualElement root, UiTemplates templates)
+    public FiveOhOneStatsPresenter(VisualElement root)
     {
-        _templates = templates;
         _darts         = root.Q<Label>("fo-stat-darts");
         _avg           = root.Q<Label>("fo-stat-avg");
         _triple        = root.Q<Label>("fo-stat-triple");
@@ -31,6 +30,7 @@ public class FiveOhOneStatsPresenter
         _dartsToFinish = root.Q<Label>("fo-stat-darts-to-finish");
         _checkout      = root.Q<Label>("fo-stat-checkout");
         _recentContainer = root.Q<VisualElement>("fo-recent-sessions-container");
+        _recentProto     = UiRows.TakeTemplate(_recentContainer);
         _recentEmpty  = root.Q<VisualElement>("fo-recent-empty");
         _recentHeader = root.Q<VisualElement>("fo-recent-header");
 
@@ -60,7 +60,7 @@ public class FiveOhOneStatsPresenter
         for (int i = recent.Count - 1; i >= 0; i--)
         {
             var s = recent[i];
-            _recentContainer.Add(UiRows.Cells(_templates.CellRow4,
+            _recentContainer.Add(UiRows.Cells(_recentProto,
                 s.totalDartsThrown.ToString(),
                 s.threeDartAverage.ToString("F1"),
                 s.dartsToFinishPossible?.ToString() ?? "n.a.",

@@ -13,6 +13,7 @@ public class DartInputController : MonoBehaviour
     private Label _feedbackLabel;
     private ScrollView _roundsScroll;
     private VisualElement _roundsContainer;
+    private VisualElement _roundProto;
     private readonly DartArrow[] _pendingArrows = new DartArrow[3];
 
     private Button _btnRemoveLast;
@@ -59,6 +60,7 @@ public class DartInputController : MonoBehaviour
         _feedbackLabel   = root.Q<Label>("feedback-label");
         _roundsScroll    = root.Q<ScrollView>("rounds-scroll");
         _roundsContainer = root.Q<VisualElement>("rounds-container");
+        _roundProto     = UiRows.TakeTemplate(_roundsContainer);
 
         _btnRemoveLast   = root.Q<Button>("btn-remove-last");
         _btnNewSession   = root.Q<Button>("btn-new-session");
@@ -327,7 +329,7 @@ public class DartInputController : MonoBehaviour
 
     private VisualElement AddRoundRow(int roundNumber, ScoringRound round)
     {
-        var row = UiTemplates.Row(_templates.ScoringRoundRow);
+        var row = UiClone.Deep(_roundProto);
         row.Q<Label>("num").text   = $"#{roundNumber}";
         row.Q<Label>("darts").text =
             $"{round.arrows[0].score}  +  {round.arrows[1].score}  +  {round.arrows[2].score}";

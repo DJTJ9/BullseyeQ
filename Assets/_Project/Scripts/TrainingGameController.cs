@@ -48,7 +48,7 @@ public class TrainingGameController : MonoBehaviour
 
     private const int MaxFinishRoutes = 6;
 
-    [SerializeField] private UiTemplates _templates;
+    private VisualElement _throwProto, _aiThrowProto, _recentProto;
 
     // ---- Game state ----
     private enum State { Idle, PlayerTurn, AITurn, GameOver }
@@ -111,6 +111,9 @@ public class TrainingGameController : MonoBehaviour
         _recentHeader      = root.Q<VisualElement>("tg-recent-header");
         _aiThrowsContainer = root.Q<VisualElement>("tg-ai-throws-container");
         _aiThrowsScroll    = root.Q<ScrollView>("tg-ai-throws-scroll");
+        _throwProto        = UiRows.TakeTemplate(_throwsContainer);
+        _aiThrowProto      = UiRows.TakeTemplate(_aiThrowsContainer);
+        _recentProto       = UiRows.TakeTemplate(_recentContainer);
         _gameOverOverlay   = root.Q<VisualElement>("tg-game-over-overlay");
         UiRows.HideAll(_gameOverOverlay);
         _gameOverTitle     = root.Q<Label>("tg-game-over-title");
@@ -483,7 +486,7 @@ public class TrainingGameController : MonoBehaviour
             int remBefore = running;
             if (!v.busted) running -= v.scoredPoints;
             int remAfter = v.busted ? remBefore : running;
-            lastRow = AddThrowRow(_throwsContainer, i + 1, v, remAfter);
+            lastRow = AddThrowRow(_throwsContainer, _throwProto, i + 1, v, remAfter);
         }
         if (lastRow != null)
         {
@@ -493,11 +496,11 @@ public class TrainingGameController : MonoBehaviour
     }
 
     private VisualElement AddAIThrowRow(int number, FiveOhOneVisit visit, int remAfter)
-        => AddThrowRow(_aiThrowsContainer, number, visit, remAfter);
+        => AddThrowRow(_aiThrowsContainer, _aiThrowProto, number, visit, remAfter);
 
-    private VisualElement AddThrowRow(VisualElement container, int number, FiveOhOneVisit visit, int remAfter)
+    private static VisualElement AddThrowRow(VisualElement container, VisualElement proto, int number, FiveOhOneVisit visit, int remAfter)
     {
-        var row = UiRows.Visit(_templates.VisitRow, number, visit, remAfter);
+        var row = UiRows.Visit(proto, number, visit, remAfter);
         container.Add(row);
         return row;
     }
@@ -513,7 +516,7 @@ public class TrainingGameController : MonoBehaviour
         for (int i = recent.Count - 1; i >= 0; i--)
         {
             var s = recent[i];
-            _recentContainer.Add(UiRows.Cells(_templates.CellRow4,
+            _recentContainer.Add(UiRows.Cells(_recentProto,
                 s.totalDartsThrown.ToString(),
                 s.threeDartAverage.ToString("F1"),
                 s.dartsToFinishPossible?.ToString() ?? "n.a.",
