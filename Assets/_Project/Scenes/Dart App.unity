@@ -291,6 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DartInputController
   _logoTexture: {fileID: 2800000, guid: f17dd41897f06b6469e90dcbdea1d21b, type: 3}
+  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!114 &858747674
 MonoBehaviour:
   m_ObjectHideFlags: 0

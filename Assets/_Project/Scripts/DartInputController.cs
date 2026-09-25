@@ -37,6 +37,7 @@ public class DartInputController : MonoBehaviour
     private TrainingPlanPresenter  _trainingPlanPresenter;
 
     [SerializeField] private Texture2D _logoTexture;
+    [SerializeField] private UiTemplates _templates;
 
     /// <summary>Queries all UI elements and registers input and button callbacks.</summary>
     void OnEnable()
@@ -323,26 +324,16 @@ public class DartInputController : MonoBehaviour
 
     private VisualElement AddRoundRow(int roundNumber, ScoringRound round)
     {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
+        var row = UiTemplates.Row(_templates.ScoringRoundRow);
+        row.Q<Label>("num").text   = $"#{roundNumber}";
+        row.Q<Label>("darts").text =
+            $"{round.arrows[0].score}  +  {round.arrows[1].score}  +  {round.arrows[2].score}";
 
-        var numberLabel = new Label($"#{roundNumber}");
-        numberLabel.AddToClassList("list-row__num");
+        var total = row.Q<Label>("total");
+        total.text = round.totalScore.ToString();
+        if (round.totalScore == 180) total.AddToClassList("list-row__rem--checkout");
 
-        var dartsLabel = new Label(
-            $"{round.arrows[0].score}  +  {round.arrows[1].score}  +  {round.arrows[2].score}"
-        );
-        dartsLabel.AddToClassList("list-row__darts");
-
-        var totalLabel = new Label(round.totalScore.ToString());
-        totalLabel.AddToClassList("list-row__rem");
-        if (round.totalScore == 180) totalLabel.AddToClassList("list-row__rem--checkout");
-
-        row.Add(numberLabel);
-        row.Add(dartsLabel);
-        row.Add(totalLabel);
         _roundsContainer.Add(row);
-
         _roundsScroll?.ScrollTo(row);
         return row;
     }
