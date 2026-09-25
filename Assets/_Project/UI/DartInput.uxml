@@ -1,11 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
-    <ui:Template name="Panel_Overview" src="Panels/Panel_Overview.uxml"/>
-    <ui:Template name="Panel_TrainingGame" src="Panels/Panel_TrainingGame.uxml"/>
-    <ui:Template name="Panel_Sessions" src="Panels/Panel_Sessions.uxml"/>
-    <ui:Template name="Panel_TrainingPlan" src="Panels/Panel_TrainingPlan.uxml"/>
-    <ui:Template name="Panel_Stats" src="Panels/Panel_Stats.uxml"/>
-    <ui:Template name="Panel_Settings" src="Panels/Panel_Settings.uxml"/>
     <ui:VisualElement name="root">
         <StageVignetteElement name="stage-bg"/>
 
@@ -26,26 +20,672 @@
         <ui:VisualElement name="content-area" class="content-area">
 
             <!-- ── Overview ────────────────────────────────────────── -->
-            <ui:Instance template="Panel_Overview" name="panel-overview" class="content-panel"/>
+            <ui:VisualElement name="panel-overview" class="content-panel">
+                <ui:Label text="Overview" class="panel-title"/>
+                <ui:VisualElement class="hero-row">
+                    <ui:VisualElement class="hero">
+                        <ui:Label name="ov-lifetime-avg" text="–" class="hero-value"/>
+                        <ui:Label text="Lifetime avg" class="hero-caption"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hero">
+                        <ui:Label name="ov-session-count" text="–" class="hero-value"/>
+                        <ui:Label text="Sessions" class="hero-caption"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hero">
+                        <ui:Label name="ov-rolling-avg" text="–" class="hero-value"/>
+                        <ui:Label text="Last 5 avg" class="hero-caption"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hero">
+                        <ui:Label name="ov-trend" text="–" class="hero-value"/>
+                        <ui:Label text="Trend" class="hero-caption"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="divider"/>
+                <ui:VisualElement class="columns">
+                    <ui:VisualElement class="col-main">
+                        <ui:Label text="Recent sessions" class="section-title"/>
+                        <ui:Label name="ov-recent-empty" text="No finished sessions yet." class="placeholder-text"/>
+                        <ui:VisualElement name="ov-recent-header" class="list-row list-row--header">
+                            <ui:Label text="Date" class="list-row__cell"/>
+                            <ui:Label text="Visits" class="list-row__cell"/>
+                            <ui:Label text="Avg" class="list-row__cell"/>
+                            <ui:Label text="Triple %" class="list-row__cell"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="ov-recent-container"/>
+                        <ui:VisualElement class="divider"/>
+                        <ui:Label text="Personal bests" class="section-title"/>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Best session avg" class="stat-row__label"/>
+                            <ui:Label name="ov-best-session-avg" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Highest visit" class="stat-row__label"/>
+                            <ui:Label name="ov-best-round" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Total 180s" class="stat-row__label"/>
+                            <ui:Label name="ov-total-180s" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Total 140+" class="stat-row__label"/>
+                            <ui:Label name="ov-total-140s" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Total 100+" class="stat-row__label"/>
+                            <ui:Label name="ov-total-100s" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Total visits" class="stat-row__label"/>
+                            <ui:Label name="ov-total-rounds" text="–" class="stat-row__value"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="col-side">
+                        <ui:Label text="Overall heatmap" class="section-title"/>
+                        <ui:VisualElement name="ov-heatmap-container" class="heatmap-slot"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
 
             <!-- ── Training game ───────────────────────────────────── -->
-            <ui:Instance template="Panel_TrainingGame" name="panel-training-game" class="content-panel"/>
+            <ui:VisualElement name="panel-training-game" class="content-panel" style="display: none;">
+                <ui:Label text="Training game" class="panel-title"/>
+                <ui:VisualElement class="score-bug">
+                    <ui:VisualElement name="tg-player-plate" class="score-plate">
+                        <ui:Label text="YOU" class="score-plate__name"/>
+                        <ui:VisualElement class="score-plate__body">
+                            <ui:Label name="tg-current-score" text="501" class="score-plate__rest"/>
+                            <ui:VisualElement class="score-plate__sub">
+                                <ui:Label name="tg-player-avg" text="avg –" class="score-plate__meta"/>
+                                <ui:Label name="tg-player-last" text="last –" class="score-plate__meta"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="tg-ai-plate" class="score-plate score-plate--ai">
+                        <ui:Label text="AI" class="score-plate__name"/>
+                        <ui:VisualElement class="score-plate__body">
+                            <ui:Label name="tg-ai-score" text="501" class="score-plate__rest"/>
+                            <ui:VisualElement class="score-plate__sub">
+                                <ui:Label name="tg-ai-avg" text="avg –" class="score-plate__meta"/>
+                                <ui:Label name="tg-ai-last-score" text="last –" class="score-plate__meta"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="tg-bottom-section" class="columns">
+                    <ui:VisualElement name="tg-finishes-section" class="col-side col-side--left panel panel--grow">
+                        <ui:Label text="Possible finishes" class="section-title"/>
+                        <ui:ScrollView name="tg-finishes-scroll" class="scroll">
+                            <ui:Label name="tg-finishes-empty" text="No finish yet." class="placeholder-text"/>
+                            <ui:Label name="tg-finish-header" text="Remaining –" class="finish-header"/>
+                            <ui:VisualElement name="tg-finishes-container"/>
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="tg-center-section" class="col-main">
+                        <ui:VisualElement name="tg-input-section" class="panel">
+                            <ui:Label name="tg-turn-label" text="" class="turn-label"/>
+                            <ui:VisualElement name="tg-fields-row" class="fields-row">
+                                <ui:TextField name="tg-dart-field-0" label="Dart 1" class="dart-field"/>
+                                <ui:TextField name="tg-dart-field-1" label="Dart 2" class="dart-field"/>
+                                <ui:TextField name="tg-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                            </ui:VisualElement>
+                            <ui:Label name="tg-feedback-label" text="" class="feedback"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="list-block">
+                            <ui:VisualElement name="tg-throws-header" class="list-header">
+                                <ui:Label text="Your throws" class="list-title"/>
+                                <ui:Button name="tg-btn-remove-last" text="Undo last" class="text-button text-button--small"/>
+                            </ui:VisualElement>
+                            <ui:ScrollView name="tg-throws-scroll" class="scroll">
+                                <ui:VisualElement name="tg-throws-container"/>
+                            </ui:ScrollView>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Recent legs" class="section-title"/>
+                            <ui:ScrollView name="tg-recent-sessions-scroll" class="scroll scroll--fixed">
+                                <ui:Label name="tg-recent-empty" text="No finished legs yet." class="placeholder-text"/>
+                                <ui:VisualElement name="tg-recent-header" class="list-row list-row--header">
+                                    <ui:Label text="Darts" class="list-row__cell"/>
+                                    <ui:Label text="Avg" class="list-row__cell"/>
+                                    <ui:Label text="Fin" class="list-row__cell"/>
+                                    <ui:Label text="CO%" class="list-row__cell"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="tg-recent-sessions-container"/>
+                            </ui:ScrollView>
+                            <ui:VisualElement name="tg-session-buttons" class="button-row">
+                                <ui:Button name="tg-btn-new-game" text="New game" class="text-button text-button--primary button-row__gap"/>
+                                <ui:Button name="tg-btn-reset-game" text="Reset game" class="text-button text-button--danger"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="tg-ai-section" class="col-side panel panel--grow">
+                        <ui:VisualElement name="tg-ai-last-visit-block" class="ai-visit">
+                            <ui:Label text="Last AI visit" class="stat-caption"/>
+                            <ui:VisualElement name="tg-ai-darts-row" class="ai-slots">
+                                <ui:Label name="tg-ai-dart-0" text="" class="ai-slot"/>
+                                <ui:Label name="tg-ai-dart-1" text="" class="ai-slot"/>
+                                <ui:Label name="tg-ai-dart-2" text="" class="ai-slot"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label text="AI throws" class="section-title"/>
+                        <ui:ScrollView name="tg-ai-throws-scroll" class="scroll">
+                            <ui:VisualElement name="tg-ai-throws-container"/>
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
 
             <!-- ── Training sessions ───────────────────────────────── -->
-            <ui:Instance template="Panel_Sessions" name="panel-training-sessions" class="content-panel"/>
+            <ui:VisualElement name="panel-training-sessions" class="content-panel" style="display: none;">
+                <ui:Label text="Training sessions" class="panel-title"/>
+                <ui:VisualElement class="tab-strip">
+                    <ui:Button name="session-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
+                    <ui:Button name="session-tab-fo" text="501" class="stats-inner-tab"/>
+                    <ui:Button name="session-tab-doubles" text="Doubles" class="stats-inner-tab"/>
+                </ui:VisualElement>
+
+                <!-- Scoring -->
+                <ui:VisualElement name="session-scoring-panel" class="sub-panel">
+                    <ui:VisualElement name="bottom-section" class="columns">
+                        <ui:VisualElement class="col-main">
+                            <ui:VisualElement name="input-section" class="panel">
+                                <ui:VisualElement name="fields-row" class="fields-row">
+                                    <ui:TextField name="dart-field-0" label="Dart 1" class="dart-field"/>
+                                    <ui:TextField name="dart-field-1" label="Dart 2" class="dart-field"/>
+                                    <ui:TextField name="dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                                </ui:VisualElement>
+                                <ui:Label name="feedback-label" text="" class="feedback"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="rounds-section" class="list-block">
+                                <ui:VisualElement name="rounds-header" class="list-header">
+                                    <ui:Label text="Throw history" class="list-title"/>
+                                    <ui:Button name="btn-remove-last" text="Undo last" class="text-button text-button--small"/>
+                                </ui:VisualElement>
+                                <ui:ScrollView name="rounds-scroll" class="scroll">
+                                    <ui:VisualElement name="rounds-container"/>
+                                </ui:ScrollView>
+                                <ui:VisualElement name="session-buttons" class="button-row">
+                                    <ui:Button name="btn-new-session" text="New session" class="text-button text-button--primary button-row__gap"/>
+                                    <ui:Button name="btn-reset-session" text="Reset session" class="text-button text-button--danger"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="stats-section" class="col-side panel panel--grow">
+                            <ui:Label text="Session stats" class="section-title"/>
+                            <ui:VisualElement class="stat-grid">
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="stat-avg-session" text="–" class="stat-value"/>
+                                    <ui:Label text="Session avg" class="stat-caption"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="stat-avg-rolling" text="–" class="stat-value"/>
+                                    <ui:Label text="Last 5 avg" class="stat-caption"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-grid">
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="stat-triple-rate" text="–" class="stat-value"/>
+                                    <ui:Label text="Triple rate" class="stat-caption"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="stat-wasted-rate" text="–" class="stat-value"/>
+                                    <ui:Label text="Wasted darts" class="stat-caption"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="heatmap-container" class="heatmap-slot"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- 501 -->
+                <ui:VisualElement name="session-fo-panel" class="sub-panel" style="display: none;">
+                    <ui:VisualElement class="score-bug">
+                        <ui:VisualElement name="fo-plate" class="score-plate">
+                            <ui:Label text="YOU" class="score-plate__name"/>
+                            <ui:VisualElement class="score-plate__body">
+                                <ui:Label name="fo-current-score" text="501" class="score-plate__rest"/>
+                                <ui:VisualElement class="score-plate__sub">
+                                    <ui:Label name="fo-plate-avg" text="avg –" class="score-plate__meta"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="fo-bottom-section" class="columns">
+                        <ui:VisualElement name="fo-finishes-section" class="col-side col-side--left panel panel--grow">
+                            <ui:Label text="Possible finishes" class="section-title"/>
+                            <ui:ScrollView name="fo-finishes-scroll" class="scroll">
+                                <ui:Label name="fo-finishes-empty" text="No finish yet." class="placeholder-text"/>
+                                <ui:Label name="fo-finish-header" text="Remaining –" class="finish-header"/>
+                                <ui:VisualElement name="fo-finishes-container"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="fo-center-section" class="col-main">
+                            <ui:VisualElement name="fo-input-section" class="panel">
+                                <ui:VisualElement name="fo-fields-row" class="fields-row">
+                                    <ui:TextField name="fo-dart-field-0" label="Dart 1" class="dart-field"/>
+                                    <ui:TextField name="fo-dart-field-1" label="Dart 2" class="dart-field"/>
+                                    <ui:TextField name="fo-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                                </ui:VisualElement>
+                                <ui:Label name="fo-feedback-label" text="" class="feedback"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="list-block">
+                                <ui:VisualElement name="fo-throws-header" class="list-header">
+                                    <ui:Label text="Throws" class="list-title"/>
+                                    <ui:Button name="fo-btn-remove-last" text="Undo last" class="text-button text-button--small"/>
+                                </ui:VisualElement>
+                                <ui:ScrollView name="fo-throws-scroll" class="scroll">
+                                    <ui:VisualElement name="fo-throws-container"/>
+                                </ui:ScrollView>
+                                <ui:VisualElement class="divider"/>
+                                <ui:Label text="Recent legs" class="section-title"/>
+                                <ui:ScrollView name="fo-recent-sessions-scroll" class="scroll scroll--fixed">
+                                    <ui:Label name="fo-recent-empty" text="No finished legs yet." class="placeholder-text"/>
+                                    <ui:VisualElement name="fo-recent-header" class="list-row list-row--header">
+                                        <ui:Label text="Darts" class="list-row__cell"/>
+                                        <ui:Label text="Avg" class="list-row__cell"/>
+                                        <ui:Label text="Fin" class="list-row__cell"/>
+                                        <ui:Label text="CO%" class="list-row__cell"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="fo-recent-sessions-container"/>
+                                </ui:ScrollView>
+                                <ui:VisualElement name="fo-session-buttons" class="button-row">
+                                    <ui:Button name="fo-btn-new-session" text="New session" class="text-button text-button--primary button-row__gap"/>
+                                    <ui:Button name="fo-btn-reset-session" text="Reset session" class="text-button text-button--danger"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="fo-stats-section" class="col-side panel panel--grow">
+                            <ui:Label text="Session stats" class="section-title"/>
+                            <ui:VisualElement class="stat-grid">
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-darts" text="–" class="stat-value"/>
+                                    <ui:Label text="Darts" class="stat-caption"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-avg" text="–" class="stat-value"/>
+                                    <ui:Label text="3-dart avg" class="stat-caption"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-grid">
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-triple" text="–" class="stat-value"/>
+                                    <ui:Label text="Triple rate" class="stat-caption"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-wasted" text="–" class="stat-value"/>
+                                    <ui:Label text="Wasted darts" class="stat-caption"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-grid">
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-darts-to-finish" text="–" class="stat-value"/>
+                                    <ui:Label text="Darts to finish" class="stat-caption"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-block">
+                                    <ui:Label name="fo-stat-checkout" text="–" class="stat-value"/>
+                                    <ui:Label text="Checkout rate" class="stat-caption"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="fo-heatmap-container" class="heatmap-slot"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Doubles -->
+                <ui:VisualElement name="session-doubles-panel" class="sub-panel" style="display: none;">
+                    <ui:VisualElement class="tab-strip">
+                        <ui:Button name="checkout-tab-target" text="Target double" class="stats-inner-tab stats-inner-tab--active"/>
+                        <ui:Button name="checkout-tab-challenge" text="Checkout challenge" class="stats-inner-tab"/>
+                        <ui:Button name="checkout-tab-five" text="Five checkouts" class="stats-inner-tab"/>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="checkout-target-panel" class="sub-panel">
+                        <ui:VisualElement class="columns">
+                            <ui:VisualElement class="col-side col-side--left panel panel--grow">
+                                <ui:Label text="Pick a double" class="section-title"/>
+                                <ui:Label name="co-td-selected-label" text="–" class="stat-value"/>
+                                <ui:VisualElement name="co-td-field-grid" class="field-grid"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-main">
+                                <ui:VisualElement class="panel">
+                                    <ui:VisualElement class="fields-row">
+                                        <ui:TextField name="co-td-dart-field-0" label="Dart 1" class="dart-field"/>
+                                        <ui:TextField name="co-td-dart-field-1" label="Dart 2" class="dart-field"/>
+                                        <ui:TextField name="co-td-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                                    </ui:VisualElement>
+                                    <ui:Label name="co-td-feedback" text="" class="feedback"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="list-block">
+                                    <ui:VisualElement class="list-header">
+                                        <ui:Label text="Attempts" class="list-title"/>
+                                    </ui:VisualElement>
+                                    <ui:ScrollView name="co-td-rounds-scroll" class="scroll">
+                                        <ui:VisualElement name="co-td-rounds-container"/>
+                                    </ui:ScrollView>
+                                    <ui:VisualElement class="button-row">
+                                        <ui:Button name="co-td-btn-new" text="New session" class="text-button text-button--primary button-row__gap"/>
+                                        <ui:Button name="co-td-btn-reset" text="Reset session" class="text-button text-button--danger"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-side panel panel--grow">
+                                <ui:Label text="Session stats" class="section-title"/>
+                                <ui:VisualElement class="stat-grid">
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-td-stat-hitrate" text="–" class="stat-value"/>
+                                        <ui:Label text="Hit rate" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-td-stat-hits" text="–" class="stat-value"/>
+                                        <ui:Label text="Hits" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-td-stat-attempts" text="–" class="stat-value"/>
+                                        <ui:Label text="Attempts" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="co-td-heatmap-container" class="heatmap-slot"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="checkout-challenge-panel" class="sub-panel" style="display: none;">
+                        <ui:VisualElement class="columns">
+                            <ui:VisualElement class="col-side col-side--left panel panel--grow">
+                                <ui:Label text="Checkout route" class="section-title"/>
+                                <ui:Label name="co-ch-route" text="–" class="finish-route finish-route--primary"/>
+                                <ui:VisualElement class="divider"/>
+                                <ui:ScrollView class="scroll">
+                                    <ui:VisualElement name="co-ch-history-container"/>
+                                </ui:ScrollView>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-main">
+                                <ui:VisualElement class="panel">
+                                    <ui:VisualElement class="fields-row">
+                                        <ui:TextField name="co-ch-dart-field-0" label="Dart 1" class="dart-field"/>
+                                        <ui:TextField name="co-ch-dart-field-1" label="Dart 2" class="dart-field"/>
+                                        <ui:TextField name="co-ch-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                                    </ui:VisualElement>
+                                    <ui:Label name="co-ch-feedback" text="" class="feedback"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="list-block panel--center">
+                                    <ui:Label text="Score" class="stat-caption"/>
+                                    <ui:Label name="co-ch-current-score" text="21" class="stat-value stat-value--big"/>
+                                    <ui:Label text="High score" class="stat-caption"/>
+                                    <ui:Label name="co-ch-highscore" text="21" class="stat-value stat-value--small"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="button-row">
+                                    <ui:Button name="co-ch-btn-new" text="New session" class="text-button text-button--primary button-row__gap"/>
+                                    <ui:Button name="co-ch-btn-reset" text="Reset session" class="text-button text-button--danger"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-side panel panel--grow">
+                                <ui:Label text="Session stats" class="section-title"/>
+                                <ui:VisualElement class="stat-grid">
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-ch-stat-hitrate" text="–" class="stat-value"/>
+                                        <ui:Label text="Hit rate" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-ch-stat-attempts" text="–" class="stat-value"/>
+                                        <ui:Label text="Attempts" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="stat-grid">
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-ch-stat-avg-darts" text="–" class="stat-value"/>
+                                        <ui:Label text="Avg darts (hit)" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-ch-stat-best" text="–" class="stat-value"/>
+                                        <ui:Label text="Best score" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="co-ch-heatmap-container" class="heatmap-slot"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="checkout-five-panel" class="sub-panel" style="display: none;">
+                        <ui:VisualElement class="columns">
+                            <ui:VisualElement class="col-side col-side--left panel panel--grow">
+                                <ui:Label text="Difficulty" class="section-title"/>
+                                <ui:VisualElement class="tab-strip">
+                                    <ui:Button name="co-five-diff-0" text="Easy" class="stats-inner-tab stats-inner-tab--active"/>
+                                    <ui:Button name="co-five-diff-1" text="Medium" class="stats-inner-tab"/>
+                                    <ui:Button name="co-five-diff-2" text="Hard" class="stats-inner-tab"/>
+                                    <ui:Button name="co-five-diff-3" text="Expert" class="stats-inner-tab"/>
+                                </ui:VisualElement>
+                                <ui:Label text="Checkouts" class="section-title"/>
+                                <ui:VisualElement name="co-five-cards-container" class="scroll"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-main">
+                                <ui:VisualElement class="panel">
+                                    <ui:VisualElement class="fields-row">
+                                        <ui:TextField name="co-five-dart-field-0" label="Dart 1" class="dart-field"/>
+                                        <ui:TextField name="co-five-dart-field-1" label="Dart 2" class="dart-field"/>
+                                        <ui:TextField name="co-five-dart-field-2" label="Dart 3" class="dart-field dart-field--last"/>
+                                    </ui:VisualElement>
+                                    <ui:Label name="co-five-feedback" text="" class="feedback"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="list-block panel--center">
+                                    <ui:Label text="Route" class="stat-caption"/>
+                                    <ui:Label name="co-five-route" text="–" class="finish-route finish-route--primary"/>
+                                    <ui:Label name="co-five-progress" text="0 / 5" class="stat-value"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement class="button-row">
+                                    <ui:Button name="co-five-btn-new" text="New game" class="text-button text-button--primary button-row__gap"/>
+                                    <ui:Button name="co-five-btn-reset" text="Reset" class="text-button text-button--danger"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="col-side panel panel--grow">
+                                <ui:Label text="Session stats" class="section-title"/>
+                                <ui:VisualElement class="stat-grid">
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-five-stat-completed" text="0 / 5" class="stat-value"/>
+                                        <ui:Label text="Completed" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="stat-block">
+                                        <ui:Label name="co-five-stat-attempts" text="–" class="stat-value"/>
+                                        <ui:Label text="Attempts" class="stat-caption"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="co-five-heatmap-container" class="heatmap-slot"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
 
             <!-- ── Training plan ───────────────────────────────────── -->
-            <ui:Instance template="Panel_TrainingPlan" name="panel-training-plan" class="content-panel"/>
+            <ui:VisualElement name="panel-training-plan" class="content-panel" style="display: none;">
+                <ui:Label text="Training plan" class="panel-title"/>
+                <ui:Label text="Based on your last 10 sessions" class="section-title"/>
+                <ui:ScrollView class="scroll">
+                    <ui:VisualElement name="tp-no-data" class="empty-state">
+                        <ui:Label text="Not enough data yet" class="empty-state__title"/>
+                        <ui:Label text="Complete at least 3 sessions to get a personalised training plan." class="empty-state__text"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="tp-rec-container"/>
+                </ui:ScrollView>
+            </ui:VisualElement>
 
             <!-- ── Stats & analytics ───────────────────────────────── -->
-            <ui:Instance template="Panel_Stats" name="panel-stats" class="content-panel"/>
+            <ui:VisualElement name="panel-stats" class="content-panel" style="display: none;">
+                <ui:Label text="Stats &amp; analytics" class="panel-title"/>
+                <ui:VisualElement class="tab-strip">
+                    <ui:Button name="stats-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
+                    <ui:Button name="stats-tab-fo" text="501" class="stats-inner-tab"/>
+                    <ui:Button name="stats-tab-doubles" text="Doubles" class="stats-inner-tab"/>
+                    <ui:Button name="stats-tab-tg" text="Training game" class="stats-inner-tab"/>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="stats-scoring-panel" class="sub-panel">
+                    <ui:VisualElement class="columns">
+                        <ui:VisualElement class="col-main col-main--wide">
+                            <ui:Label text="Avg score per session" class="section-title"/>
+                            <ui:VisualElement name="chart-avg-score" class="chart-container"/>
+                            <ui:Label text="Triple rate %" class="section-title"/>
+                            <ui:VisualElement name="chart-triple-rate" class="chart-container"/>
+                            <ui:Label text="Wasted darts %" class="section-title"/>
+                            <ui:VisualElement name="chart-wasted-rate" class="chart-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-main">
+                            <ui:Label text="Score distribution" class="section-title"/>
+                            <ui:Label name="score-dist-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="score-dist-container"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Lifetime" class="section-title"/>
+                            <ui:Label name="scoring-lifetime-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="scoring-lifetime-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-side">
+                            <ui:Label text="Overall heatmap" class="section-title"/>
+                            <ui:VisualElement name="stats-scoring-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Session history" class="section-title"/>
+                            <ui:ScrollView name="scoring-history-scroll" class="scroll">
+                                <ui:Label name="scoring-history-empty" text="No data yet" class="placeholder-text"/>
+                                <ui:VisualElement name="scoring-history-header" class="list-row list-row--header">
+                                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-scoring__date"/>
+                                    <ui:Label text="Avg" class="list-row__cell list-row__cell--fixed hist-scoring__avg"/>
+                                    <ui:Label text="180s" class="list-row__cell list-row__cell--fixed hist-scoring__180"/>
+                                    <ui:Label text="Visits" class="list-row__cell list-row__cell--fixed hist-scoring__visits"/>
+                                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="scoring-history-container"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="stats-fo-panel" class="sub-panel" style="display: none;">
+                    <ui:VisualElement class="columns">
+                        <ui:VisualElement class="col-main col-main--wide">
+                            <ui:Label text="3-dart average per leg" class="section-title"/>
+                            <ui:VisualElement name="chart-fo-avg" class="chart-container"/>
+                            <ui:Label text="Checkout rate %" class="section-title"/>
+                            <ui:VisualElement name="chart-fo-checkout" class="chart-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-main">
+                            <ui:Label text="501 stats" class="section-title"/>
+                            <ui:Label name="fo-stats-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="fo-stats-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-side">
+                            <ui:Label text="Overall heatmap" class="section-title"/>
+                            <ui:VisualElement name="stats-fo-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Session history" class="section-title"/>
+                            <ui:ScrollView name="fo-history-scroll" class="scroll">
+                                <ui:Label name="fo-history-empty" text="No data yet" class="placeholder-text"/>
+                                <ui:VisualElement name="fo-history-header" class="list-row list-row--header">
+                                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-fo__date"/>
+                                    <ui:Label text="3DA" class="list-row__cell list-row__cell--fixed hist-fo__3da"/>
+                                    <ui:Label text="CO%" class="list-row__cell list-row__cell--fixed hist-fo__co"/>
+                                    <ui:Label text="Result" class="list-row__cell list-row__cell--fixed hist-fo__result"/>
+                                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="fo-history-container"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="stats-doubles-panel" class="sub-panel" style="display: none;">
+                    <ui:VisualElement class="columns">
+                        <ui:VisualElement class="col-main col-main--wide">
+                            <ui:Label text="Hit rate trend" class="section-title"/>
+                            <ui:VisualElement name="chart-co-hitrate" class="chart-container"/>
+                            <ui:Label text="High score trend (challenge)" class="section-title"/>
+                            <ui:VisualElement name="chart-co-highscore" class="chart-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-main">
+                            <ui:Label text="Mode distribution" class="section-title"/>
+                            <ui:Label name="co-dist-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="co-dist-container"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Lifetime" class="section-title"/>
+                            <ui:Label name="co-lifetime-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="co-lifetime-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-side">
+                            <ui:Label text="Overall heatmap" class="section-title"/>
+                            <ui:VisualElement name="stats-co-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Session history" class="section-title"/>
+                            <ui:ScrollView name="co-history-scroll" class="scroll">
+                                <ui:Label name="co-history-empty" text="No data yet" class="placeholder-text"/>
+                                <ui:VisualElement name="co-history-header" class="list-row list-row--header">
+                                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-co__date"/>
+                                    <ui:Label text="Mode" class="list-row__cell list-row__cell--fixed hist-co__mode"/>
+                                    <ui:Label text="Hit%" class="list-row__cell list-row__cell--fixed hist-co__hit"/>
+                                    <ui:Label text="Attempts" class="list-row__cell list-row__cell--fixed hist-co__attempts"/>
+                                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="co-history-container"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="stats-tg-panel" class="sub-panel" style="display: none;">
+                    <ui:VisualElement class="columns">
+                        <ui:VisualElement class="col-main col-main--wide">
+                            <ui:Label text="Win rate trend" class="section-title"/>
+                            <ui:VisualElement name="chart-tg-winrate" class="chart-container"/>
+                            <ui:Label text="3-dart average (you)" class="section-title"/>
+                            <ui:VisualElement name="chart-tg-avg" class="chart-container"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-main">
+                            <ui:Label text="Training game stats" class="section-title"/>
+                            <ui:Label name="tg-stats-empty" text="No data yet" class="placeholder-text"/>
+                            <ui:VisualElement name="tg-stats-container"/>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Overall heatmap" class="section-title"/>
+                            <ui:VisualElement name="stats-tg-heatmap" class="heatmap-slot"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-main col-main--wide col-main--last">
+                            <ui:Label text="Match history (last 10)" class="section-title"/>
+                            <ui:ScrollView name="tg-history-scroll" class="scroll">
+                                <ui:Label name="tg-history-empty" text="No data yet" class="placeholder-text"/>
+                                <ui:VisualElement name="tg-history-header" class="list-row list-row--header">
+                                    <ui:Label text="Date" class="list-row__cell list-row__cell--fixed hist-tg__date"/>
+                                    <ui:Label text="You" class="list-row__cell list-row__cell--fixed hist-tg__you"/>
+                                    <ui:Label text="AI" class="list-row__cell list-row__cell--fixed hist-tg__ai"/>
+                                    <ui:Label text="CO%" class="list-row__cell list-row__cell--fixed hist-tg__co"/>
+                                    <ui:Label text="Result" class="list-row__cell list-row__cell--fixed hist-tg__result"/>
+                                    <ui:Label text="" class="list-row__cell list-row__cell--fixed hist__del"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="tg-history-container"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
 
             <!-- ── Settings ────────────────────────────────────────── -->
-            <ui:Instance template="Panel_Settings" name="panel-settings" class="content-panel"/>
+            <ui:VisualElement name="panel-settings" class="content-panel" style="display: none;">
+                <ui:Label text="Settings" class="panel-title"/>
+                <ui:VisualElement class="settings-body">
+                    <ui:VisualElement class="settings-row">
+                        <ui:VisualElement>
+                            <ui:Label text="Reduce motion" class="settings-row__label"/>
+                            <ui:Label text="Turns off screen transitions and score animations." class="settings-row__hint"/>
+                        </ui:VisualElement>
+                        <ui:Toggle name="settings-toggle-motion" class="motion-toggle"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="settings-row">
+                        <ui:VisualElement>
+                            <ui:Label text="Reset stats" class="settings-row__label"/>
+                            <ui:Label text="Deletes every session, leg and match." class="settings-row__hint"/>
+                        </ui:VisualElement>
+                        <ui:Button name="settings-btn-reset-stats" text="Reset stats" class="text-button text-button--danger"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <!-- ── Root-level overlays (cover the sidebar too) ─────────── -->
-        <ui:VisualElement name="tg-game-over-overlay" class="modal-overlay">
+        <ui:VisualElement name="tg-game-over-overlay" class="modal-overlay" style="display: none;">
             <ui:VisualElement class="modal-box">
                 <ui:Label name="tg-game-over-title" text="" class="game-over-title"/>
                 <ui:Label name="tg-game-over-subtitle" text="" class="game-over-sub"/>
@@ -53,7 +693,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement name="modal-overlay" class="modal-overlay">
+        <ui:VisualElement name="modal-overlay" class="modal-overlay" style="display: none;">
             <ui:VisualElement name="modal-box" class="modal-box">
                 <ui:Label text="Delete all stats? This can't be undone." class="modal-message"/>
                 <ui:VisualElement class="modal-buttons">

@@ -130,7 +130,6 @@
 .content-panel {
     flex-grow: 1;
     flex-direction: column;
-    display: none;
     padding-top: 24px;
     padding-bottom: 20px;
     padding-left: 28px;
@@ -141,7 +140,6 @@
 .sub-panel {
     flex-grow: 1;
     flex-direction: column;
-    display: none;
     min-height: 0;
 }
 
@@ -684,7 +682,6 @@
     background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
-    display: none;
 }
 .modal-box {
     background-color: var(--bq-panel);

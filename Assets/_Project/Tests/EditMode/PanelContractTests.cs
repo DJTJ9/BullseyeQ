@@ -1,9 +1,12 @@
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-// Prüft, dass die Shell (inkl. aller Panel-Instanzen) jedes Element liefert, das ein Controller per Name sucht,
-// und dass jedes Panel seine Hüllenklasse trägt. Fängt ab, dass beim Split oder im UI Builder ein Element verloren geht.
+// Prüft, dass die flache Shell jedes Element liefert, das ein Controller per Name sucht, jedes Panel seine Hüllenklasse trägt,
+// kein <ui:Instance> mehr existiert und die USS Panels nicht per display:none versteckt (Sichtbarkeit ist Laufzeit-Sache).
 [TestFixture]
 public class PanelContractTests
 {
@@ -112,15 +115,43 @@ public class PanelContractTests
         Assert.IsTrue(panel.ClassListContains("sub-panel"), $"#{name} ohne .sub-panel");
     }
 
+    const string UssPath = "Assets/_Project/UI/TrainingsSessionStyle.uss";
+
     [TestCaseSource(nameof(ContentPanels))]
-    public void ContentPanel_IsTemplateInstance(string name)
+    public void ContentPanel_IsInlineElement(string name)
     {
-        Assert.IsInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist kein <ui:Instance>");
+        Assert.IsNotInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist noch ein <ui:Instance>");
     }
 
     [TestCaseSource(nameof(SubPanels))]
-    public void SubPanel_IsTemplateInstance(string name)
+    public void SubPanel_IsInlineElement(string name)
     {
-        Assert.IsInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist kein <ui:Instance>");
+        Assert.IsNotInstanceOf<TemplateContainer>(_root.Q(name), $"#{name} ist noch ein <ui:Instance>");
+    }
+
+    [Test]
+    public void Shell_HasNoTemplateInstances()
+    {
+        var instances = _root.Query<TemplateContainer>().ToList().Where(e => e != _root).Select(e => e.name).ToList();
+        CollectionAssert.IsEmpty(instances, "TemplateContainer in der Shell");
+    }
+
+    [Test]
+    public void Shell_IsOneDocumentWithOneStyleSheet()
+    {
+        var text = File.ReadAllText(ShellPath);
+        Assert.AreEqual(1, Regex.Matches(text, "<Style ").Count, "genau ein <Style>-Tag erwartet");
+        StringAssert.DoesNotContain("<ui:Template ", text);
+        StringAssert.DoesNotContain("<ui:Instance ", text);
+    }
+
+    [Test]
+    public void Uss_PanelShellClassesDoNotHide()
+    {
+        var uss = File.ReadAllText(UssPath);
+        var rules = Regex.Matches(uss, @"(?m)^((?:\.(?:content-panel|sub-panel|modal-overlay)\s*,?\s*)+)\{([^}]*)\}");
+        Assert.Greater(rules.Count, 0, "Regeln für .content-panel/.sub-panel/.modal-overlay nicht gefunden");
+        foreach (Match r in rules)
+            StringAssert.DoesNotContain("display", r.Groups[2].Value, $"'{r.Groups[1].Value.Trim()}' setzt display");
     }
 }
