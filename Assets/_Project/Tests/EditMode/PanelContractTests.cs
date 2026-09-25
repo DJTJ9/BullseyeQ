@@ -37,6 +37,7 @@ public class PanelContractTests
         "fo-throws-scroll", "fo-throws-container", "fo-recent-sessions-container", "fo-btn-new-session", "fo-btn-reset-session",
         "fo-stat-darts", "fo-stat-avg", "fo-stat-triple", "fo-stat-wasted", "fo-stat-darts-to-finish", "fo-stat-checkout",
         "fo-heatmap-container",
+        "fo-finishes-empty", "fo-finish-header", "fo-recent-empty", "fo-recent-header",
         "checkout-tab-target", "checkout-tab-challenge", "checkout-tab-five",
         "co-td-selected-label", "co-td-field-grid", "co-td-dart-field-0", "co-td-dart-field-1", "co-td-dart-field-2",
         "co-td-feedback", "co-td-rounds-scroll", "co-td-rounds-container", "co-td-btn-new", "co-td-btn-reset",

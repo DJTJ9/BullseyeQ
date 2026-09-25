@@ -21,6 +21,8 @@ public class FiveOhOneController : MonoBehaviour
     private ScrollView _throwsScroll;
     private VisualElement _throwsContainer;
     private VisualElement _finishesContainer;
+    private Label _finishHeader;
+    private Label _finishesEmpty;
     private VisualElement _lastThrowRow;
 
     private Button _btnRemoveLast;
@@ -40,6 +42,8 @@ public class FiveOhOneController : MonoBehaviour
 
     /// <summary>True once the leg has been won; input is locked until a new session starts.</summary>
     private bool _legFinished;
+
+    [SerializeField] private UiTemplates _templates;
 
     private static FiveOhOneSession Session => DataManager.Instance.CurrentFiveOhOneSession;
 
@@ -65,12 +69,14 @@ public class FiveOhOneController : MonoBehaviour
         _throwsScroll      = root.Q<ScrollView>("fo-throws-scroll");
         _throwsContainer   = root.Q<VisualElement>("fo-throws-container");
         _finishesContainer = root.Q<VisualElement>("fo-finishes-container");
+        _finishHeader      = root.Q<Label>("fo-finish-header");
+        _finishesEmpty     = root.Q<Label>("fo-finishes-empty");
 
         _btnRemoveLast   = root.Q<Button>("fo-btn-remove-last");
         _btnNewSession   = root.Q<Button>("fo-btn-new-session");
         _btnResetSession = root.Q<Button>("fo-btn-reset-session");
 
-        _statsPresenter = new FiveOhOneStatsPresenter(root);
+        _statsPresenter = new FiveOhOneStatsPresenter(root, _templates);
 
         _btnRemoveLast.clicked   += OnRemoveLast;
         _btnNewSession.clicked   += OnNewSession;
@@ -297,59 +303,13 @@ public class FiveOhOneController : MonoBehaviour
 
     private VisualElement AddThrowRow(int number, FiveOhOneVisit visit, int remAfter)
     {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
-
-        var numberLabel = new Label($"#{number}");
-        numberLabel.AddToClassList("list-row__num");
-
-        var dartsLabel = new Label(string.Join("  ", visit.arrows.Select(DartArrow.FieldKey)));
-        dartsLabel.AddToClassList("list-row__darts");
-
-        var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
-        scoredLabel.AddToClassList("list-row__score");
-
-        string remText = visit.busted ? "Bust" : visit.checkout ? "Out" : remAfter.ToString();
-        var remLabel = new Label(remText);
-        remLabel.AddToClassList("list-row__rem");
-        if (visit.busted)   remLabel.AddToClassList("list-row__rem--bust");
-        if (visit.checkout) remLabel.AddToClassList("list-row__rem--checkout");
-
-        row.Add(numberLabel);
-        row.Add(dartsLabel);
-        row.Add(scoredLabel);
-        row.Add(remLabel);
+        var row = UiRows.Visit(_templates.VisitRow, number, visit, remAfter);
         _throwsContainer.Add(row);
         return row;
     }
 
     private void RebuildFinishes(int remaining)
-    {
-        _finishesContainer.Clear();
-
-        var routes = remaining >= 2 ? CheckoutChart.GetCheckouts(remaining, MaxFinishRoutes) : null;
-
-        if (routes == null || routes.Count == 0)
-        {
-            var none = new Label(remaining > 170 ? "Score too high for a finish." : "No finish with 3 darts.");
-            none.AddToClassList("placeholder-text");
-            _finishesContainer.Add(none);
-            return;
-        }
-
-        var header = new Label($"Remaining {remaining}");
-        header.AddToClassList("finish-header");
-        _finishesContainer.Add(header);
-
-        // First route is the recommended one (highlighted); the rest are alternatives.
-        for (int i = 0; i < routes.Count; i++)
-        {
-            var routeLabel = new Label(routes[i]);
-            routeLabel.AddToClassList("finish-route");
-            if (i == 0) routeLabel.AddToClassList("finish-route--primary");
-            _finishesContainer.Add(routeLabel);
-        }
-    }
+        => UiRows.ShowFinishes(_finishesContainer, _finishHeader, _finishesEmpty, remaining, MaxFinishRoutes);
 
     private void ClearFields()
     {

@@ -342,6 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7120b4ef867f74a8138a758831ff7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DartTrainingsApp::FiveOhOneController
+  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!114 &858747677
 MonoBehaviour:
   m_ObjectHideFlags: 0

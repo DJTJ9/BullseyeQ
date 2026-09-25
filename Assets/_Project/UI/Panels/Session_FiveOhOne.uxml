@@ -15,9 +15,9 @@
         <ui:VisualElement name="fo-finishes-section" class="col-side col-side--left panel panel--grow">
             <ui:Label text="Possible finishes" class="section-title"/>
             <ui:ScrollView name="fo-finishes-scroll" class="scroll">
-                <ui:VisualElement name="fo-finishes-container">
-                    <ui:Label text="No finish yet." class="placeholder-text"/>
-                </ui:VisualElement>
+                <ui:Label name="fo-finishes-empty" text="No finish yet." class="placeholder-text"/>
+                <ui:Label name="fo-finish-header" text="Remaining –" class="finish-header"/>
+                <ui:VisualElement name="fo-finishes-container"/>
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="fo-center-section" class="col-main">
@@ -40,9 +40,14 @@
                 <ui:VisualElement class="divider"/>
                 <ui:Label text="Recent legs" class="section-title"/>
                 <ui:ScrollView name="fo-recent-sessions-scroll" class="scroll scroll--fixed">
-                    <ui:VisualElement name="fo-recent-sessions-container">
-                        <ui:Label text="No finished legs yet." class="placeholder-text"/>
+                    <ui:Label name="fo-recent-empty" text="No finished legs yet." class="placeholder-text"/>
+                    <ui:VisualElement name="fo-recent-header" class="list-row list-row--header">
+                        <ui:Label text="Darts" class="list-row__cell"/>
+                        <ui:Label text="Avg" class="list-row__cell"/>
+                        <ui:Label text="Fin" class="list-row__cell"/>
+                        <ui:Label text="CO%" class="list-row__cell"/>
                     </ui:VisualElement>
+                    <ui:VisualElement name="fo-recent-sessions-container"/>
                 </ui:ScrollView>
                 <ui:VisualElement name="fo-session-buttons" class="button-row">
                     <ui:Button name="fo-btn-new-session" text="New session" class="text-button text-button--primary button-row__gap"/>
