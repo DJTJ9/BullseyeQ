@@ -5,11 +5,13 @@ public class TrainingPlanPresenter
     private readonly VisualElement _noDataEl;
     private readonly VisualElement _recContainer;
     private readonly System.Action<TrainingNavTarget> _onNavigate;
+    private readonly UiTemplates _templates;
 
-    public TrainingPlanPresenter(VisualElement root, System.Action<TrainingNavTarget> onNavigate = null)
+    public TrainingPlanPresenter(VisualElement root, UiTemplates templates, System.Action<TrainingNavTarget> onNavigate = null)
     {
         _noDataEl     = root.Q("tp-no-data");
         _recContainer = root.Q("tp-rec-container");
+        _templates    = templates;
         _onNavigate   = onNavigate;
     }
 
@@ -34,47 +36,20 @@ public class TrainingPlanPresenter
 
     private VisualElement BuildCard(TrainingRecommendation rec)
     {
-        var card = new VisualElement();
-        card.AddToClassList("plan-card");
+        var card = UiTemplates.Row(_templates.PlanCard);
         card.AddToClassList(FocusClass(rec.focus));
+        card.Q<Label>("badge").text  = PriorityLabel(rec.priority);
+        card.Q<Label>("title").text  = rec.title;
+        card.Q<Label>("reason").text = rec.reason;
+        card.Q<Label>("action").text = rec.action;
 
-        var accent = new VisualElement();
-        accent.AddToClassList("plan-card__accent");
-        card.Add(accent);
-
-        var content = new VisualElement();
-        content.AddToClassList("plan-card__content");
-
-        var headerRow = new VisualElement();
-        headerRow.AddToClassList("plan-card__header");
-
-        var badge = new Label(PriorityLabel(rec.priority));
-        badge.AddToClassList("plan-card__badge");
-        headerRow.Add(badge);
-
-        var titleLabel = new Label(rec.title);
-        titleLabel.AddToClassList("plan-card__title");
-        headerRow.Add(titleLabel);
-        content.Add(headerRow);
-
-        var reasonLabel = new Label(rec.reason);
-        reasonLabel.AddToClassList("plan-card__reason");
-        content.Add(reasonLabel);
-
-        var actionLabel = new Label(rec.action);
-        actionLabel.AddToClassList("plan-card__action");
-        content.Add(actionLabel);
-
-        card.Add(content);
-
+        var startBtn = card.Q<Button>("button");
         if (_onNavigate != null)
         {
-            var target   = NavTarget(rec);
-            var startBtn = new Button(() => _onNavigate(target)) { text = "Train now" };
-            startBtn.AddToClassList("text-button");
-            startBtn.AddToClassList("plan-card__button");
-            card.Add(startBtn);
+            var target = NavTarget(rec);
+            startBtn.clicked += () => _onNavigate(target);
         }
+        else UiRows.SetVisible(startBtn, false);
 
         return card;
     }

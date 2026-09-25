@@ -148,7 +148,7 @@ public class DartInputController : MonoBehaviour
 
         _overviewPresenter     = new OverviewPresenter(root);
         _statsPresenter2       = new StatsPresenter(root, _templates);
-        _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
+        _trainingPlanPresenter = new TrainingPlanPresenter(root, _templates, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();
 
         var btnQuit = root.Q<Button>("nav-quit");
