@@ -20,6 +20,7 @@ public class PanelContractTests
         "ov-lifetime-avg", "ov-session-count", "ov-rolling-avg", "ov-trend", "ov-recent-container",
         "ov-best-session-avg", "ov-best-round", "ov-total-180s", "ov-total-140s", "ov-total-100s", "ov-total-rounds",
         "ov-heatmap-container",
+        "ov-recent-empty", "ov-recent-header",
         // Training game
         "tg-player-plate", "tg-current-score", "tg-player-avg", "tg-player-last",
         "tg-ai-plate", "tg-ai-score", "tg-ai-avg", "tg-ai-last-score",

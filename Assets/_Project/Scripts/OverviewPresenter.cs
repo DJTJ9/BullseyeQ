@@ -15,6 +15,9 @@ public class OverviewPresenter
     private readonly Label _trend;
 
     private readonly VisualElement _recentContainer;
+    private readonly UiTemplates _templates;
+    private readonly VisualElement _recentEmpty;
+    private readonly VisualElement _recentHeader;
 
     private readonly Label _bestSessionAvg;
     private readonly Label _bestRound;
@@ -25,14 +28,17 @@ public class OverviewPresenter
 
     private readonly DartboardHeatmapElement _heatmap;
 
-    public OverviewPresenter(VisualElement root)
+    public OverviewPresenter(VisualElement root, UiTemplates templates)
     {
+        _templates = templates;
         _lifetimeAvg  = root.Q<Label>("ov-lifetime-avg");
         _sessionCount = root.Q<Label>("ov-session-count");
         _rollingAvg   = root.Q<Label>("ov-rolling-avg");
         _trend        = root.Q<Label>("ov-trend");
 
         _recentContainer = root.Q<VisualElement>("ov-recent-container");
+        _recentEmpty     = root.Q<VisualElement>("ov-recent-empty");
+        _recentHeader    = root.Q<VisualElement>("ov-recent-header");
 
         _bestSessionAvg = root.Q<Label>("ov-best-session-avg");
         _bestRound      = root.Q<Label>("ov-best-round");
@@ -107,45 +113,19 @@ public class OverviewPresenter
     private void BuildRecentTable(List<ScoringSession> completed)
     {
         if (_recentContainer == null) return;
-        _recentContainer.Clear();
-
-        if (completed.Count == 0)
-        {
-            var empty = new Label("No finished sessions yet.");
-            empty.AddToClassList("placeholder-text");
-            _recentContainer.Add(empty);
-            return;
-        }
-
-        _recentContainer.Add(MakeRow("Date", "Visits", "Avg", "Triple %", isHeader: true));
+        if (!UiRows.ResetList(_recentContainer, _recentEmpty, _recentHeader, completed.Count > 0)) return;
 
         int start = Mathf.Max(0, completed.Count - 5);
         for (int i = completed.Count - 1; i >= start; i--)
         {
             var s = completed[i];
             string dateStr = s.date.Length >= 10 ? s.date[..10] : s.date;
-            _recentContainer.Add(MakeRow(
+            _recentContainer.Add(UiRows.Cells(_templates.CellRow4,
                 dateStr,
                 s.rounds.Count.ToString(),
                 s.averageScore.ToString("F1"),
-                $"{s.tripleHitRate * 100:F0}%",
-                isHeader: false));
+                $"{s.tripleHitRate * 100:F0}%"));
         }
-    }
-
-    private static VisualElement MakeRow(string c0, string c1, string c2, string c3, bool isHeader)
-    {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
-        if (isHeader) row.AddToClassList("list-row--header");
-
-        foreach (var text in new[] { c0, c1, c2, c3 })
-        {
-            var lbl = new Label(text);
-            lbl.AddToClassList("list-row__cell");
-            row.Add(lbl);
-        }
-        return row;
     }
 
     private static float RollingAverageSlice(List<ScoringSession> completed, int count, int offset)

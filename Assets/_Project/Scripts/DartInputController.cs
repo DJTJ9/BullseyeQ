@@ -146,7 +146,7 @@ public class DartInputController : MonoBehaviour
             if (_activePanel >= 0) UiFx.MoveNavMarker(_navMarker, _navButtons[_activePanel]);
         });
 
-        _overviewPresenter     = new OverviewPresenter(root);
+        _overviewPresenter     = new OverviewPresenter(root, _templates);
         _statsPresenter2       = new StatsPresenter(root, _templates);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, _templates, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();

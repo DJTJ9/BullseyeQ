@@ -23,6 +23,13 @@
     <ui:VisualElement class="columns">
         <ui:VisualElement class="col-main">
             <ui:Label text="Recent sessions" class="section-title"/>
+            <ui:Label name="ov-recent-empty" text="No finished sessions yet." class="placeholder-text"/>
+            <ui:VisualElement name="ov-recent-header" class="list-row list-row--header">
+                <ui:Label text="Date" class="list-row__cell"/>
+                <ui:Label text="Visits" class="list-row__cell"/>
+                <ui:Label text="Avg" class="list-row__cell"/>
+                <ui:Label text="Triple %" class="list-row__cell"/>
+            </ui:VisualElement>
             <ui:VisualElement name="ov-recent-container"/>
             <ui:VisualElement class="divider"/>
             <ui:Label text="Personal bests" class="section-title"/>
