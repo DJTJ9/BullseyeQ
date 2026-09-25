@@ -27,6 +27,7 @@ public class PanelContractTests
         "tg-feedback-label", "tg-btn-remove-last", "tg-throws-scroll", "tg-throws-container", "tg-recent-sessions-container",
         "tg-btn-new-game", "tg-btn-reset-game", "tg-ai-dart-0", "tg-ai-dart-1", "tg-ai-dart-2",
         "tg-ai-throws-scroll", "tg-ai-throws-container",
+        "tg-finishes-empty", "tg-finish-header", "tg-recent-empty", "tg-recent-header",
         // Sessions
         "session-tab-scoring", "session-tab-fo", "session-tab-doubles",
         "dart-field-0", "dart-field-1", "dart-field-2", "feedback-label", "btn-remove-last", "rounds-scroll", "rounds-container",

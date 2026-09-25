@@ -32,6 +32,10 @@ public class TrainingGameController : MonoBehaviour
     private ScrollView _throwsScroll;
     private VisualElement _finishesContainer;
     private VisualElement _recentContainer;
+    private Label _finishHeader;
+    private Label _finishesEmpty;
+    private VisualElement _recentEmpty;
+    private VisualElement _recentHeader;
     private VisualElement _aiThrowsContainer;
     private ScrollView _aiThrowsScroll;
     private VisualElement _gameOverOverlay;
@@ -43,6 +47,8 @@ public class TrainingGameController : MonoBehaviour
     private Button _btnOk;
 
     private const int MaxFinishRoutes = 6;
+
+    [SerializeField] private UiTemplates _templates;
 
     // ---- Game state ----
     private enum State { Idle, PlayerTurn, AITurn, GameOver }
@@ -99,6 +105,10 @@ public class TrainingGameController : MonoBehaviour
         _throwsScroll      = root.Q<ScrollView>("tg-throws-scroll");
         _finishesContainer = root.Q<VisualElement>("tg-finishes-container");
         _recentContainer   = root.Q<VisualElement>("tg-recent-sessions-container");
+        _finishHeader      = root.Q<Label>("tg-finish-header");
+        _finishesEmpty     = root.Q<Label>("tg-finishes-empty");
+        _recentEmpty       = root.Q<VisualElement>("tg-recent-empty");
+        _recentHeader      = root.Q<VisualElement>("tg-recent-header");
         _aiThrowsContainer = root.Q<VisualElement>("tg-ai-throws-container");
         _aiThrowsScroll    = root.Q<ScrollView>("tg-ai-throws-scroll");
         _gameOverOverlay   = root.Q<VisualElement>("tg-game-over-overlay");
@@ -484,96 +494,30 @@ public class TrainingGameController : MonoBehaviour
     private VisualElement AddAIThrowRow(int number, FiveOhOneVisit visit, int remAfter)
         => AddThrowRow(_aiThrowsContainer, number, visit, remAfter);
 
-    private static VisualElement AddThrowRow(VisualElement container, int number, FiveOhOneVisit visit, int remAfter)
+    private VisualElement AddThrowRow(VisualElement container, int number, FiveOhOneVisit visit, int remAfter)
     {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
-
-        var numLabel = new Label($"#{number}");
-        numLabel.AddToClassList("list-row__num");
-
-        var dartsLabel = new Label(string.Join("  ", visit.arrows.Select(DartArrow.FieldKey)));
-        dartsLabel.AddToClassList("list-row__darts");
-
-        var scoredLabel = new Label(visit.busted ? "0" : visit.scoredPoints.ToString());
-        scoredLabel.AddToClassList("list-row__score");
-
-        string remText = visit.busted ? "Bust" : visit.checkout ? "Out" : remAfter.ToString();
-        var remLabel = new Label(remText);
-        remLabel.AddToClassList("list-row__rem");
-        if (visit.busted)   remLabel.AddToClassList("list-row__rem--bust");
-        if (visit.checkout) remLabel.AddToClassList("list-row__rem--checkout");
-
-        row.Add(numLabel); row.Add(dartsLabel); row.Add(scoredLabel); row.Add(remLabel);
+        var row = UiRows.Visit(_templates.VisitRow, number, visit, remAfter);
         container.Add(row);
         return row;
     }
 
     private void RebuildFinishes(int remaining)
-    {
-        _finishesContainer.Clear();
-        var routes = remaining >= 2 ? CheckoutChart.GetCheckouts(remaining, MaxFinishRoutes) : null;
-
-        if (routes == null || routes.Count == 0)
-        {
-            var none = new Label(remaining > 170 ? "Score too high for a finish." : "No finish with 3 darts.");
-            none.AddToClassList("placeholder-text");
-            _finishesContainer.Add(none);
-            return;
-        }
-
-        var header = new Label($"Remaining {remaining}");
-        header.AddToClassList("finish-header");
-        _finishesContainer.Add(header);
-
-        for (int i = 0; i < routes.Count; i++)
-        {
-            var routeLabel = new Label(routes[i]);
-            routeLabel.AddToClassList("finish-route");
-            if (i == 0) routeLabel.AddToClassList("finish-route--primary");
-            _finishesContainer.Add(routeLabel);
-        }
-    }
+        => UiRows.ShowFinishes(_finishesContainer, _finishHeader, _finishesEmpty, remaining, MaxFinishRoutes);
 
     private void RebuildRecentList()
     {
-        _recentContainer.Clear();
         var recent = DataManager.Instance.Profile.RecentLegs();
+        if (!UiRows.ResetList(_recentContainer, _recentEmpty, _recentHeader, recent.Count > 0)) return;
 
-        if (recent.Count == 0)
-        {
-            var empty = new Label("No finished legs yet.");
-            empty.AddToClassList("placeholder-text");
-            _recentContainer.Add(empty);
-            return;
-        }
-
-        _recentContainer.Add(MakeRecentRow("Darts", "Avg", "Fin", "CO%", isHeader: true));
         for (int i = recent.Count - 1; i >= 0; i--)
         {
             var s = recent[i];
-            _recentContainer.Add(MakeRecentRow(
+            _recentContainer.Add(UiRows.Cells(_templates.CellRow4,
                 s.totalDartsThrown.ToString(),
                 s.threeDartAverage.ToString("F1"),
                 s.dartsToFinishPossible?.ToString() ?? "n.a.",
-                s.checkoutRate.HasValue ? $"{s.checkoutRate.Value * 100:F0}%" : "n.a.",
-                isHeader: false));
+                s.checkoutRate.HasValue ? $"{s.checkoutRate.Value * 100:F0}%" : "n.a."));
         }
-    }
-
-    private static VisualElement MakeRecentRow(string c0, string c1, string c2, string c3, bool isHeader)
-    {
-        var row = new VisualElement();
-        row.AddToClassList("list-row");
-        if (isHeader) row.AddToClassList("list-row--header");
-
-        foreach (var text in new[] { c0, c1, c2, c3 })
-        {
-            var label = new Label(text);
-            label.AddToClassList("list-row__cell");
-            row.Add(label);
-        }
-        return row;
     }
 
     private void ClearAIDisplay()

@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b262c3d694d19d24caa43e3ebe12e3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DartTrainingsApp::TrainingGameController
+  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!1 &960457488
 GameObject:
   m_ObjectHideFlags: 0

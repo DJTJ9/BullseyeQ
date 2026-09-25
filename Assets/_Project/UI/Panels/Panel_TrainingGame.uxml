@@ -27,9 +27,9 @@
         <ui:VisualElement name="tg-finishes-section" class="col-side col-side--left panel panel--grow">
             <ui:Label text="Possible finishes" class="section-title"/>
             <ui:ScrollView name="tg-finishes-scroll" class="scroll">
-                <ui:VisualElement name="tg-finishes-container">
-                    <ui:Label text="No finish yet." class="placeholder-text"/>
-                </ui:VisualElement>
+                <ui:Label name="tg-finishes-empty" text="No finish yet." class="placeholder-text"/>
+                <ui:Label name="tg-finish-header" text="Remaining –" class="finish-header"/>
+                <ui:VisualElement name="tg-finishes-container"/>
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="tg-center-section" class="col-main">
@@ -53,9 +53,14 @@
                 <ui:VisualElement class="divider"/>
                 <ui:Label text="Recent legs" class="section-title"/>
                 <ui:ScrollView name="tg-recent-sessions-scroll" class="scroll scroll--fixed">
-                    <ui:VisualElement name="tg-recent-sessions-container">
-                        <ui:Label text="No finished legs yet." class="placeholder-text"/>
+                    <ui:Label name="tg-recent-empty" text="No finished legs yet." class="placeholder-text"/>
+                    <ui:VisualElement name="tg-recent-header" class="list-row list-row--header">
+                        <ui:Label text="Darts" class="list-row__cell"/>
+                        <ui:Label text="Avg" class="list-row__cell"/>
+                        <ui:Label text="Fin" class="list-row__cell"/>
+                        <ui:Label text="CO%" class="list-row__cell"/>
                     </ui:VisualElement>
+                    <ui:VisualElement name="tg-recent-sessions-container"/>
                 </ui:ScrollView>
                 <ui:VisualElement name="tg-session-buttons" class="button-row">
                     <ui:Button name="tg-btn-new-game" text="New game" class="text-button text-button--primary button-row__gap"/>
