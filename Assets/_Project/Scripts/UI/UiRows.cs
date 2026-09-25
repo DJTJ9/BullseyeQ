@@ -3,19 +3,11 @@ using System.Linq;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// Shared builders for template-based list rows and the static empty-state / header siblings of a list.
-/// Templates carry structure and base classes; these helpers fill in data and state modifier classes.
+/// Shared builders for list rows cloned from UXML example rows, plus the static empty-state / header siblings of a list.
+/// Example rows carry structure and base classes; these helpers fill in data and state modifier classes.
 /// </summary>
 public static class UiRows
 {
-    /// <summary>One 501 / training-game visit: number, darts, points scored, remaining (or Bust / Out).</summary>
-    public static VisualElement Visit(VisualTreeAsset tpl, int number, FiveOhOneVisit visit, int remAfter)
-        => FillVisit(UiTemplates.Row(tpl), number, visit, remAfter);
-
-    /// <summary>Instantiates <paramref name="tpl"/> and writes <paramref name="texts"/> into its cell0…cellN labels.</summary>
-    public static VisualElement Cells(VisualTreeAsset tpl, params string[] texts)
-        => FillCells(UiTemplates.Row(tpl), texts);
-
     /// <summary>Removes and returns the example row (first child) that <paramref name="container"/> carries in the UXML,
     /// leaving the container empty. Call once at init; clone the result for every runtime row.</summary>
     public static VisualElement TakeTemplate(VisualElement container)
@@ -27,7 +19,7 @@ public static class UiRows
         return proto;
     }
 
-    /// <summary>One 501 / training-game visit cloned from the list's example row.</summary>
+    /// <summary>One 501 / training-game visit: number, darts, points scored, remaining (or Bust / Out), cloned from the list's example row.</summary>
     public static VisualElement Visit(VisualElement proto, int number, FiveOhOneVisit visit, int remAfter)
         => FillVisit(UiClone.Deep(proto), number, visit, remAfter);
 

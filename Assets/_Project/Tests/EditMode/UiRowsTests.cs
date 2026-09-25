@@ -4,11 +4,14 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-// Testet die geteilten Zeilen-/Listen-Helper gegen die echten Templates aus UiTemplates.asset.
+// Testet die geteilten Zeilen-/Listen-Helper gegen die echten Beispielzeilen aus DartInput.uxml.
 [TestFixture]
 public class UiRowsTests
 {
-    static UiTemplates T => AssetDatabase.LoadAssetAtPath<UiTemplates>("Assets/_Project/UI/UiTemplates.asset");
+    /// <summary>Takes the example row of <paramref name="container"/> from a fresh instance of the shell.</summary>
+    static VisualElement P(string container) =>
+        UiRows.TakeTemplate(AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Project/UI/DartInput.uxml")
+            .Instantiate().Q(container));
 
     static FiveOhOneVisit Visit(bool busted, bool checkout, params string[] darts)
     {
@@ -20,7 +23,7 @@ public class UiRowsTests
     [Test]
     public void Visit_Normal_ShowsScoreAndRemaining()
     {
-        var row = UiRows.Visit(T.VisitRow, 3, Visit(false, false, "20+", "20+", "20+"), 321);
+        var row = UiRows.Visit(P("fo-throws-container"), 3, Visit(false, false, "20+", "20+", "20+"), 321);
 
         Assert.AreEqual("#3",  row.Q<Label>("num").text);
         Assert.AreEqual("180", row.Q<Label>("score").text);
@@ -32,7 +35,7 @@ public class UiRowsTests
     [Test]
     public void Visit_Bust_ShowsZeroAndBustClass()
     {
-        var row = UiRows.Visit(T.VisitRow, 1, Visit(true, false, "20+"), 40);
+        var row = UiRows.Visit(P("fo-throws-container"), 1, Visit(true, false, "20+"), 40);
 
         Assert.AreEqual("0",    row.Q<Label>("score").text);
         Assert.AreEqual("Bust", row.Q<Label>("rem").text);
@@ -42,7 +45,7 @@ public class UiRowsTests
     [Test]
     public void Visit_Checkout_ShowsOutAndCheckoutClass()
     {
-        var row = UiRows.Visit(T.VisitRow, 9, Visit(false, true, "20-"), 0);
+        var row = UiRows.Visit(P("tg-throws-container"), 9, Visit(false, true, "20-"), 0);
 
         Assert.AreEqual("Out", row.Q<Label>("rem").text);
         Assert.IsTrue(row.Q<Label>("rem").ClassListContains("list-row__rem--checkout"));
@@ -51,7 +54,7 @@ public class UiRowsTests
     [Test]
     public void Cells_FillsCellsInOrder()
     {
-        var row = UiRows.Cells(T.CellRow4, "a", "b", "c", "d");
+        var row = UiRows.Cells(P("ov-recent-container"), "a", "b", "c", "d");
 
         Assert.AreEqual("a", row.Q<Label>("cell0").text);
         Assert.AreEqual("d", row.Q<Label>("cell3").text);

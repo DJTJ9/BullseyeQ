@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
-    <ui:VisualElement class="stat-row">
-        <ui:Label name="label" text="Label" class="stat-row__label"/>
-        <ui:Label name="value" text="–" class="stat-row__value"/>
-    </ui:VisualElement>
-</ui:UXML>

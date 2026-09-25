@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/_Project/UI/TrainingsSessionStyle.uss?fileID=7433441132597879392&amp;guid=9a9be5dd932fff3458eb8d3e02cba2be&amp;type=3#TrainingsSessionStyle"/>
-    <ui:VisualElement class="list-row">
-        <ui:Label name="cell0" text="–" class="list-row__cell"/>
-        <ui:Label name="cell1" text="–" class="list-row__cell"/>
-        <ui:Label name="cell2" text="–" class="list-row__cell"/>
-        <ui:Label name="cell3" text="–" class="list-row__cell"/>
-    </ui:VisualElement>
-</ui:UXML>

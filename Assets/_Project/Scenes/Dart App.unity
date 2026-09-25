@@ -291,7 +291,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DartInputController
   _logoTexture: {fileID: 2800000, guid: f17dd41897f06b6469e90dcbdea1d21b, type: 3}
-  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!114 &858747674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,7 +341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7120b4ef867f74a8138a758831ff7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DartTrainingsApp::FiveOhOneController
-  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!114 &858747677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935fa19b67ce77c4fa2949f7477ec518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DartTrainingsApp::CheckOutController
-  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!114 &858747678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b262c3d694d19d24caa43e3ebe12e3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DartTrainingsApp::TrainingGameController
-  _templates: {fileID: 11400000, guid: 3100d4f529218d145b7461c03f3302b0, type: 2}
 --- !u!1 &960457488
 GameObject:
   m_ObjectHideFlags: 0
