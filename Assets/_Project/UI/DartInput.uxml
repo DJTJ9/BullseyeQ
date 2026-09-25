@@ -348,7 +348,29 @@
                             <ui:VisualElement class="col-side col-side--left panel panel--grow">
                                 <ui:Label text="Pick a double" class="section-title"/>
                                 <ui:Label name="co-td-selected-label" text="–" class="stat-value"/>
-                                <ui:VisualElement name="co-td-field-grid" class="field-grid"/>
+                                <ui:VisualElement name="co-td-field-grid" class="field-grid">
+                                    <ui:Button name="co-field-D20" text="D20" class="field-grid-button field-grid-button--active"/>
+                                    <ui:Button name="co-field-D1" text="D1" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D18" text="D18" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D4" text="D4" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D13" text="D13" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D6" text="D6" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D10" text="D10" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D15" text="D15" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D2" text="D2" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D17" text="D17" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D3" text="D3" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D19" text="D19" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D7" text="D7" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D16" text="D16" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D8" text="D8" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D11" text="D11" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D14" text="D14" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D9" text="D9" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D12" text="D12" class="field-grid-button"/>
+                                    <ui:Button name="co-field-D5" text="D5" class="field-grid-button"/>
+                                    <ui:Button name="co-field-Bull" text="Bull" class="field-grid-button"/>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                             <ui:VisualElement class="col-main">
                                 <ui:VisualElement class="panel">
@@ -465,7 +487,28 @@
                                     <ui:Button name="co-five-diff-3" text="Expert" class="stats-inner-tab"/>
                                 </ui:VisualElement>
                                 <ui:Label text="Checkouts" class="section-title"/>
-                                <ui:VisualElement name="co-five-cards-container" class="scroll"/>
+                                <ui:VisualElement name="co-five-cards-container" class="scroll">
+                                    <ui:VisualElement class="five-card five-card--done">
+                                        <ui:Label name="score" text="41" class="five-card__score"/>
+                                        <ui:Label name="status" text="Done" class="five-card__status"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="five-card five-card--active">
+                                        <ui:Label name="score" text="52" class="five-card__score"/>
+                                        <ui:Label name="status" text="Now" class="five-card__status"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="five-card">
+                                        <ui:Label name="score" text="60" class="five-card__score"/>
+                                        <ui:Label name="status" text="-" class="five-card__status"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="five-card">
+                                        <ui:Label name="score" text="68" class="five-card__score"/>
+                                        <ui:Label name="status" text="-" class="five-card__status"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="five-card">
+                                        <ui:Label name="score" text="77" class="five-card__score"/>
+                                        <ui:Label name="status" text="-" class="five-card__status"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                             <ui:VisualElement class="col-main">
                                 <ui:VisualElement class="panel">

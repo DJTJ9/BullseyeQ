@@ -191,4 +191,37 @@ public class PanelContractTests
         Assert.AreEqual(1, charts.Count, $"#{name}");
         Assert.AreEqual(hex, ColorUtility.ToHtmlStringRGB(charts[0].lineColor), $"#{name} line-color");
     }
+
+    static readonly string[] DoubleFields =
+    {
+        "D20","D1","D18","D4","D13","D6","D10","D15","D2","D17",
+        "D3","D19","D7","D16","D8","D11","D14","D9","D12","D5","Bull",
+    };
+
+    [Test]
+    public void FieldGrid_HasEveryDoubleAsStaticButton()
+    {
+        var grid = _root.Q("co-td-field-grid");
+        Assert.AreEqual(DoubleFields.Length, grid.childCount);
+        foreach (var f in DoubleFields)
+        {
+            var b = grid.Q<Button>("co-field-" + f);
+            Assert.IsNotNull(b, $"#co-field-{f} fehlt");
+            Assert.AreEqual(f, b.text);
+            Assert.IsTrue(b.ClassListContains("field-grid-button"), $"#co-field-{f} ohne .field-grid-button");
+        }
+    }
+
+    [Test]
+    public void FiveCards_HasFiveStaticCards()
+    {
+        var container = _root.Q("co-five-cards-container");
+        Assert.AreEqual(5, container.childCount);
+        foreach (var card in container.Children())
+        {
+            Assert.IsTrue(card.ClassListContains("five-card"));
+            Assert.IsNotNull(card.Q<Label>("score"));
+            Assert.IsNotNull(card.Q<Label>("status"));
+        }
+    }
 }

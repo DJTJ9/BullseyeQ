@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -206,5 +207,53 @@ public class UiRowsTests
 
         Assert.AreEqual(DisplayStyle.None, a.style.display.value);
         Assert.AreEqual(DisplayStyle.None, b.style.display.value);
+    }
+
+    static VisualElement FiveCards()
+    {
+        var container = new VisualElement();
+        for (int i = 0; i < 5; i++)
+        {
+            var card = new VisualElement();
+            card.AddToClassList("five-card");
+            card.AddToClassList("five-card--done");   // stale state from the UXML preview / a previous fill
+            card.Add(new Label("0") { name = "score" });
+            card.Add(new Label("?") { name = "status" });
+            container.Add(card);
+        }
+        return container;
+    }
+
+    [Test]
+    public void FillFiveCards_FillsFirstNAndHidesRest()
+    {
+        var c = FiveCards();
+
+        UiRows.FillFiveCards(c, new[] { 41, 52, 60 }, new[] { true, false, false }, 1);
+
+        var cards = c.Children().ToList();
+        Assert.AreEqual("41", cards[0].Q<Label>("score").text);
+        Assert.AreEqual("Done", cards[0].Q<Label>("status").text);
+        Assert.IsTrue(cards[0].ClassListContains("five-card--done"));
+        Assert.AreEqual("Now", cards[1].Q<Label>("status").text);
+        Assert.IsTrue(cards[1].ClassListContains("five-card--active"));
+        Assert.IsFalse(cards[1].ClassListContains("five-card--done"));
+        Assert.AreEqual("-", cards[2].Q<Label>("status").text);
+        Assert.IsFalse(cards[2].ClassListContains("five-card--done"));
+        Assert.IsFalse(cards[2].ClassListContains("five-card--active"));
+        Assert.AreEqual(DisplayStyle.Flex, cards[2].style.display.value);
+        Assert.AreEqual(DisplayStyle.None, cards[3].style.display.value);
+        Assert.AreEqual(DisplayStyle.None, cards[4].style.display.value);
+    }
+
+    [Test]
+    public void FillFiveCards_NoScores_HidesAll()
+    {
+        var c = FiveCards();
+
+        UiRows.FillFiveCards(c, null, null, 0);
+
+        foreach (var card in c.Children())
+            Assert.AreEqual(DisplayStyle.None, card.style.display.value);
     }
 }

@@ -55,13 +55,6 @@ public class CheckOutController : MonoBehaviour
     // ── Pending darts (for multi-dart input) ─────────────────────────────────
     private readonly DartArrow[] _pendingDarts = new DartArrow[3];
 
-    // Double field names for the Target Double grid
-    private static readonly string[] DoubleFields =
-    {
-        "D20","D1","D18","D4","D13","D6","D10","D15","D2","D17",
-        "D3","D19","D7","D16","D8","D11","D14","D9","D12","D5","Bull"
-    };
-
     // Score ranges per difficulty
     private static readonly (int min, int max)[] DiffRanges =
     {
@@ -110,7 +103,7 @@ public class CheckOutController : MonoBehaviour
 
         _tdStats = new CheckOutStatsPresenter(root, CheckOutMode.TargetDouble);
 
-        BuildFieldGrid();
+        WireFieldGrid();
         RegisterFieldCallbacks(_tdFields, OnTdFieldSubmit);
         _tdBtnNew?.RegisterCallback<ClickEvent>(_ => NewSession(CheckOutMode.TargetDouble));
         _tdBtnReset?.RegisterCallback<ClickEvent>(_ => ResetSession(CheckOutMode.TargetDouble));
@@ -147,6 +140,7 @@ public class CheckOutController : MonoBehaviour
         _fiveRoute         = root.Q<Label>("co-five-route");
         _fiveProgress      = root.Q<Label>("co-five-progress");
         _fiveCardsContainer = root.Q<VisualElement>("co-five-cards-container");
+        if (_fiveCardsContainer != null) UiRows.FillFiveCards(_fiveCardsContainer, null, null, 0);
         _fiveBtnNew         = root.Q<Button>("co-five-btn-new");
         _fiveBtnReset       = root.Q<Button>("co-five-btn-reset");
 
@@ -208,17 +202,13 @@ public class CheckOutController : MonoBehaviour
 
     // ── Target Double ─────────────────────────────────────────────────────────
 
-    private void BuildFieldGrid()
+    private void WireFieldGrid()
     {
         if (_tdFieldGrid == null) return;
-        _tdFieldGrid.Clear();
-        foreach (var field in DoubleFields)
+        foreach (var btn in _tdFieldGrid.Query<Button>(className: "field-grid-button").ToList())
         {
-            string f = field;
-            var btn = new Button { text = f };
-            btn.AddToClassList("field-grid-button");
+            string f = btn.text;
             btn.RegisterCallback<ClickEvent>(_ => SelectTargetField(f));
-            _tdFieldGrid.Add(btn);
         }
         SelectTargetField("D20");
     }
@@ -431,25 +421,7 @@ public class CheckOutController : MonoBehaviour
     private void RebuildFiveCards()
     {
         if (_fiveCardsContainer == null || Session == null) return;
-        _fiveCardsContainer.Clear();
-
-        var scores    = Session.assignedScores;
-        var completed = Session.completedScores;
-        if (scores == null || scores.Length == 0) return;
-
-        for (int i = 0; i < scores.Length; i++)
-        {
-            bool active = i == _fiveActiveIdx;
-            bool done   = i < (completed?.Length ?? 0) && completed[i];
-
-            var card = UiTemplates.Row(_templates.FiveCard);
-            if (done)        card.AddToClassList("five-card--done");
-            else if (active) card.AddToClassList("five-card--active");
-
-            card.Q<Label>("score").text  = scores[i].ToString();
-            card.Q<Label>("status").text = done ? "Done" : active ? "Now" : "-";
-            _fiveCardsContainer.Add(card);
-        }
+        UiRows.FillFiveCards(_fiveCardsContainer, Session.assignedScores, Session.completedScores, _fiveActiveIdx);
     }
 
     private void OnFiveFieldSubmit(int index)

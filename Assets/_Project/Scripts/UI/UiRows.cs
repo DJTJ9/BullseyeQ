@@ -103,4 +103,29 @@ public static class UiRows
     {
         foreach (var el in elements) SetVisible(el, false);
     }
+
+    /// <summary>Fills the static five-checkout cards: the first <c>scores.Length</c> show score and state
+    /// (done / now / -), the rest are hidden. Clears state classes left by the UXML preview or a previous fill.</summary>
+    public static void FillFiveCards(VisualElement container, int[] scores, bool[] completed, int activeIdx)
+    {
+        int n = scores?.Length ?? 0;
+        int i = 0;
+        foreach (var card in container.Children())
+        {
+            card.RemoveFromClassList("five-card--done");
+            card.RemoveFromClassList("five-card--active");
+            SetVisible(card, i < n);
+            if (i < n)
+            {
+                bool active = i == activeIdx;
+                bool done   = i < (completed?.Length ?? 0) && completed[i];
+                if (done)        card.AddToClassList("five-card--done");
+                else if (active) card.AddToClassList("five-card--active");
+
+                card.Q<Label>("score").text  = scores[i].ToString();
+                card.Q<Label>("status").text = done ? "Done" : active ? "Now" : "-";
+            }
+            i++;
+        }
+    }
 }
