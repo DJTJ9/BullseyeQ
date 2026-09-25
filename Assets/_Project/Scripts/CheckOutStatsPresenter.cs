@@ -36,7 +36,7 @@ public class CheckOutStatsPresenter
                 _tdHitRate  = root.Q<Label>("co-td-stat-hitrate");
                 _tdHits     = root.Q<Label>("co-td-stat-hits");
                 _tdAttempts = root.Q<Label>("co-td-stat-attempts");
-                _heatmap    = Inject(root, "co-td-heatmap-container");
+                _heatmap    = Find(root, "co-td-heatmap-container");
                 break;
 
             case CheckOutMode.CheckoutChallenge:
@@ -44,13 +44,13 @@ public class CheckOutStatsPresenter
                 _chAttempts = root.Q<Label>("co-ch-stat-attempts");
                 _chAvgDarts = root.Q<Label>("co-ch-stat-avg-darts");
                 _chBest     = root.Q<Label>("co-ch-stat-best");
-                _heatmap    = Inject(root, "co-ch-heatmap-container");
+                _heatmap    = Find(root, "co-ch-heatmap-container");
                 break;
 
             case CheckOutMode.FiveCheckouts:
                 _fiveCompleted = root.Q<Label>("co-five-stat-completed");
                 _fiveAttempts  = root.Q<Label>("co-five-stat-attempts");
-                _heatmap       = Inject(root, "co-five-heatmap-container");
+                _heatmap       = Find(root, "co-five-heatmap-container");
                 break;
         }
     }
@@ -97,14 +97,8 @@ public class CheckOutStatsPresenter
         }
     }
 
-    private static DartboardHeatmapElement Inject(VisualElement root, string containerName)
-    {
-        var container = root.Q<VisualElement>(containerName);
-        if (container == null) return null;
-        var heatmap = new DartboardHeatmapElement();
-        container.Add(heatmap);
-        return heatmap;
-    }
+    private static DartboardHeatmapElement Find(VisualElement root, string containerName)
+        => root.Q<VisualElement>(containerName)?.Q<DartboardHeatmapElement>();
 
     private static void Set(Label lbl, string value)
     {

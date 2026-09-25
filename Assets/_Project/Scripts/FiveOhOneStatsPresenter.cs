@@ -20,7 +20,7 @@ public class FiveOhOneStatsPresenter
     private readonly VisualElement _recentEmpty;
     private readonly VisualElement _recentHeader;
 
-    /// <summary>Queries all 501 stat elements from <paramref name="root"/> and injects the heatmap.</summary>
+    /// <summary>Queries all 501 stat elements from <paramref name="root"/> and the heatmap from the UXML.</summary>
     public FiveOhOneStatsPresenter(VisualElement root, UiTemplates templates)
     {
         _templates = templates;
@@ -34,8 +34,7 @@ public class FiveOhOneStatsPresenter
         _recentEmpty  = root.Q<VisualElement>("fo-recent-empty");
         _recentHeader = root.Q<VisualElement>("fo-recent-header");
 
-        _heatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("fo-heatmap-container").Add(_heatmap);
+        _heatmap = root.Q<VisualElement>("fo-heatmap-container").Q<DartboardHeatmapElement>();
     }
 
     /// <summary>Updates the stat labels, heatmap and recent-legs list from the current leg and profile.</summary>

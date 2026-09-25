@@ -81,7 +81,9 @@
                     </ui:VisualElement>
                     <ui:VisualElement class="col-side">
                         <ui:Label text="Overall heatmap" class="section-title"/>
-                        <ui:VisualElement name="ov-heatmap-container" class="heatmap-slot"/>
+                        <ui:VisualElement name="ov-heatmap-container" class="heatmap-slot">
+                            <DartboardHeatmapElement/>
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
@@ -230,7 +232,9 @@
                                     <ui:Label text="Wasted darts" class="stat-caption"/>
                                 </ui:VisualElement>
                             </ui:VisualElement>
-                            <ui:VisualElement name="heatmap-container" class="heatmap-slot"/>
+                            <ui:VisualElement name="heatmap-container" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -324,7 +328,9 @@
                                     <ui:Label text="Checkout rate" class="stat-caption"/>
                                 </ui:VisualElement>
                             </ui:VisualElement>
-                            <ui:VisualElement name="fo-heatmap-container" class="heatmap-slot"/>
+                            <ui:VisualElement name="fo-heatmap-container" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -382,7 +388,9 @@
                                         <ui:Label text="Attempts" class="stat-caption"/>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="co-td-heatmap-container" class="heatmap-slot"/>
+                                <ui:VisualElement name="co-td-heatmap-container" class="heatmap-slot">
+                                    <DartboardHeatmapElement/>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -439,7 +447,9 @@
                                         <ui:Label text="Best score" class="stat-caption"/>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="co-ch-heatmap-container" class="heatmap-slot"/>
+                                <ui:VisualElement name="co-ch-heatmap-container" class="heatmap-slot">
+                                    <DartboardHeatmapElement/>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -488,7 +498,9 @@
                                         <ui:Label text="Attempts" class="stat-caption"/>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="co-five-heatmap-container" class="heatmap-slot"/>
+                                <ui:VisualElement name="co-five-heatmap-container" class="heatmap-slot">
+                                    <DartboardHeatmapElement/>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -522,11 +534,17 @@
                     <ui:VisualElement class="columns">
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Avg score per session" class="section-title"/>
-                            <ui:VisualElement name="chart-avg-score" class="chart-container"/>
+                            <ui:VisualElement name="chart-avg-score" class="chart-container">
+                                <LineChartElement line-color="#2FBF71"/>
+                            </ui:VisualElement>
                             <ui:Label text="Triple rate %" class="section-title"/>
-                            <ui:VisualElement name="chart-triple-rate" class="chart-container"/>
+                            <ui:VisualElement name="chart-triple-rate" class="chart-container">
+                                <LineChartElement line-color="#F2A93B"/>
+                            </ui:VisualElement>
                             <ui:Label text="Wasted darts %" class="section-title"/>
-                            <ui:VisualElement name="chart-wasted-rate" class="chart-container"/>
+                            <ui:VisualElement name="chart-wasted-rate" class="chart-container">
+                                <LineChartElement line-color="#E5202B"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Score distribution" class="section-title"/>
@@ -539,7 +557,9 @@
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
-                            <ui:VisualElement name="stats-scoring-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement name="stats-scoring-heatmap" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Session history" class="section-title"/>
                             <ui:ScrollView name="scoring-history-scroll" class="scroll">
@@ -561,9 +581,13 @@
                     <ui:VisualElement class="columns">
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="3-dart average per leg" class="section-title"/>
-                            <ui:VisualElement name="chart-fo-avg" class="chart-container"/>
+                            <ui:VisualElement name="chart-fo-avg" class="chart-container">
+                                <LineChartElement line-color="#2FBF71"/>
+                            </ui:VisualElement>
                             <ui:Label text="Checkout rate %" class="section-title"/>
-                            <ui:VisualElement name="chart-fo-checkout" class="chart-container"/>
+                            <ui:VisualElement name="chart-fo-checkout" class="chart-container">
+                                <LineChartElement line-color="#F2A93B"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
                             <ui:Label text="501 stats" class="section-title"/>
@@ -572,7 +596,9 @@
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
-                            <ui:VisualElement name="stats-fo-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement name="stats-fo-heatmap" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Session history" class="section-title"/>
                             <ui:ScrollView name="fo-history-scroll" class="scroll">
@@ -594,9 +620,13 @@
                     <ui:VisualElement class="columns">
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Hit rate trend" class="section-title"/>
-                            <ui:VisualElement name="chart-co-hitrate" class="chart-container"/>
+                            <ui:VisualElement name="chart-co-hitrate" class="chart-container">
+                                <LineChartElement line-color="#2FBF71"/>
+                            </ui:VisualElement>
                             <ui:Label text="High score trend (challenge)" class="section-title"/>
-                            <ui:VisualElement name="chart-co-highscore" class="chart-container"/>
+                            <ui:VisualElement name="chart-co-highscore" class="chart-container">
+                                <LineChartElement line-color="#F2A93B"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Mode distribution" class="section-title"/>
@@ -609,7 +639,9 @@
                         </ui:VisualElement>
                         <ui:VisualElement class="col-side">
                             <ui:Label text="Overall heatmap" class="section-title"/>
-                            <ui:VisualElement name="stats-co-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement name="stats-co-heatmap" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Session history" class="section-title"/>
                             <ui:ScrollView name="co-history-scroll" class="scroll">
@@ -631,9 +663,13 @@
                     <ui:VisualElement class="columns">
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Win rate trend" class="section-title"/>
-                            <ui:VisualElement name="chart-tg-winrate" class="chart-container"/>
+                            <ui:VisualElement name="chart-tg-winrate" class="chart-container">
+                                <LineChartElement line-color="#2FBF71"/>
+                            </ui:VisualElement>
                             <ui:Label text="3-dart average (you)" class="section-title"/>
-                            <ui:VisualElement name="chart-tg-avg" class="chart-container"/>
+                            <ui:VisualElement name="chart-tg-avg" class="chart-container">
+                                <LineChartElement line-color="#F2A93B"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
                             <ui:Label text="Training game stats" class="section-title"/>
@@ -641,7 +677,9 @@
                             <ui:VisualElement name="tg-stats-container"/>
                             <ui:VisualElement class="divider"/>
                             <ui:Label text="Overall heatmap" class="section-title"/>
-                            <ui:VisualElement name="stats-tg-heatmap" class="heatmap-slot"/>
+                            <ui:VisualElement name="stats-tg-heatmap" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main col-main--wide col-main--last">
                             <ui:Label text="Match history (last 10)" class="section-title"/>

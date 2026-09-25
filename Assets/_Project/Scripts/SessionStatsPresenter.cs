@@ -14,7 +14,7 @@ public class SessionStatsPresenter
     private readonly DartboardHeatmapElement _heatmap;
 
     /// <summary>
-    /// Queries all required UI elements from <paramref name="root"/> and injects the heatmap.
+    /// Queries all required UI elements from <paramref name="root"/> and the heatmap from the UXML.
     /// </summary>
     /// <param name="root">The root visual element of the UI document.</param>
     public SessionStatsPresenter(VisualElement root)
@@ -24,8 +24,7 @@ public class SessionStatsPresenter
         _tripleRate = root.Q<Label>("stat-triple-rate");
         _wastedRate = root.Q<Label>("stat-wasted-rate");
 
-        _heatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("heatmap-container").Add(_heatmap);
+        _heatmap = root.Q<VisualElement>("heatmap-container").Q<DartboardHeatmapElement>();
     }
 
     /// <summary>

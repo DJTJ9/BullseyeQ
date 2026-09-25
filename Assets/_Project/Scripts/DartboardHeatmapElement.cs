@@ -8,8 +8,10 @@ using UnityEngine.UIElements;
 /// Keeps the board square (side = min(width, height − legend)), places the 20 numbers around the double ring,
 /// shows a min/max legend below and a hover tooltip with field + hits.
 /// Call <see cref="UpdateHeatmap"/> with the latest hit-count dictionary to refresh.
+/// Usable from UXML as &lt;DartboardHeatmapElement/&gt;.
 /// </summary>
-public class DartboardHeatmapElement : VisualElement
+[UxmlElement]
+public partial class DartboardHeatmapElement : VisualElement
 {
     /// <summary>Dartboard sector order (clockwise from top).</summary>
     static readonly int[] BoardNumbers = { 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5 };

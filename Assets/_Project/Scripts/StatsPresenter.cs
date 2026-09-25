@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -80,48 +79,44 @@ public class StatsPresenter
             if (_tabButtons[i] != null) _tabButtons[i].clicked += () => ShowInnerTab(idx);
         }
 
-        _chartAvgScore = CreateChart(root.Q<VisualElement>("chart-avg-score"),   UiTheme.Hit);
-        _chartTriple   = CreateChart(root.Q<VisualElement>("chart-triple-rate"), UiTheme.Warm);
-        _chartWasted   = CreateChart(root.Q<VisualElement>("chart-wasted-rate"), UiTheme.Live);
+        _chartAvgScore = Chart(root, "chart-avg-score");
+        _chartTriple   = Chart(root, "chart-triple-rate");
+        _chartWasted   = Chart(root, "chart-wasted-rate");
         if (_chartTriple != null) _chartTriple.FormatValue = v => $"{v:F1}%";
         if (_chartWasted != null) _chartWasted.FormatValue = v => $"{v:F1}%";
 
         _scoreDistContainer       = root.Q<VisualElement>("score-dist-container");
         _scoringLifetimeContainer = root.Q<VisualElement>("scoring-lifetime-container");
 
-        _scoringHeatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("stats-scoring-heatmap")?.Add(_scoringHeatmap);
+        _scoringHeatmap = Heatmap(root, "stats-scoring-heatmap");
         _scoringHistoryContainer = root.Q<VisualElement>("scoring-history-container");
 
-        _chartFoAvg      = CreateChart(root.Q<VisualElement>("chart-fo-avg"),      UiTheme.Hit);
-        _chartFoCheckout = CreateChart(root.Q<VisualElement>("chart-fo-checkout"), UiTheme.Warm);
+        _chartFoAvg      = Chart(root, "chart-fo-avg");
+        _chartFoCheckout = Chart(root, "chart-fo-checkout");
         if (_chartFoCheckout != null) _chartFoCheckout.FormatValue = v => $"{v:F1}%";
 
         _foStatsContainer = root.Q<VisualElement>("fo-stats-container");
 
-        _foHeatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("stats-fo-heatmap")?.Add(_foHeatmap);
+        _foHeatmap = Heatmap(root, "stats-fo-heatmap");
         _foHistoryContainer = root.Q<VisualElement>("fo-history-container");
 
-        _chartCoHitRate   = CreateChart(root.Q<VisualElement>("chart-co-hitrate"),   UiTheme.Hit);
-        _chartCoHighscore = CreateChart(root.Q<VisualElement>("chart-co-highscore"), UiTheme.Warm);
+        _chartCoHitRate   = Chart(root, "chart-co-hitrate");
+        _chartCoHighscore = Chart(root, "chart-co-highscore");
         if (_chartCoHitRate != null) _chartCoHitRate.FormatValue = v => $"{v:F1}%";
 
         _coDistContainer     = root.Q<VisualElement>("co-dist-container");
         _coLifetimeContainer = root.Q<VisualElement>("co-lifetime-container");
 
-        _coHeatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("stats-co-heatmap")?.Add(_coHeatmap);
+        _coHeatmap = Heatmap(root, "stats-co-heatmap");
         _coHistoryContainer = root.Q<VisualElement>("co-history-container");
 
-        _chartTgWinRate = CreateChart(root.Q<VisualElement>("chart-tg-winrate"), UiTheme.Hit);
-        _chartTgAvg     = CreateChart(root.Q<VisualElement>("chart-tg-avg"),     UiTheme.Warm);
+        _chartTgWinRate = Chart(root, "chart-tg-winrate");
+        _chartTgAvg     = Chart(root, "chart-tg-avg");
         if (_chartTgWinRate != null) _chartTgWinRate.FormatValue = v => $"{v:F0}%";
         _tgStatsContainer   = root.Q<VisualElement>("tg-stats-container");
         _tgHistoryContainer = root.Q<VisualElement>("tg-history-container");
 
-        _tgHeatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("stats-tg-heatmap")?.Add(_tgHeatmap);
+        _tgHeatmap = Heatmap(root, "stats-tg-heatmap");
 
         _scoreDistEmpty       = root.Q("score-dist-empty");
         _scoringLifetimeEmpty = root.Q("scoring-lifetime-empty");
@@ -430,13 +425,11 @@ public class StatsPresenter
             AddStatRow(_coLifetimeContainer, "Best five checkouts", $"{bestFive} / 5");
     }
 
-    private static LineChartElement CreateChart(VisualElement container, Color color)
-    {
-        if (container == null) return null;
-        var chart = new LineChartElement { lineColor = color };
-        container.Add(chart);
-        return chart;
-    }
+    private static LineChartElement Chart(VisualElement root, string container)
+        => root.Q<VisualElement>(container)?.Q<LineChartElement>();
+
+    private static DartboardHeatmapElement Heatmap(VisualElement root, string container)
+        => root.Q<VisualElement>(container)?.Q<DartboardHeatmapElement>();
 
     // ── History builders ─────────────────────────────────────────────────────
 

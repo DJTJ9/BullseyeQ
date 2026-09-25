@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 // Prüft, dass die flache Shell jedes Element liefert, das ein Controller per Name sucht, jedes Panel seine Hüllenklasse trägt,
@@ -153,5 +154,41 @@ public class PanelContractTests
         Assert.Greater(rules.Count, 0, "Regeln für .content-panel/.sub-panel/.modal-overlay nicht gefunden");
         foreach (Match r in rules)
             StringAssert.DoesNotContain("display", r.Groups[2].Value, $"'{r.Groups[1].Value.Trim()}' setzt display");
+    }
+
+    static readonly string[] HeatmapSlots =
+    {
+        "heatmap-container", "fo-heatmap-container",
+        "co-td-heatmap-container", "co-ch-heatmap-container", "co-five-heatmap-container",
+        "ov-heatmap-container",
+        "stats-scoring-heatmap", "stats-fo-heatmap", "stats-co-heatmap", "stats-tg-heatmap",
+    };
+
+    // Container → erwartete Linienfarbe (UiTheme.Hit / Warm / Live, wie bisher in StatsPresenter.CreateChart).
+    static readonly object[] Charts =
+    {
+        new object[] { "chart-avg-score",    "2FBF71" },
+        new object[] { "chart-triple-rate",  "F2A93B" },
+        new object[] { "chart-wasted-rate",  "E5202B" },
+        new object[] { "chart-fo-avg",       "2FBF71" },
+        new object[] { "chart-fo-checkout",  "F2A93B" },
+        new object[] { "chart-co-hitrate",   "2FBF71" },
+        new object[] { "chart-co-highscore", "F2A93B" },
+        new object[] { "chart-tg-winrate",   "2FBF71" },
+        new object[] { "chart-tg-avg",       "F2A93B" },
+    };
+
+    [TestCaseSource(nameof(HeatmapSlots))]
+    public void HeatmapSlot_HoldsExactlyOneHeatmap(string name)
+    {
+        Assert.AreEqual(1, _root.Q(name).Query<DartboardHeatmapElement>().ToList().Count, $"#{name}");
+    }
+
+    [TestCaseSource(nameof(Charts))]
+    public void ChartContainer_HoldsLineChartWithColor(string name, string hex)
+    {
+        var charts = _root.Q(name).Query<LineChartElement>().ToList();
+        Assert.AreEqual(1, charts.Count, $"#{name}");
+        Assert.AreEqual(hex, ColorUtility.ToHtmlStringRGB(charts[0].lineColor), $"#{name} line-color");
     }
 }

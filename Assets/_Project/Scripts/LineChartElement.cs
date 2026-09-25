@@ -6,16 +6,18 @@ using UnityEngine.UIElements;
 /// Custom VisualElement that renders a float data series as a line chart using Painter2D.
 /// Features: Y-axis min/max labels, subtle horizontal grid, hover tooltip showing exact values.
 /// Call <see cref="SetData"/> to populate. Set <see cref="FormatValue"/> to control formatting.
+/// Usable from UXML as &lt;LineChartElement line-color="#2FBF71"/&gt;; FormatValue stays code-only.
 /// </summary>
-public class LineChartElement : VisualElement
+[UxmlElement]
+public partial class LineChartElement : VisualElement
 {
     private float[]   _data   = Array.Empty<float>();
     private Vector2[] _points = Array.Empty<Vector2>();
 
-    public Color lineColor  = UiTheme.Hit;
-    public bool  showDots   = true;
-    public float dotRadius  = 3f;
-    public float lineWidth  = 2f;
+    [UxmlAttribute] public Color lineColor = UiTheme.Hit;
+    [UxmlAttribute] public bool  showDots  = true;
+    [UxmlAttribute] public float dotRadius = 3f;
+    [UxmlAttribute] public float lineWidth = 2f;
 
     /// <summary>Formats a data value for the Y-axis labels and tooltip. Default: one decimal place.</summary>
     public Func<float, string> FormatValue = v => v.ToString("F1");

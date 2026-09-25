@@ -47,8 +47,7 @@ public class OverviewPresenter
         _total100s      = root.Q<Label>("ov-total-100s");
         _totalRounds    = root.Q<Label>("ov-total-rounds");
 
-        _heatmap = new DartboardHeatmapElement();
-        root.Q<VisualElement>("ov-heatmap-container")?.Add(_heatmap);
+        _heatmap = root.Q<VisualElement>("ov-heatmap-container")?.Q<DartboardHeatmapElement>();
     }
 
     public void Refresh(PlayerProfile profile)
