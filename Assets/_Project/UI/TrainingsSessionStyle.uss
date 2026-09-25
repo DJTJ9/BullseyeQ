@@ -26,6 +26,9 @@
     --bq-dur-flash: 400ms;
     --bq-dur-banner: 250ms;
     --bq-dur-card: 200ms;
+    --bq-dur-window-in: 220ms;
+    --bq-dur-window-out: 120ms;
+    --bq-dur-rule-fade: 400ms;
 
     --bq-fs-xs: 13px;
     --bq-fs-sm: 16px;
@@ -202,6 +205,28 @@
     transform-origin: left;
     scale: 0 1;
     opacity: 0;
+}
+
+/* Menu ⇄ window swap (UiFx.OpenWindow / CloseWindow) — same 0s-enter trick as the content panels. */
+.main-menu, .window {
+    opacity: 1;
+    translate: 0 0;
+    transition-property: opacity, translate;
+    transition-duration: var(--bq-dur-window-in);
+    transition-timing-function: ease-out;
+}
+.main-menu--enter { opacity: 0; translate: -24px 0; transition-duration: 0s; }
+.main-menu--exit  { opacity: 0; translate: -24px 0; transition-duration: var(--bq-dur-window-out); }
+.window--enter    { opacity: 0; translate: 32px 0; transition-duration: 0s; }
+.window--exit     { opacity: 0; transition-duration: var(--bq-dur-window-out); }
+
+.window-rule--start { scale: 0.01 1; opacity: 1; }
+.window-rule--sweep {
+    scale: 1 1;
+    opacity: 0;
+    transition-property: scale, opacity;
+    transition-duration: var(--bq-dur-marker), var(--bq-dur-rule-fade);
+    transition-timing-function: ease-out;
 }
 
 /* ── Content panels + transitions ─────────────────────────────────────── */
@@ -838,6 +863,10 @@
 /* ── Reduced motion: every transition-bearing selector → 0 s ─────────── */
 
 .bq-no-motion .menu-item,
+.bq-no-motion .main-menu,
+.bq-no-motion .window,
+.bq-no-motion .main-menu--exit,
+.bq-no-motion .window--exit,
 .bq-no-motion .nav-marker,
 .bq-no-motion .content-panel,
 .bq-no-motion .sub-panel,

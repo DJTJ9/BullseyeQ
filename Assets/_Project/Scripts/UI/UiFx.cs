@@ -18,9 +18,26 @@ public static class UiFx
     const string ShakeR      = "bq-fx--shake-r";
     const string FlashClass  = "bq-fx--flash";
     const string BannerIn    = "lower-third--in";
+    const string MenuEnter   = "main-menu--enter";
+    const string MenuExit    = "main-menu--exit";
+    const string WindowEnter = "window--enter";
+    const string WindowExit  = "window--exit";
+    const string RuleStart   = "window-rule--start";
+    const string RuleSweep   = "window-rule--sweep";
 
     const int ExitMs = 120, PopHalfMs = 90, ShakeStepMs = 50, ShakeSteps = 6, FlashMs = 400;
     const int BannerSlideMs = 250, BannerHoldMs = 1200;
+
+    /// <summary>Menu/window exit duration before the other layer enters; mirrors <c>--bq-dur-window-out</c>.</summary>
+    public const int LayerExitMs = 120;
+    const int RuleMs = 400; // mirrors --bq-dur-rule-fade
+
+    static readonly string[] LayerClasses = { MenuEnter, MenuExit, WindowEnter, WindowExit };
+
+    // The single in-flight menu ⇄ window swap. A new swap cancels it, so Esc during an open (or a click
+    // during a close) ends in whatever state was asked for last — no input lock.
+    static IVisualElementScheduledItem _pendingLayer;
+    static IVisualElementScheduledItem _ruleReset;
 
     // Tracks the in-flight Pop/Shake per element so a new call can cancel the old one
     // instead of leaving a dangling scheduled callback and stuck classes behind.
@@ -114,9 +131,64 @@ public static class UiFx
         }).StartingIn(ExitMs);
     }
 
-    // ── Sidebar marker ───────────────────────────────────────────────────────
+    // ── Menu ⇄ window ────────────────────────────────────────────────────────
 
-    /// <summary>Moves the absolute rail marker to <paramref name="target"/>'s row (USS transitions <c>top</c>).</summary>
+    /// <summary>Menu fades out 24 px to the left (120 ms), then the window slides in from +32 px (220 ms)
+    /// and <paramref name="rule"/> sweeps along the header underside.</summary>
+    public static void OpenWindow(VisualElement menu, VisualElement window, VisualElement rule = null)
+        => SwapLayer(menu, window, MenuExit, WindowEnter, rule);
+
+    /// <summary>Window fades out (120 ms), then the menu slides back in (220 ms).</summary>
+    public static void CloseWindow(VisualElement window, VisualElement menu)
+        => SwapLayer(window, menu, WindowExit, MenuEnter, null);
+
+    static void SwapLayer(VisualElement from, VisualElement to, string exitClass, string enterClass, VisualElement rule)
+    {
+        _pendingLayer?.Pause();
+        _pendingLayer = null;
+        foreach (var c in LayerClasses) { from.RemoveFromClassList(c); to.RemoveFromClassList(c); }
+
+        // Reduced motion, or the previous swap was reversed before its exit finished (from never became visible).
+        if (NoMotion(to) || from.resolvedStyle.display == DisplayStyle.None)
+        {
+            from.style.display = DisplayStyle.None;
+            to.style.display   = DisplayStyle.Flex;
+            SweepRule(rule);
+            return;
+        }
+
+        from.AddToClassList(exitClass);
+        _pendingLayer = from.schedule.Execute(() =>
+        {
+            _pendingLayer = null;
+            from.style.display = DisplayStyle.None;
+            from.RemoveFromClassList(exitClass);
+            to.AddToClassList(enterClass);                                 // 0 s → snaps to offset + opacity 0
+            to.style.display = DisplayStyle.Flex;
+            to.schedule.Execute(() => to.RemoveFromClassList(enterClass)); // next frame → 220 ms ease-out
+            SweepRule(rule);
+        }).StartingIn(LayerExitMs);
+    }
+
+    /// <summary>Red header rule: snaps to a 4 px stub at the left, then sweeps to full width (200 ms) while
+    /// fading (400 ms). No-op under reduced motion or without a rule.</summary>
+    public static void SweepRule(VisualElement rule)
+    {
+        if (rule == null || NoMotion(rule)) return;
+        _ruleReset?.Pause();
+        rule.RemoveFromClassList(RuleSweep);
+        rule.AddToClassList(RuleStart);                   // 0 s → stub visible
+        rule.schedule.Execute(() =>
+        {
+            rule.RemoveFromClassList(RuleStart);
+            rule.AddToClassList(RuleSweep);               // next frame → sweep + fade
+        });
+        _ruleReset = rule.schedule.Execute(() => rule.RemoveFromClassList(RuleSweep)).StartingIn(RuleMs);
+    }
+
+    // ── Menu marker ──────────────────────────────────────────────────────────
+
+    /// <summary>Moves the absolute menu marker to <paramref name="target"/>'s row (USS transitions <c>top</c>).</summary>
     public static void MoveNavMarker(VisualElement marker, VisualElement target)
     {
         if (marker == null || target == null) return;
