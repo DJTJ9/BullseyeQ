@@ -36,4 +36,32 @@ public class DartboardHeatmapElementTests
         var p = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * 70f;
         Assert.AreEqual("S5", DartboardHeatmapElement.FieldKeyAt(p, C, R));
     }
+
+    // Nächster Punkt der Zahlen-Box zum Board-Mittelpunkt.
+    static float NearestDistance(Rect box) =>
+        new Vector2(Mathf.Clamp(C.x, box.xMin, box.xMax), Mathf.Clamp(C.y, box.yMin, box.yMax)).magnitude;
+
+    [Test]
+    public void NumberRect_AllClearBoardByTheSameGap()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            var box = DartboardHeatmapElement.NumberRect(i, C, R);
+            Assert.AreEqual(DartboardHeatmapElement.NumberBoxWidth,  box.width,  0.01f);
+            Assert.AreEqual(DartboardHeatmapElement.NumberBoxHeight, box.height, 0.01f);
+            Assert.GreaterOrEqual(NearestDistance(box), R + DartboardHeatmapElement.NumberGap - 0.5f, $"Sektor {i} ragt ins Board");
+        }
+    }
+
+    [TestCase(0)]   // 20, oben
+    [TestCase(5)]   // 6, rechts
+    [TestCase(10)]  // 3, unten
+    [TestCase(15)]  // 11, links
+    public void NumberRect_IsCentredOnItsSectorAxis(int i)
+    {
+        var mid = DartboardHeatmapElement.NumberRect(i, C, R).center;
+        float rad = (i * 18f - 90f) * Mathf.Deg2Rad;
+        var dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+        Assert.AreEqual(0f, dir.x * mid.y - dir.y * mid.x, 0.01f); // kein seitlicher Versatz zur Sektorachse
+    }
 }

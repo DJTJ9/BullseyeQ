@@ -23,8 +23,12 @@ public partial class DartboardHeatmapElement : VisualElement
     const float RDoubleInner = 0.953f;
 
     const float BoardFactor      = 0.40f;  // board radius / square side — leaves room for the number ring
-    const float NumberRingFactor = 1.14f;  // number radius / board radius
     const float LegendHeight     = 22f;
+
+    /// <summary>Number label box (matches .heatmap-number in the USS) and its clearance from the board edge.</summary>
+    public const float NumberBoxWidth  = 28f;
+    public const float NumberBoxHeight = 20f;
+    public const float NumberGap       = 4f;
     const float LegendWidth      = 120f;
     const int   LegendSteps      = 24;
     const float WireWidth        = 1.5f;
@@ -90,10 +94,14 @@ public partial class DartboardHeatmapElement : VisualElement
         float w = resolvedStyle.width, h = resolvedStyle.height;
         float availH = h - LegendHeight;
         float side = Mathf.Min(w, availH);
+        // Shrink the board if needed so the number ring still fits inside the element.
+        float radius = Mathf.Min(side * BoardFactor,
+                                 availH * 0.5f - NumberGap - NumberBoxHeight,
+                                 w * 0.5f - NumberGap - NumberBoxWidth);
         return new Geometry
         {
             width = w, height = h,
-            radius = side > 0 ? side * BoardFactor : 0f,
+            radius = side > 0 ? Mathf.Max(0f, radius) : 0f,
             center = new Vector2(w * 0.5f, availH * 0.5f)
         };
     }
@@ -122,6 +130,33 @@ public partial class DartboardHeatmapElement : VisualElement
         return $"D{n}";
     }
 
+    /// <summary>
+    /// Box of the number label for sector <paramref name="i"/>: centred on the sector axis and pushed out just far
+    /// enough that its nearest edge clears the board by <see cref="NumberGap"/> — the box's half-extent along the
+    /// axis differs by angle (wide at 6/11, tall at 20/3), so the radius is computed per sector.
+    /// </summary>
+    public static Rect NumberRect(int i, Vector2 center, float boardRadius)
+    {
+        var dir = Dir(i * 18f - 90f);
+        float hw = NumberBoxWidth * 0.5f, hh = NumberBoxHeight * 0.5f;
+        float target = boardRadius + NumberGap;
+
+        // Distance from the centre to the box's nearest point, for a box centred at distance d along dir.
+        float Nearest(float d) => new Vector2(Mathf.Max(0f, Mathf.Abs(dir.x) * d - hw),
+                                              Mathf.Max(0f, Mathf.Abs(dir.y) * d - hh)).magnitude;
+
+        // Monotonic in d → bisect for the smallest d whose box clears the board by NumberGap.
+        float lo = target, hi = target + hw + hh;
+        for (int k = 0; k < 24; k++)
+        {
+            float m = (lo + hi) * 0.5f;
+            if (Nearest(m) < target) lo = m; else hi = m;
+        }
+
+        var mid = center + dir * hi;
+        return new Rect(mid.x - hw, mid.y - hh, NumberBoxWidth, NumberBoxHeight);
+    }
+
     private void LayoutOverlay()
     {
         var g = GetGeometry();
@@ -129,9 +164,9 @@ public partial class DartboardHeatmapElement : VisualElement
 
         for (int i = 0; i < 20; i++)
         {
-            var pos = g.center + Dir(i * 18f - 90f) * g.radius * NumberRingFactor;
-            _numbers[i].style.left = pos.x - 12f;
-            _numbers[i].style.top  = pos.y - 8f;
+            var box = NumberRect(i, g.center, g.radius);
+            _numbers[i].style.left = box.x;
+            _numbers[i].style.top  = box.y;
         }
 
         float x0 = g.width * 0.5f - LegendWidth * 0.5f;
