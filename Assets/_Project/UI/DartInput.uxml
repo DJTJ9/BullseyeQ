@@ -638,7 +638,7 @@
                                 <ui:Label name="reason" text="Checkout rate 18% over your last 10 legs." class="plan-card__reason"/>
                                 <ui:Label name="action" text="Play Five Checkouts on Medium." class="plan-card__action"/>
                             </ui:VisualElement>
-                            <ui:Button name="button" text="Train now" class="text-button plan-card__button"/>
+                            <ui:Button name="button" text="Train now" class="text-button text-button--primary plan-card__button"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:ScrollView>
