@@ -28,3 +28,16 @@ public struct TrainingPlanMetrics
     public float checkoutRate;
     public int checkoutAttempts;
 }
+
+/// <summary>Maps a recommendation to the Training-sessions tab its "Train now" opens (plan cards and the dashboard board).</summary>
+public static class TrainingNav
+{
+    public static TrainingNavTarget For(TrainingRecommendation rec) =>
+        rec.focus switch
+        {
+            TrainingFocus.Checkout when rec.action.Contains("Five Checkouts") => TrainingNavTarget.FiveCheckouts,
+            TrainingFocus.Checkout  => TrainingNavTarget.CheckoutChallenge,
+            TrainingFocus.Scoring when rec.action.Contains("501")             => TrainingNavTarget.FiveOhOne,
+            _                       => TrainingNavTarget.Scoring,
+        };
+}

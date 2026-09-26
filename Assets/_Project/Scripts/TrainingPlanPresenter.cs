@@ -46,7 +46,7 @@ public class TrainingPlanPresenter
         var startBtn = card.Q<Button>("button");
         if (_onNavigate != null)
         {
-            var target = NavTarget(rec);
+            var target = TrainingNav.For(rec);
             startBtn.clicked += () => _onNavigate(target);
         }
         else UiRows.SetVisible(startBtn, false);
@@ -69,13 +69,4 @@ public class TrainingPlanPresenter
         2 => "2 – Medium",
         _ => "3 – Low",
     };
-
-    private static TrainingNavTarget NavTarget(TrainingRecommendation rec) =>
-        rec.focus switch
-        {
-            TrainingFocus.Checkout when rec.action.Contains("Five Checkouts") => TrainingNavTarget.FiveCheckouts,
-            TrainingFocus.Checkout  => TrainingNavTarget.CheckoutChallenge,
-            TrainingFocus.Scoring when rec.action.Contains("501")             => TrainingNavTarget.FiveOhOne,
-            _                       => TrainingNavTarget.Scoring,
-        };
 }
