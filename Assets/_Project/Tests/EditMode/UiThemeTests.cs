@@ -130,6 +130,27 @@ public class UiThemeTests
         Assert.AreEqual(142f, left, 0.01f);
     }
 
+    // --- UiFx board reveal ---
+
+    [Test]
+    public void RevealBoard_SnapsToEnterState()
+    {
+        var board = new VisualElement();
+        UiFx.RevealBoard(board);
+        Assert.IsTrue(board.ClassListContains("dash-board--enter"));
+    }
+
+    [Test]
+    public void RevealBoard_NoMotion_StaysVisible()
+    {
+        var root = new VisualElement(); var board = new VisualElement();
+        root.Add(board);
+        root.AddToClassList("bq-no-motion");
+        board.AddToClassList("dash-board--enter");
+        UiFx.RevealBoard(board);
+        Assert.IsFalse(board.ClassListContains("dash-board--enter"));
+    }
+
     // --- UiFx reduced motion ---
 
     [Test]

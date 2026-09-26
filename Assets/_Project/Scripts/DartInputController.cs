@@ -46,6 +46,7 @@ public class DartInputController : MonoBehaviour
 
     private StatsPresenter         _statsPresenter2;
     private TrainingPlanPresenter  _trainingPlanPresenter;
+    private DashboardPresenter     _dashboard;
 
     /// <summary>Queries all UI elements and registers input and button callbacks.</summary>
     void OnEnable()
@@ -169,6 +170,7 @@ public class DartInputController : MonoBehaviour
 
         _statsPresenter2       = new StatsPresenter(root);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
+        _dashboard             = new DashboardPresenter(root, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();
 
         // The UXML display state is an editor preview only — hide everything, then start in the main menu.
@@ -263,10 +265,12 @@ public class DartInputController : MonoBehaviour
     /// <summary>Window title = the tile's label.</summary>
     private string TileLabel(int index) => _navButtons[index].Q<Label>(className: "menu-tile__label").text;
 
-    /// <summary>Window → main menu; the marker and focus return to the last opened item. Panel state is kept.</summary>
+    /// <summary>Window → main menu; the dashboard reflects what was just played, marker and focus return to the last
+    /// opened tile. Panel state is kept.</summary>
     private void ShowMenu()
     {
         if (!_nav.Close()) return;
+        _dashboard.Refresh(DataManager.Instance.Profile);
         UiFx.CloseWindow(_window, _mainMenu);
         _markerTarget = _navButtons[_nav.LastOpened];
         FocusMenuItem();
@@ -317,11 +321,13 @@ public class DartInputController : MonoBehaviour
     private static bool IsShown(VisualElement el) => el != null && el.resolvedStyle.display == DisplayStyle.Flex;
 
     /// <summary>Rebuilds the history list and stats after the first frame so the UI is fully built,
-    /// then hooks Esc and focuses the menu.</summary>
+    /// then fills and reveals the dashboard, hooks Esc and focuses the menu.</summary>
     void Start()
     {
         RebuildHistory();
         RefreshStats();
+        _dashboard.Refresh(DataManager.Instance.Profile);
+        _dashboard.Reveal();
 
         // Keyboard events reach the panel's visual tree even when nothing is focused; TrickleDown runs
         // before a focused TextField sees the key.

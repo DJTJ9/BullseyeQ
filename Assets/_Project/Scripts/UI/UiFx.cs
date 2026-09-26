@@ -24,6 +24,7 @@ public static class UiFx
     const string WindowExit  = "window--exit";
     const string RuleStart   = "window-rule--start";
     const string RuleSweep   = "window-rule--sweep";
+    const string BoardEnter  = "dash-board--enter";
 
     const int ExitMs = 120, PopHalfMs = 90, ShakeStepMs = 50, ShakeSteps = 6, FlashMs = 400;
     const int BannerSlideMs = 250, BannerHoldMs = 1200;
@@ -31,6 +32,7 @@ public static class UiFx
     /// <summary>Menu/window exit duration before the other layer enters; mirrors <c>--bq-dur-window-out</c>.</summary>
     public const int LayerExitMs = 120;
     const int RuleMs = 400; // mirrors --bq-dur-rule-fade
+    const int BoardDelayMs = 120; // the board lands after the tiles
 
     static readonly string[] LayerClasses = { MenuEnter, MenuExit, WindowEnter, WindowExit };
 
@@ -206,6 +208,18 @@ public static class UiFx
         var (left, width) = MarkerSpan(r);
         marker.style.left  = left;
         marker.style.width = width;
+    }
+
+    // ── Dashboard board ──────────────────────────────────────────────────────
+
+    /// <summary>The menu's one orchestrated moment: the board snaps to opacity 0 / +12 px, then eases in
+    /// (<c>--bq-dur-board-in</c>) after the tiles. Instant under reduced motion; clicks work throughout.</summary>
+    public static void RevealBoard(VisualElement board)
+    {
+        if (board == null) return;
+        if (NoMotion(board)) { board.RemoveFromClassList(BoardEnter); return; }
+        board.AddToClassList(BoardEnter);                                                            // 0 s → hidden offset
+        board.schedule.Execute(() => board.RemoveFromClassList(BoardEnter)).StartingIn(BoardDelayMs); // → ease-out
     }
 
     // ── Number tick ──────────────────────────────────────────────────────────
