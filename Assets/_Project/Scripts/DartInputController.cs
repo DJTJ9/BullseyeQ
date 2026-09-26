@@ -35,17 +35,17 @@ public class DartInputController : MonoBehaviour
     private VisualElement _gameOverOverlay;
     private readonly WindowNav _nav = new WindowNav();
 
+    // Window indices = order of the menu tiles.
+    private const int WinGame = 0, WinSessions = 1, WinPlan = 2, WinStats = 3, WinSettings = 4;
+
     private Button[]          _sessionTabBtns;
     private VisualElement[]   _sessionTabPanels;
     private int               _activeSessionTab = -1;
     private TextField         _foField0;
     private CheckOutController _checkOutController;
 
-    private OverviewPresenter      _overviewPresenter;
     private StatsPresenter         _statsPresenter2;
     private TrainingPlanPresenter  _trainingPlanPresenter;
-
-    [SerializeField] private Texture2D _logoTexture;
 
     /// <summary>Queries all UI elements and registers input and button callbacks.</summary>
     void OnEnable()
@@ -118,11 +118,6 @@ public class DartInputController : MonoBehaviour
                 _sessionTabBtns[idx].clicked += () => ShowSessionTab(idx);
         }
 
-        // Logo
-        var logoImage = root.Q<Image>("menu-logo");
-        if (logoImage != null && _logoTexture != null)
-            logoImage.image = _logoTexture;
-
         // Main menu ⇄ window shell
         _mainMenu        = root.Q<VisualElement>("main-menu");
         _window          = root.Q<VisualElement>("window");
@@ -133,21 +128,19 @@ public class DartInputController : MonoBehaviour
         root.Q<Button>("window-back").clicked += ShowMenu;
 
         _navMarker = root.Q<VisualElement>("nav-marker");
-        _navButtons = new Button[6];
-        _navButtons[0] = root.Q<Button>("nav-overview");
-        _navButtons[1] = root.Q<Button>("nav-training-game");
-        _navButtons[2] = root.Q<Button>("nav-training-sessions");
-        _navButtons[3] = root.Q<Button>("nav-training-plan");
-        _navButtons[4] = root.Q<Button>("nav-stats");
-        _navButtons[5] = root.Q<Button>("nav-settings");
+        _navButtons = new Button[5];
+        _navButtons[WinGame]     = root.Q<Button>("nav-training-game");
+        _navButtons[WinSessions] = root.Q<Button>("nav-training-sessions");
+        _navButtons[WinPlan]     = root.Q<Button>("nav-training-plan");
+        _navButtons[WinStats]    = root.Q<Button>("nav-stats");
+        _navButtons[WinSettings] = root.Q<Button>("nav-settings");
 
-        _panels = new VisualElement[6];
-        _panels[0] = root.Q<VisualElement>("panel-overview");
-        _panels[1] = root.Q<VisualElement>("panel-training-game");
-        _panels[2] = root.Q<VisualElement>("panel-training-sessions");
-        _panels[3] = root.Q<VisualElement>("panel-training-plan");
-        _panels[4] = root.Q<VisualElement>("panel-stats");
-        _panels[5] = root.Q<VisualElement>("panel-settings");
+        _panels = new VisualElement[5];
+        _panels[WinGame]     = root.Q<VisualElement>("panel-training-game");
+        _panels[WinSessions] = root.Q<VisualElement>("panel-training-sessions");
+        _panels[WinPlan]     = root.Q<VisualElement>("panel-training-plan");
+        _panels[WinStats]    = root.Q<VisualElement>("panel-stats");
+        _panels[WinSettings] = root.Q<VisualElement>("panel-settings");
 
         for (int i = 0; i < _navButtons.Length; i++)
         {
@@ -160,21 +153,20 @@ public class DartInputController : MonoBehaviour
 
         _menuItems = new[]
         {
-            _navButtons[0], _navButtons[1], _navButtons[2], _navButtons[3], _navButtons[4], _navButtons[5], btnQuit,
+            _navButtons[0], _navButtons[1], _navButtons[2], _navButtons[3], _navButtons[4], btnQuit,
         };
-        foreach (var item in _menuItems)
+        // The marker rides the tiles only; Quit sits apart and shows focus on its own.
+        foreach (var tile in _navButtons)
         {
-            var target = item;
+            var target = tile;
             target.RegisterCallback<PointerEnterEvent>(_ => MoveMarkerTo(target));
             target.RegisterCallback<FocusInEvent>(_ => MoveMarkerTo(target));
         }
 
-        // Keep the marker aligned when the menu lays out (first frame, resize, back from a window).
-        var menuList = root.Q<VisualElement>("menu-list");
-        menuList.RegisterCallback<GeometryChangedEvent>(_ => UiFx.MoveNavMarker(_navMarker, _markerTarget));
-        menuList.RegisterCallback<NavigationMoveEvent>(OnMenuMove);
+        // Keep the marker aligned when the grid lays out (first frame, resize, back from a window).
+        root.Q<VisualElement>("menu-grid").RegisterCallback<GeometryChangedEvent>(_ => UiFx.MoveNavMarker(_navMarker, _markerTarget));
+        _mainMenu.RegisterCallback<NavigationMoveEvent>(OnMenuMove);
 
-        _overviewPresenter     = new OverviewPresenter(root);
         _statsPresenter2       = new StatsPresenter(root);
         _trainingPlanPresenter = new TrainingPlanPresenter(root, NavigateFromPlan);
         _checkOutController   = GetComponent<CheckOutController>();
@@ -189,7 +181,7 @@ public class DartInputController : MonoBehaviour
 
     private void NavigateFromPlan(TrainingNavTarget target)
     {
-        ShowPanel(2);
+        ShowPanel(WinSessions);
         switch (target)
         {
             case TrainingNavTarget.Scoring:
@@ -226,14 +218,14 @@ public class DartInputController : MonoBehaviour
         }
 
         if (index == 0) FocusField(0);
-        if (index == 1) _foField0?.schedule.Execute(() => { if (_nav.Active == 2) _foField0.Focus(); });
+        if (index == 1) _foField0?.schedule.Execute(() => { if (_nav.Active == WinSessions) _foField0.Focus(); });
         if (index == 2) _checkOutController?.RefreshAll();
     }
 
     private void ShowPanel(int index)
     {
         int previous = _nav.Open(index);
-        _windowTitle.text = _navButtons[index].text;
+        _windowTitle.text = TileLabel(index);
 
         if (previous == WindowNav.Menu)
         {
@@ -241,7 +233,7 @@ public class DartInputController : MonoBehaviour
             // cancels a stale pending switch from an earlier window → window jump.
             UiRows.HideAll(_panels);
             UiFx.SwitchPanel(null, _panels[index]);
-            _root.focusController?.focusedElement?.Blur(); // the clicked menu item is about to be hidden
+            _root.focusController?.focusedElement?.Blur(); // the clicked menu tile is about to be hidden
             UiFx.OpenWindow(_mainMenu, _window, _windowRule);
         }
         else if (previous != index)
@@ -251,12 +243,12 @@ public class DartInputController : MonoBehaviour
 
         for (int i = 0; i < _navButtons.Length; i++)
         {
-            if (i == index) _navButtons[i].AddToClassList("menu-item--active");
-            else            _navButtons[i].RemoveFromClassList("menu-item--active");
+            if (i == index) _navButtons[i].AddToClassList("menu-tile--active");
+            else            _navButtons[i].RemoveFromClassList("menu-tile--active");
         }
         _markerTarget = _navButtons[index];
 
-        if (index == 2)
+        if (index == WinSessions)
         {
             // From the menu the window only displays after the menu exit; a field can't take focus before that.
             if (previous == WindowNav.Menu) _fields[0].schedule.Execute(() => FocusField(0)).StartingIn(UiFx.LayerExitMs);
@@ -264,10 +256,12 @@ public class DartInputController : MonoBehaviour
         }
 
         var profile = DataManager.Instance.Profile;
-        if (index == 0) _overviewPresenter?.Refresh(profile);
-        if (index == 3) _trainingPlanPresenter?.Refresh(profile);
-        if (index == 4) _statsPresenter2?.Refresh(profile);
+        if (index == WinPlan)  _trainingPlanPresenter?.Refresh(profile);
+        if (index == WinStats) _statsPresenter2?.Open(profile);
     }
+
+    /// <summary>Window title = the tile's label.</summary>
+    private string TileLabel(int index) => _navButtons[index].Q<Label>(className: "menu-tile__label").text;
 
     /// <summary>Window → main menu; the marker and focus return to the last opened item. Panel state is kept.</summary>
     private void ShowMenu()
@@ -291,16 +285,21 @@ public class DartInputController : MonoBehaviour
         UiFx.MoveNavMarker(_navMarker, item);
     }
 
-    /// <summary>↑/↓ in the menu: focus moves through the items (wrapping), the marker follows via FocusInEvent.</summary>
+    /// <summary>←/→ in the menu: focus moves through the tiles and Quit (wrapping), the marker follows via FocusInEvent.
+    /// Other menu controls (the board's button) keep their default navigation.</summary>
     private void OnMenuMove(NavigationMoveEvent evt)
     {
         if (_nav.InWindow) return;
-        int delta = evt.direction == NavigationMoveEvent.Direction.Up   ? -1
-                  : evt.direction == NavigationMoveEvent.Direction.Down ?  1 : 0;
+        int delta = evt.direction == NavigationMoveEvent.Direction.Left  ? -1
+                  : evt.direction == NavigationMoveEvent.Direction.Right ?  1 : 0;
         if (delta == 0) return;
 
         int current = System.Array.IndexOf(_menuItems, evt.target as Button);
-        if (current < 0) current = System.Array.IndexOf(_menuItems, _markerTarget as Button);
+        if (current < 0)
+        {
+            if (evt.target != _mainMenu) return;
+            current = System.Array.IndexOf(_menuItems, _markerTarget as Button);
+        }
         _menuItems[WindowNav.Step(current, delta, _menuItems.Length)].Focus();
         _root.focusController.IgnoreEvent(evt);
         evt.StopPropagation();
@@ -323,7 +322,6 @@ public class DartInputController : MonoBehaviour
     {
         RebuildHistory();
         RefreshStats();
-        _overviewPresenter?.Refresh(DataManager.Instance.Profile);
 
         // Keyboard events reach the panel's visual tree even when nothing is focused; TrickleDown runs
         // before a focused TextField sees the key.
@@ -440,6 +438,6 @@ public class DartInputController : MonoBehaviour
 
     private void FocusField(int index)
     {
-        _fields[index].schedule.Execute(() => { if (_nav.Active == 2) _fields[index].Focus(); });
+        _fields[index].schedule.Execute(() => { if (_nav.Active == WinSessions) _fields[index].Focus(); });
     }
 }

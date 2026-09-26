@@ -188,14 +188,24 @@ public static class UiFx
 
     // ── Menu marker ──────────────────────────────────────────────────────────
 
-    /// <summary>Moves the absolute menu marker to <paramref name="target"/>'s row (USS transitions <c>top</c>).</summary>
+    const float MarkerWidthRatio = 0.5f;
+
+    /// <summary>Pure: the marker bar is half the tile's width, centred under it.</summary>
+    public static (float left, float width) MarkerSpan(Rect tile)
+    {
+        float w = tile.width * MarkerWidthRatio;
+        return (tile.x + (tile.width - w) * 0.5f, w);
+    }
+
+    /// <summary>Moves the absolute menu marker under <paramref name="target"/>'s tile (USS transitions <c>left</c>/<c>width</c>).</summary>
     public static void MoveNavMarker(VisualElement marker, VisualElement target)
     {
         if (marker == null || target == null) return;
         var r = target.layout;
-        if (float.IsNaN(r.y) || r.height <= 0f) return; // layout not ready yet
-        marker.style.top    = r.y;
-        marker.style.height = r.height;
+        if (float.IsNaN(r.x) || r.width <= 0f) return; // layout not ready yet
+        var (left, width) = MarkerSpan(r);
+        marker.style.left  = left;
+        marker.style.width = width;
     }
 
     // ── Number tick ──────────────────────────────────────────────────────────

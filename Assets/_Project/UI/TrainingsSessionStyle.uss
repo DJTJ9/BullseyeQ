@@ -33,6 +33,19 @@
     --bq-dur-window-in: 220ms;
     --bq-dur-window-out: 120ms;
     --bq-dur-rule-fade: 400ms;
+    --bq-dur-hover: 120ms;
+    --bq-dur-press: 60ms;
+    --bq-dur-board-in: 220ms;
+
+    /* Game look: menu tiles + dashboard (tunable) */
+    --bq-tile-size: 168px;
+    --bq-tile-icon: 112px;
+    --bq-tile-gap-half: 20px;
+    --bq-tile-lift: 0 -4px;
+    --bq-tile-press: 0 3px;
+    --bq-logo-width: 42%;
+    --bq-board-width: 58%;
+    --bq-board-offset: 0 12px;
 
     --bq-fs-xs: 13px;
     --bq-fs-sm: 16px;
@@ -84,74 +97,244 @@
 }
 .unity-scroll-view__content-viewport { padding-right: 4px; }
 
-/* ── Main menu ────────────────────────────────────────────────────────── */
+/* ── Main menu: logo, icon tiles, dashboard ───────────────────────────── */
 /* Text colour/font rules carry #root: `#root .unity-text-element` (1,1,0) would
    otherwise override a plain class selector. */
 
 .main-menu {
     flex-grow: 1;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    padding-top: 32px;
+    padding-bottom: 72px;
     padding-left: 64px;
     padding-right: 64px;
 }
 
 .menu-logo {
-    width: 55%;
-    height: 70%;
+    width: var(--bq-logo-width);
+    height: 26%;
     flex-shrink: 0;
-    margin-right: 48px;
+    background-image: url("/Assets/_Project/Art/BullseyeQ-Logo-Alpha.png");
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.menu-list {
-    flex-grow: 1;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.menu-item {
-    height: 72px;
-    flex-shrink: 0;
+.menu-grid {
     flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-top: 24px;
+}
+
+.menu-tile {
+    flex-direction: column;
     align-items: center;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 28px;
-    padding-right: 16px;
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: var(--bq-tile-gap-half);
+    margin-right: var(--bq-tile-gap-half);
+    padding: 0;
     border-width: 0;
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
-    font-size: var(--bq-fs-menu);
-    -unity-text-align: middle-left;
-    transition-property: color;
-    transition-duration: 150ms;
+    translate: 0 0;
+    transition-property: translate;
+    transition-duration: var(--bq-dur-hover);
+    transition-timing-function: ease-out;
+}
+.menu-tile:hover,
+.menu-tile:focus { translate: var(--bq-tile-lift); }
+
+/* Dark base under the frame = the tile's thickness; the frame sinks into it on press. */
+.menu-tile__base {
+    padding-bottom: 6px;
+    border-radius: 14px;
+    background-color: var(--bq-stage-edge);
 }
 
-#root .menu-item {
-    color: var(--bq-muted);
-    -unity-font-definition: url("/Assets/_Project/Fonts/BarlowCondensed-Medium.ttf");
+.menu-tile__frame {
+    width: var(--bq-tile-size);
+    height: var(--bq-tile-size);
+    align-items: center;
+    justify-content: center;
+    background-image: url("/Assets/_Project/Art/UI/Button_Square03_White.png");
+    -unity-background-image-tint-color: var(--bq-panel);
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 20;
+    -unity-slice-bottom: 20;
+    translate: 0 0;
+    transition-property: translate, -unity-background-image-tint-color;
+    transition-duration: var(--bq-dur-hover), var(--bq-dur-hover);
+    transition-timing-function: ease-out;
 }
-#root .menu-item:hover,
-#root .menu-item:focus,
-#root .menu-item--active      { color: var(--bq-text); }
-#root .menu-item--quit        { color: rgba(229, 32, 43, 0.7); }
-#root .menu-item--quit:hover,
-#root .menu-item--quit:focus  { color: var(--bq-live); }
+.menu-tile:hover .menu-tile__frame,
+.menu-tile:focus .menu-tile__frame,
+.menu-tile--active .menu-tile__frame { -unity-background-image-tint-color: var(--bq-tile-hover); }
+.menu-tile:active .menu-tile__frame {
+    translate: var(--bq-tile-press);
+    transition-duration: var(--bq-dur-press), var(--bq-dur-hover);
+}
 
-.menu-list__gap { height: 36px; flex-shrink: 0; }
+.menu-tile__icon {
+    width: var(--bq-tile-icon);
+    height: var(--bq-tile-icon);
+    -unity-background-scale-mode: scale-to-fit;
+}
+.menu-tile__icon--game     { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Target.Png"); }
+.menu-tile__icon--sessions { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Timer.Png"); }
+.menu-tile__icon--plan     { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Scroll.Png"); }
+.menu-tile__icon--stats    { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Trophy.Png"); }
+.menu-tile__icon--settings { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Setting.Png"); }
 
+#root .menu-tile__label {
+    width: var(--bq-tile-size);
+    margin-top: 12px;
+    font-size: var(--bq-fs-lg);
+    color: var(--bq-text);
+    white-space: normal;
+    -unity-text-align: upper-center;
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+
+/* Oche marker: red bar under the focused/hovered tile, glides horizontally (UiFx.MoveNavMarker). */
 .nav-marker {
     position: absolute;
     left: 0;
-    top: 0;
-    width: 4px;
-    height: 0;
+    bottom: -18px;
+    width: 0;
+    height: 6px;
+    border-radius: 3px;
     background-color: var(--bq-live);
-    transition-property: top, height;
+    transition-property: left, width;
     transition-duration: var(--bq-dur-marker);
     transition-timing-function: ease-out;
 }
+
+.menu-quit {
+    position: absolute;
+    right: 32px;
+    bottom: 24px;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+.menu-quit__icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    background-image: url("/Assets/_Project/Art/UI/Icon_PictoIcon_Exit.Png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--bq-muted);
+}
+.menu-quit:hover .menu-quit__icon,
+.menu-quit:focus .menu-quit__icon { -unity-background-image-tint-color: var(--bq-live-text); }
+#root .menu-quit__label { font-size: var(--bq-fs-base); color: var(--bq-muted); }
+#root .menu-quit:hover .menu-quit__label,
+#root .menu-quit:focus .menu-quit__label { color: var(--bq-live-text); }
+
+/* ── Dashboard ────────────────────────────────────────────────────────── */
+
+.dashboard {
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 56px;
+    flex-shrink: 1;
+    min-height: 0;
+}
+
+/* Today's practice: the one loud element — wood frame (9-slice, tinted), slate face, chalk text. */
+.dash-board {
+    width: var(--bq-board-width);
+    flex-shrink: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-image: url("/Assets/_Project/Art/UI/BasicFrame_Square01_White.Png");
+    -unity-background-image-tint-color: var(--bq-wood);
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    -unity-slice-scale: 0.5;
+    opacity: 1;
+    translate: 0 0;
+    transition-property: opacity, translate;
+    transition-duration: var(--bq-dur-board-in);
+    transition-timing-function: ease-out;
+}
+.dash-board--enter { opacity: 0; translate: var(--bq-board-offset); transition-duration: 0s; }
+
+.dash-board__slate {
+    background-color: var(--bq-slate);
+    border-radius: 6px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 28px;
+    padding-right: 28px;
+}
+#root .dash-board__kicker {
+    margin-bottom: 12px;
+    font-size: var(--bq-fs-md);
+    color: var(--bq-warm);
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+.dash-board__row { flex-direction: row; align-items: flex-start; }
+.dash-board__icon {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    margin-right: 20px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.dash-board__icon--scoring     { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Target.Png"); }
+.dash-board__icon--triple      { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Arrow.Png"); }
+.dash-board__icon--checkout    { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Medal_Gold.Png"); }
+.dash-board__icon--consistency { background-image: url("/Assets/_Project/Art/UI/Icon_ItemIcon_Clover.Png"); }
+.dash-board__text { flex-grow: 1; flex-shrink: 1; min-width: 0; }
+#root .dash-board__title {
+    font-size: var(--bq-fs-xl);
+    color: var(--bq-text);
+    white-space: normal;
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+#root .dash-board__reason { margin-top: 6px; font-size: var(--bq-fs-base); color: var(--bq-text); white-space: normal; }
+#root .dash-board__action { margin-top: 4px; font-size: var(--bq-fs-sm); color: var(--bq-muted); white-space: normal; }
+.dash-board__start { align-self: flex-end; margin-top: 16px; }
+
+.dash-side { flex-grow: 1; min-width: 0; margin-left: 24px; }
+.dash-recent__kind { flex-grow: 1; }
+#root .dash-recent__value {
+    width: 88px;
+    font-size: var(--bq-fs-lg);
+    -unity-text-align: middle-right;
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+#root .dash-recent__when { width: 64px; color: var(--bq-muted); -unity-text-align: middle-right; }
+.dash-stat__pair { flex-direction: row; align-items: flex-end; }
+#root .dash-stat__value {
+    font-size: var(--bq-fs-xl);
+    color: var(--bq-text);
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+#root .dash-stat__trend {
+    margin-left: 12px;
+    font-size: var(--bq-fs-md);
+    color: var(--bq-muted);
+    -unity-font-definition: url("/Assets/_Project/Fonts/LilitaOne-Regular.ttf");
+}
+#root .dash-stat__trend--up   { color: var(--bq-hit); }
+#root .dash-stat__trend--down { color: var(--bq-live-text); }
 
 /* ── Window ───────────────────────────────────────────────────────────── */
 
@@ -866,7 +1049,10 @@
 
 /* ── Reduced motion: every transition-bearing selector → 0 s ─────────── */
 
-.bq-no-motion .menu-item,
+.bq-no-motion .menu-tile,
+.bq-no-motion .menu-tile__frame,
+.bq-no-motion .dash-board,
+.bq-no-motion .dash-board--enter,
 .bq-no-motion .main-menu,
 .bq-no-motion .window,
 .bq-no-motion .main-menu--exit,
@@ -891,3 +1077,8 @@
 .bq-no-motion .motion-toggle .unity-toggle__checkmark {
     transition-duration: 0s;
 }
+
+/* Reduced motion: no lift, no press offset — the tint change alone marks hover/focus. */
+.bq-no-motion .menu-tile:hover,
+.bq-no-motion .menu-tile:focus,
+.bq-no-motion .menu-tile:active .menu-tile__frame { translate: 0 0; }

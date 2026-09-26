@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 // Prüft, dass die flache Shell jedes Element liefert, das ein Controller per Name sucht, jedes Panel seine Hüllenklasse trägt,
 // kein <ui:Instance> mehr existiert und die USS Panels nicht per display:none versteckt (Sichtbarkeit ist Laufzeit-Sache).
-// Hauptmenü (main-menu/menu-list) und Window (window-header + Panels) ersetzen Sidebar und content-area.
+// Hauptmenü (main-menu: Logo, menu-grid mit 5 Tiles, dashboard, Quit) und Window (window-header + Panels); Overview lebt als erster Tab in Stats.
 [TestFixture]
 public class PanelContractTests
 {
@@ -17,11 +17,15 @@ public class PanelContractTests
     static readonly string[] RequiredNames =
     {
         // Shell
-        "root", "main-menu", "menu-logo", "menu-list", "nav-marker",
-        "nav-overview", "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings", "nav-quit",
+        "root", "main-menu", "menu-logo", "menu-grid", "nav-marker",
+        "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings", "nav-quit",
         "window", "window-header", "window-back", "window-title", "window-esc-hint", "window-rule",
         "tg-game-over-overlay", "tg-game-over-title", "tg-game-over-subtitle", "tg-btn-ok",
         "modal-overlay", "modal-btn-cancel", "modal-btn-yes", "lower-third", "lower-third-label",
+        // Dashboard
+        "dashboard", "dash-today", "dash-today-icon", "dash-today-title", "dash-today-reason", "dash-today-action",
+        "dash-today-start", "dash-recent-container", "dash-recent-empty",
+        "dash-stat-avg", "dash-stat-last10", "dash-stat-trend", "dash-stat-sessions",
         // Overview
         "ov-lifetime-avg", "ov-session-count", "ov-rolling-avg", "ov-trend", "ov-recent-container",
         "ov-best-session-avg", "ov-best-round", "ov-total-180s", "ov-total-140s", "ov-total-100s", "ov-total-rounds",
@@ -60,7 +64,7 @@ public class PanelContractTests
         // Training plan
         "tp-no-data", "tp-rec-container",
         // Stats
-        "stats-tab-scoring", "stats-tab-fo", "stats-tab-doubles", "stats-tab-tg",
+        "stats-tab-overview", "stats-page-overview", "stats-tab-scoring", "stats-tab-fo", "stats-tab-doubles", "stats-tab-tg",
         "chart-avg-score", "chart-triple-rate", "chart-wasted-rate", "score-dist-container", "scoring-lifetime-container",
         "stats-scoring-heatmap", "scoring-history-container",
         "chart-fo-avg", "chart-fo-checkout", "fo-stats-container", "stats-fo-heatmap", "fo-history-container",
@@ -76,19 +80,14 @@ public class PanelContractTests
 
     static readonly string[] ContentPanels =
     {
-        "panel-overview", "panel-training-game", "panel-training-sessions", "panel-training-plan", "panel-stats", "panel-settings",
+        "panel-training-game", "panel-training-sessions", "panel-training-plan", "panel-stats", "panel-settings",
     };
 
     static readonly string[] SubPanels =
     {
         "session-scoring-panel", "session-fo-panel", "session-doubles-panel",
         "checkout-target-panel", "checkout-challenge-panel", "checkout-five-panel",
-        "stats-scoring-panel", "stats-fo-panel", "stats-doubles-panel", "stats-tg-panel",
-    };
-
-    static readonly string[] MenuItems =
-    {
-        "nav-overview", "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings", "nav-quit",
+        "stats-page-overview", "stats-scoring-panel", "stats-fo-panel", "stats-doubles-panel", "stats-tg-panel",
     };
 
     VisualElement _root;
@@ -163,18 +162,52 @@ public class PanelContractTests
             StringAssert.DoesNotContain("display", r.Groups[2].Value, $"'{r.Groups[1].Value.Trim()}' setzt display");
     }
 
-    [TestCaseSource(nameof(MenuItems))]
-    public void MenuItem_LivesInMenuListWithClass(string name)
+    static readonly string[] MenuTiles =
     {
-        var item = _root.Q(name);
-        Assert.AreEqual("menu-list", item.parent.name, $"#{name} liegt nicht direkt in #menu-list");
-        Assert.IsTrue(item.ClassListContains("menu-item"), $"#{name} ohne .menu-item");
+        "nav-training-game", "nav-training-sessions", "nav-training-plan", "nav-stats", "nav-settings",
+    };
+
+    [TestCaseSource(nameof(MenuTiles))]
+    public void MenuTile_LivesInMenuGridWithIconAndLabel(string name)
+    {
+        var tile = _root.Q(name);
+        Assert.AreEqual("menu-grid", tile.parent.name, $"#{name} liegt nicht direkt in #menu-grid");
+        Assert.IsTrue(tile.ClassListContains("menu-tile"), $"#{name} ohne .menu-tile");
+        Assert.IsNotNull(tile.Q(className: "menu-tile__icon"), $"#{name} ohne Icon");
+        Assert.IsFalse(string.IsNullOrEmpty(tile.Q<Label>(className: "menu-tile__label")?.text), $"#{name} ohne Label");
     }
 
     [Test]
-    public void NavMarker_LivesInMenuList()
+    public void Quit_SitsApartInMainMenu()
     {
-        Assert.AreEqual("menu-list", _root.Q("nav-marker").parent.name);
+        var quit = _root.Q("nav-quit");
+        Assert.AreEqual("main-menu", quit.parent.name);
+        Assert.IsTrue(quit.ClassListContains("menu-quit"));
+    }
+
+    [Test]
+    public void NavMarker_LivesInMenuGrid()
+    {
+        Assert.AreEqual("menu-grid", _root.Q("nav-marker").parent.name);
+    }
+
+    [Test]
+    public void Overview_IsFirstStatsTab()
+    {
+        var tab = _root.Q("stats-tab-overview");
+        Assert.AreEqual(0, tab.parent.IndexOf(tab), "Overview-Tab steht nicht an erster Stelle");
+        Assert.AreEqual("panel-stats", _root.Q("stats-page-overview").parent.name);
+        Assert.IsNull(_root.Q("panel-overview"), "#panel-overview existiert noch");
+        Assert.IsNull(_root.Q("nav-overview"), "#nav-overview existiert noch");
+    }
+
+    [Test]
+    public void DashRecent_HasOneExampleRow()
+    {
+        var list = _root.Q("dash-recent-container");
+        Assert.AreEqual(1, list.childCount);
+        foreach (var cell in new[] { "kind", "value", "when" })
+            Assert.IsNotNull(list[0].Q<Label>(cell), $"Beispielzeile ohne Label '{cell}'");
     }
 
     [TestCaseSource(nameof(ContentPanels))]
@@ -208,6 +241,8 @@ public class PanelContractTests
         StringAssert.DoesNotContain(".nav-item", uss);
         StringAssert.DoesNotContain(".content-area", uss);
         StringAssert.DoesNotContain(".panel-title", uss);
+        StringAssert.DoesNotContain(".menu-list", uss);
+        StringAssert.DoesNotContain(".menu-item", uss);
     }
 
     static readonly string[] HeatmapSlots =

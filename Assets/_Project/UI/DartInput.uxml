@@ -3,104 +3,108 @@
     <ui:VisualElement name="root">
         <StageVignetteElement name="stage-bg"/>
 
-        <!-- ── Main menu (runtime shows either this or the window) ──── -->
+        <!-- ── Main menu: logo, icon tiles, dashboard (runtime shows either this or the window) ── -->
         <ui:VisualElement name="main-menu" class="main-menu">
-            <ui:Image name="menu-logo" class="menu-logo" src="project://database/Assets/_Project/Art/BullseyeQ-Logo.png"/>
-            <ui:VisualElement name="menu-list" class="menu-list">
-                <ui:VisualElement name="nav-marker" class="nav-marker"/>
-                <ui:Button name="nav-overview" text="Overview" class="menu-item"/>
-                <ui:Button name="nav-training-game" text="Training game" class="menu-item"/>
-                <ui:Button name="nav-training-sessions" text="Training sessions" class="menu-item"/>
-                <ui:Button name="nav-training-plan" text="Training plan" class="menu-item"/>
-                <ui:Button name="nav-stats" text="Stats &amp; analytics" class="menu-item"/>
-                <ui:Button name="nav-settings" text="Settings" class="menu-item"/>
-                <ui:VisualElement class="menu-list__gap"/>
-                <ui:Button name="nav-quit" text="Quit" class="menu-item menu-item--quit"/>
+            <ui:VisualElement name="menu-logo" class="menu-logo" picking-mode="Ignore"/>
+            <ui:VisualElement name="menu-grid" class="menu-grid">
+                <ui:Button name="nav-training-game" class="menu-tile">
+                    <ui:VisualElement class="menu-tile__base" picking-mode="Ignore">
+                        <ui:VisualElement class="menu-tile__frame" picking-mode="Ignore">
+                            <ui:VisualElement class="menu-tile__icon menu-tile__icon--game" picking-mode="Ignore"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Training game" class="menu-tile__label" picking-mode="Ignore"/>
+                </ui:Button>
+                <ui:Button name="nav-training-sessions" class="menu-tile">
+                    <ui:VisualElement class="menu-tile__base" picking-mode="Ignore">
+                        <ui:VisualElement class="menu-tile__frame" picking-mode="Ignore">
+                            <ui:VisualElement class="menu-tile__icon menu-tile__icon--sessions" picking-mode="Ignore"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Training sessions" class="menu-tile__label" picking-mode="Ignore"/>
+                </ui:Button>
+                <ui:Button name="nav-training-plan" class="menu-tile">
+                    <ui:VisualElement class="menu-tile__base" picking-mode="Ignore">
+                        <ui:VisualElement class="menu-tile__frame" picking-mode="Ignore">
+                            <ui:VisualElement class="menu-tile__icon menu-tile__icon--plan" picking-mode="Ignore"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Training plan" class="menu-tile__label" picking-mode="Ignore"/>
+                </ui:Button>
+                <ui:Button name="nav-stats" class="menu-tile">
+                    <ui:VisualElement class="menu-tile__base" picking-mode="Ignore">
+                        <ui:VisualElement class="menu-tile__frame" picking-mode="Ignore">
+                            <ui:VisualElement class="menu-tile__icon menu-tile__icon--stats" picking-mode="Ignore"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Stats &amp; analytics" class="menu-tile__label" picking-mode="Ignore"/>
+                </ui:Button>
+                <ui:Button name="nav-settings" class="menu-tile">
+                    <ui:VisualElement class="menu-tile__base" picking-mode="Ignore">
+                        <ui:VisualElement class="menu-tile__frame" picking-mode="Ignore">
+                            <ui:VisualElement class="menu-tile__icon menu-tile__icon--settings" picking-mode="Ignore"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Settings" class="menu-tile__label" picking-mode="Ignore"/>
+                </ui:Button>
+                <ui:VisualElement name="nav-marker" class="nav-marker" picking-mode="Ignore"/>
             </ui:VisualElement>
+            <ui:VisualElement name="dashboard" class="dashboard">
+                <ui:VisualElement name="dash-today" class="dash-board">
+                    <ui:VisualElement class="dash-board__slate">
+                        <ui:Label text="Today's practice" class="dash-board__kicker"/>
+                        <ui:VisualElement class="dash-board__row">
+                            <ui:VisualElement name="dash-today-icon" class="dash-board__icon dash-board__icon--checkout"/>
+                            <ui:VisualElement class="dash-board__text">
+                                <ui:Label name="dash-today-title" text="Sharpen your doubles" class="dash-board__title"/>
+                                <ui:Label name="dash-today-reason" text="Checkout rate 18 % (target: 20 %+)" class="dash-board__reason"/>
+                                <ui:Label name="dash-today-action" text="Training Sessions › Doubles › Checkout Challenge" class="dash-board__action"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Button name="dash-today-start" text="Train now" class="text-button text-button--primary dash-board__start"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="dash-side" class="panel dash-side">
+                    <ui:Label text="Last sessions" class="section-title"/>
+                    <ui:Label name="dash-recent-empty" text="Your sessions show up here." class="placeholder-text"/>
+                    <ui:VisualElement name="dash-recent-container">
+                        <ui:VisualElement class="list-row">
+                            <ui:Label name="kind" text="Scoring" class="dash-recent__kind"/>
+                            <ui:Label name="value" text="62.4" class="dash-recent__value"/>
+                            <ui:Label name="when" text="Mon" class="dash-recent__when"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider"/>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="3-dart avg" class="stat-row__label"/>
+                        <ui:Label name="dash-stat-avg" text="58.2" class="dash-stat__value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Last 10" class="stat-row__label"/>
+                        <ui:VisualElement class="dash-stat__pair">
+                            <ui:Label name="dash-stat-last10" text="61.0" class="dash-stat__value"/>
+                            <ui:Label name="dash-stat-trend" text="+2.8" class="dash-stat__trend dash-stat__trend--up"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Sessions" class="stat-row__label"/>
+                        <ui:Label name="dash-stat-sessions" text="12" class="dash-stat__value"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button name="nav-quit" class="menu-quit">
+                <ui:VisualElement class="menu-quit__icon" picking-mode="Ignore"/>
+                <ui:Label text="Quit" class="menu-quit__label" picking-mode="Ignore"/>
+            </ui:Button>
         </ui:VisualElement>
 
         <!-- ── Window ──────────────────────────────────────────────── -->
         <ui:VisualElement name="window" class="window">
             <ui:VisualElement name="window-header" class="window-header">
                 <ui:Button name="window-back" text="Menu" class="text-button window-back"/>
-                <ui:Label name="window-title" text="Overview" class="window-title"/>
+                <ui:Label name="window-title" text="Stats &amp; analytics" class="window-title"/>
                 <ui:Label name="window-esc-hint" text="Esc" class="window-esc-hint"/>
                 <ui:VisualElement name="window-rule" class="window-rule" picking-mode="Ignore"/>
-            </ui:VisualElement>
-
-            <!-- ── Overview ────────────────────────────────────────── -->
-            <ui:VisualElement name="panel-overview" class="content-panel">
-                <ui:VisualElement class="hero-row">
-                    <ui:VisualElement class="hero">
-                        <ui:Label name="ov-lifetime-avg" text="–" class="hero-value"/>
-                        <ui:Label text="Lifetime avg" class="hero-caption"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="hero">
-                        <ui:Label name="ov-session-count" text="–" class="hero-value"/>
-                        <ui:Label text="Sessions" class="hero-caption"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="hero">
-                        <ui:Label name="ov-rolling-avg" text="–" class="hero-value"/>
-                        <ui:Label text="Last 5 avg" class="hero-caption"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="hero">
-                        <ui:Label name="ov-trend" text="–" class="hero-value"/>
-                        <ui:Label text="Trend" class="hero-caption"/>
-                    </ui:VisualElement>
-                </ui:VisualElement>
-                <ui:VisualElement class="divider"/>
-                <ui:VisualElement class="columns">
-                    <ui:VisualElement class="col-main">
-                        <ui:Label text="Recent sessions" class="section-title"/>
-                        <ui:Label name="ov-recent-empty" text="No finished sessions yet." class="placeholder-text"/>
-                        <ui:VisualElement name="ov-recent-header" class="list-row list-row--header">
-                            <ui:Label text="Date" class="list-row__cell"/>
-                            <ui:Label text="Visits" class="list-row__cell"/>
-                            <ui:Label text="Avg" class="list-row__cell"/>
-                            <ui:Label text="Triple %" class="list-row__cell"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="ov-recent-container">
-                            <ui:VisualElement class="list-row">
-                                <ui:Label name="cell0" text="2026-09-25" class="list-row__cell"/>
-                                <ui:Label name="cell1" text="12" class="list-row__cell"/>
-                                <ui:Label name="cell2" text="58.3" class="list-row__cell"/>
-                                <ui:Label name="cell3" text="14%" class="list-row__cell"/>
-                            </ui:VisualElement>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="divider"/>
-                        <ui:Label text="Personal bests" class="section-title"/>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Best session avg" class="stat-row__label"/>
-                            <ui:Label name="ov-best-session-avg" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Highest visit" class="stat-row__label"/>
-                            <ui:Label name="ov-best-round" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Total 180s" class="stat-row__label"/>
-                            <ui:Label name="ov-total-180s" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Total 140+" class="stat-row__label"/>
-                            <ui:Label name="ov-total-140s" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Total 100+" class="stat-row__label"/>
-                            <ui:Label name="ov-total-100s" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="stat-row">
-                            <ui:Label text="Total visits" class="stat-row__label"/>
-                            <ui:Label name="ov-total-rounds" text="–" class="stat-row__value"/>
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="col-side">
-                        <ui:Label text="Overall heatmap" class="section-title"/>
-                        <ui:VisualElement name="ov-heatmap-container" class="heatmap-slot">
-                            <DartboardHeatmapElement/>
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                </ui:VisualElement>
             </ui:VisualElement>
 
             <!-- ── Training game ───────────────────────────────────── -->
@@ -643,13 +647,87 @@
             <!-- ── Stats & analytics ───────────────────────────────── -->
             <ui:VisualElement name="panel-stats" class="content-panel" style="display: none;">
                 <ui:VisualElement class="tab-strip">
-                    <ui:Button name="stats-tab-scoring" text="Scoring" class="stats-inner-tab stats-inner-tab--active"/>
+                    <ui:Button name="stats-tab-overview" text="Overview" class="stats-inner-tab stats-inner-tab--active"/>
+                    <ui:Button name="stats-tab-scoring" text="Scoring" class="stats-inner-tab"/>
                     <ui:Button name="stats-tab-fo" text="501" class="stats-inner-tab"/>
                     <ui:Button name="stats-tab-doubles" text="Doubles" class="stats-inner-tab"/>
                     <ui:Button name="stats-tab-tg" text="Training game" class="stats-inner-tab"/>
                 </ui:VisualElement>
 
-                <ui:VisualElement name="stats-scoring-panel" class="sub-panel">
+                <ui:VisualElement name="stats-page-overview" class="sub-panel">
+                    <ui:VisualElement class="hero-row">
+                        <ui:VisualElement class="hero">
+                            <ui:Label name="ov-lifetime-avg" text="–" class="hero-value"/>
+                            <ui:Label text="Lifetime avg" class="hero-caption"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="hero">
+                            <ui:Label name="ov-session-count" text="–" class="hero-value"/>
+                            <ui:Label text="Sessions" class="hero-caption"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="hero">
+                            <ui:Label name="ov-rolling-avg" text="–" class="hero-value"/>
+                            <ui:Label text="Last 5 avg" class="hero-caption"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="hero">
+                            <ui:Label name="ov-trend" text="–" class="hero-value"/>
+                            <ui:Label text="Trend" class="hero-caption"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider"/>
+                    <ui:VisualElement class="columns">
+                        <ui:VisualElement class="col-main">
+                            <ui:Label text="Recent sessions" class="section-title"/>
+                            <ui:Label name="ov-recent-empty" text="No finished sessions yet." class="placeholder-text"/>
+                            <ui:VisualElement name="ov-recent-header" class="list-row list-row--header">
+                                <ui:Label text="Date" class="list-row__cell"/>
+                                <ui:Label text="Visits" class="list-row__cell"/>
+                                <ui:Label text="Avg" class="list-row__cell"/>
+                                <ui:Label text="Triple %" class="list-row__cell"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="ov-recent-container">
+                                <ui:VisualElement class="list-row">
+                                    <ui:Label name="cell0" text="2026-09-25" class="list-row__cell"/>
+                                    <ui:Label name="cell1" text="12" class="list-row__cell"/>
+                                    <ui:Label name="cell2" text="58.3" class="list-row__cell"/>
+                                    <ui:Label name="cell3" text="14%" class="list-row__cell"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="divider"/>
+                            <ui:Label text="Personal bests" class="section-title"/>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Best session avg" class="stat-row__label"/>
+                                <ui:Label name="ov-best-session-avg" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Highest visit" class="stat-row__label"/>
+                                <ui:Label name="ov-best-round" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Total 180s" class="stat-row__label"/>
+                                <ui:Label name="ov-total-180s" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Total 140+" class="stat-row__label"/>
+                                <ui:Label name="ov-total-140s" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Total 100+" class="stat-row__label"/>
+                                <ui:Label name="ov-total-100s" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Total visits" class="stat-row__label"/>
+                                <ui:Label name="ov-total-rounds" text="–" class="stat-row__value"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="col-side">
+                            <ui:Label text="Overall heatmap" class="section-title"/>
+                            <ui:VisualElement name="ov-heatmap-container" class="heatmap-slot">
+                                <DartboardHeatmapElement/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="stats-scoring-panel" class="sub-panel" style="display: none;">
                     <ui:VisualElement class="columns">
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Avg score per session" class="section-title"/>

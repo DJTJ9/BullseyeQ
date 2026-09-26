@@ -4,14 +4,15 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// Binds the Stats &amp; Analytics panel to historical session data.
-/// Manages the Scoring/501/Doubles/Training game inner-tab switch and populates all charts, bars and heatmaps.
-/// Call <see cref="Refresh"/> whenever the panel is shown.
+/// Manages the Overview/Scoring/501/Doubles/Training game inner-tab switch and populates all charts, bars and heatmaps.
+/// Call <see cref="Open"/> when the window opens (lands on Overview), <see cref="Refresh"/> after data changes.
 /// </summary>
 public class StatsPresenter
 {
     private readonly VisualElement[] _tabPanels;
     private readonly Button[]        _tabButtons;
     private int _activeTab = -1;
+    private readonly OverviewPresenter _overview;
 
     // Scoring charts
     private readonly LineChartElement _chartAvgScore;
@@ -60,6 +61,7 @@ public class StatsPresenter
     {
         _tabPanels = new[]
         {
+            root.Q<VisualElement>("stats-page-overview"),
             root.Q<VisualElement>("stats-scoring-panel"),
             root.Q<VisualElement>("stats-fo-panel"),
             root.Q<VisualElement>("stats-doubles-panel"),
@@ -67,6 +69,7 @@ public class StatsPresenter
         };
         _tabButtons = new[]
         {
+            root.Q<Button>("stats-tab-overview"),
             root.Q<Button>("stats-tab-scoring"),
             root.Q<Button>("stats-tab-fo"),
             root.Q<Button>("stats-tab-doubles"),
@@ -77,6 +80,7 @@ public class StatsPresenter
             int idx = i;
             if (_tabButtons[i] != null) _tabButtons[i].clicked += () => ShowInnerTab(idx);
         }
+        _overview = new OverviewPresenter(root);
 
         _chartAvgScore = Chart(root, "chart-avg-score");
         _chartTriple   = Chart(root, "chart-triple-rate");
@@ -146,8 +150,16 @@ public class StatsPresenter
         ShowInnerTab(0);
     }
 
+    /// <summary>Window opens: always lands on the Overview tab, then refreshes every tab.</summary>
+    public void Open(PlayerProfile profile)
+    {
+        ShowInnerTab(0);
+        Refresh(profile);
+    }
+
     public void Refresh(PlayerProfile profile)
     {
+        _overview.Refresh(profile);
         RefreshScoring(profile);
         RefreshFiveOhOne(profile);
         RefreshCheckOut(profile);

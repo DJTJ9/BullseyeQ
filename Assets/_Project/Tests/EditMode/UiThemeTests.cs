@@ -120,6 +120,16 @@ public class UiThemeTests
     [Test]
     public void TickValue_CountsUpToo()             => Assert.AreEqual(25, UiFx.TickValue(0, 100, 0.25f));
 
+    // --- UiFx menu marker ---
+
+    [Test]
+    public void MarkerSpan_CentresHalfWidthUnderTile()
+    {
+        var (left, width) = UiFx.MarkerSpan(new Rect(100f, 0f, 168f, 220f));
+        Assert.AreEqual(84f, width, 0.01f);
+        Assert.AreEqual(142f, left, 0.01f);
+    }
+
     // --- UiFx reduced motion ---
 
     [Test]

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 
 // Testet den Menü/Window-Zustand: Start im Menü, Öffnen merkt sich den Punkt, Esc schließt nur ohne Modal,
-// ↑/↓ springt am Listenende um.
+// ←/→ springt am Ende der Kette um (5 Tiles + Quit = 6).
 [TestFixture]
 public class WindowNavTests
 {
@@ -86,6 +86,9 @@ public class WindowNavTests
     [TestCase(0, -1, 7, 6)]
     [TestCase(-1, 1, 7, 0)]
     [TestCase(-1, -1, 7, 5)]
+    [TestCase(4, 1, 6, 5)]
+    [TestCase(5, 1, 6, 0)]
+    [TestCase(0, -1, 6, 5)]
     public void Step_WrapsAround(int current, int delta, int count, int expected)
     {
         Assert.AreEqual(expected, WindowNav.Step(current, delta, count));
