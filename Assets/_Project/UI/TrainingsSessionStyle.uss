@@ -385,7 +385,7 @@
 
 #root .window-esc-hint {
     font-size: var(--bq-fs-sm);
-    color: var(--bq-muted);
+    color: var(--bq-text);
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 10px;
