@@ -1,20 +1,24 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   BullseyeQ — Broadcast theme
+   BullseyeQ — Pub-green game theme
    Tokens mirror UiTheme.cs. Change both together.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root, #root {
-    --bq-stage: #15171C;
-    --bq-stage-edge: #0C0D10;
-    --bq-panel: #1E2127;
-    --bq-line: #2C3038;
-    --bq-text: #F3F4F6;
-    --bq-muted: #8A919E;
-    --bq-live: #E5202B;
-    --bq-live-dim: rgba(229, 32, 43, 0.12);
+    --bq-stage: #0F3B2E;
+    --bq-stage-edge: #0A2A20;
+    --bq-panel: #17503E;
+    --bq-line: #2A6B53;
+    --bq-text: #F4EBD6;
+    --bq-muted: #A9BFB2;
+    --bq-live: #D7262E;
+    --bq-live-dim: rgba(215, 38, 46, 0.12);
+    --bq-live-text: #FF9E94;
     --bq-ai: #2D9CDB;
-    --bq-hit: #2FBF71;
-    --bq-warm: #F2A93B;
+    --bq-hit: #9BE870;
+    --bq-warm: #E8B64A;
+    --bq-wood: #7A4E2D;
+    --bq-slate: #1C2B25;
+    --bq-tile-hover: #1F6B50;
     --bq-hover: rgba(255, 255, 255, 0.04);
 
     --bq-radius: 4px;

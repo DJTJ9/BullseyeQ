@@ -6,23 +6,26 @@ using UnityEngine;
 /// </summary>
 public static class UiTheme
 {
-    public static readonly Color Stage     = Hex("#15171C");
-    public static readonly Color StageEdge = Hex("#0C0D10");
-    public static readonly Color Panel     = Hex("#1E2127");
-    public static readonly Color Line      = Hex("#2C3038");
-    public static readonly Color Text      = Hex("#F3F4F6");
-    public static readonly Color Muted     = Hex("#8A919E");
-    public static readonly Color Live      = Hex("#E5202B");
+    // Pub-Grün: felt stage, chalk-cream text, dartboard red, brass, wood.
+    public static readonly Color Stage     = Hex("#0F3B2E");
+    public static readonly Color StageEdge = Hex("#0A2A20");
+    public static readonly Color Panel     = Hex("#17503E");
+    public static readonly Color Line      = Hex("#2A6B53");
+    public static readonly Color Text      = Hex("#F4EBD6");
+    public static readonly Color Muted     = Hex("#A9BFB2");
+    public static readonly Color Live      = Hex("#D7262E");
     public static readonly Color Ai        = Hex("#2D9CDB");
-    public static readonly Color Hit       = Hex("#2FBF71");
-    public static readonly Color Warm      = Hex("#F2A93B");
+    public static readonly Color Hit       = Hex("#9BE870");
+    public static readonly Color Warm      = Hex("#E8B64A");
+    public static readonly Color Wood      = Hex("#7A4E2D");
+    public static readonly Color Slate     = Hex("#1C2B25");
 
     // Heatmap ramp
-    public static readonly Color Sector1  = Hex("#1A1C21");
-    public static readonly Color Sector2  = Hex("#22252B");
+    public static readonly Color Sector1  = Hex("#123F31");
+    public static readonly Color Sector2  = Hex("#184A3A");
     public static readonly Color HeatLow  = Hex("#7A1218");
     public static readonly Color HeatMid  = Live;
-    public static readonly Color HeatHigh = Hex("#FFB4B8");
+    public static readonly Color HeatHigh = Hex("#F4EBD6");
 
     /// <summary>Parses "#RRGGBB" into an opaque Color.</summary>
     public static Color Hex(string hex)

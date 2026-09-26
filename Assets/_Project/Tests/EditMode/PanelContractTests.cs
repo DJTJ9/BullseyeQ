@@ -218,18 +218,18 @@ public class PanelContractTests
         "stats-scoring-heatmap", "stats-fo-heatmap", "stats-co-heatmap", "stats-tg-heatmap",
     };
 
-    // Container → erwartete Linienfarbe (UiTheme.Hit / Warm / Live, wie bisher in StatsPresenter.CreateChart).
+    // Container → erwartete Linienfarbe (UiTheme.Hit / Warm / Live der Pub-Grün-Palette).
     static readonly object[] Charts =
     {
-        new object[] { "chart-avg-score",    "2FBF71" },
-        new object[] { "chart-triple-rate",  "F2A93B" },
-        new object[] { "chart-wasted-rate",  "E5202B" },
-        new object[] { "chart-fo-avg",       "2FBF71" },
-        new object[] { "chart-fo-checkout",  "F2A93B" },
-        new object[] { "chart-co-hitrate",   "2FBF71" },
-        new object[] { "chart-co-highscore", "F2A93B" },
-        new object[] { "chart-tg-winrate",   "2FBF71" },
-        new object[] { "chart-tg-avg",       "F2A93B" },
+        new object[] { "chart-avg-score",    "9BE870" },
+        new object[] { "chart-triple-rate",  "E8B64A" },
+        new object[] { "chart-wasted-rate",  "D7262E" },
+        new object[] { "chart-fo-avg",       "9BE870" },
+        new object[] { "chart-fo-checkout",  "E8B64A" },
+        new object[] { "chart-co-hitrate",   "9BE870" },
+        new object[] { "chart-co-highscore", "E8B64A" },
+        new object[] { "chart-tg-winrate",   "9BE870" },
+        new object[] { "chart-tg-avg",       "E8B64A" },
     };
 
     [TestCaseSource(nameof(HeatmapSlots))]

@@ -654,15 +654,15 @@
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Avg score per session" class="section-title"/>
                             <ui:VisualElement name="chart-avg-score" class="chart-container">
-                                <LineChartElement line-color="#2FBF71"/>
+                                <LineChartElement line-color="#9BE870"/>
                             </ui:VisualElement>
                             <ui:Label text="Triple rate %" class="section-title"/>
                             <ui:VisualElement name="chart-triple-rate" class="chart-container">
-                                <LineChartElement line-color="#F2A93B"/>
+                                <LineChartElement line-color="#E8B64A"/>
                             </ui:VisualElement>
                             <ui:Label text="Wasted darts %" class="section-title"/>
                             <ui:VisualElement name="chart-wasted-rate" class="chart-container">
-                                <LineChartElement line-color="#E5202B"/>
+                                <LineChartElement line-color="#D7262E"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
@@ -722,11 +722,11 @@
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="3-dart average per leg" class="section-title"/>
                             <ui:VisualElement name="chart-fo-avg" class="chart-container">
-                                <LineChartElement line-color="#2FBF71"/>
+                                <LineChartElement line-color="#9BE870"/>
                             </ui:VisualElement>
                             <ui:Label text="Checkout rate %" class="section-title"/>
                             <ui:VisualElement name="chart-fo-checkout" class="chart-container">
-                                <LineChartElement line-color="#F2A93B"/>
+                                <LineChartElement line-color="#E8B64A"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
@@ -774,11 +774,11 @@
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Hit rate trend" class="section-title"/>
                             <ui:VisualElement name="chart-co-hitrate" class="chart-container">
-                                <LineChartElement line-color="#2FBF71"/>
+                                <LineChartElement line-color="#9BE870"/>
                             </ui:VisualElement>
                             <ui:Label text="High score trend (challenge)" class="section-title"/>
                             <ui:VisualElement name="chart-co-highscore" class="chart-container">
-                                <LineChartElement line-color="#F2A93B"/>
+                                <LineChartElement line-color="#E8B64A"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">
@@ -838,11 +838,11 @@
                         <ui:VisualElement class="col-main col-main--wide">
                             <ui:Label text="Win rate trend" class="section-title"/>
                             <ui:VisualElement name="chart-tg-winrate" class="chart-container">
-                                <LineChartElement line-color="#2FBF71"/>
+                                <LineChartElement line-color="#9BE870"/>
                             </ui:VisualElement>
                             <ui:Label text="3-dart average (you)" class="section-title"/>
                             <ui:VisualElement name="chart-tg-avg" class="chart-container">
-                                <LineChartElement line-color="#F2A93B"/>
+                                <LineChartElement line-color="#E8B64A"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:VisualElement class="col-main">

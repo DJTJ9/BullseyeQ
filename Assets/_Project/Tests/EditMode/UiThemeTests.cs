@@ -1,8 +1,10 @@
+using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// Testet UiTheme.HeatColor (Heat-Ramp-Mapping) und UiFx.TickValue (Zähler-Interpolation).
+// Testet UiTheme (Palette == Spec == USS, Heat-Ramp-Mapping) und UiFx-Helfer (Zähler-Interpolation, reduced motion, Marker, Tafel-Reveal).
 [TestFixture]
 public class UiThemeTests
 {
@@ -11,6 +13,50 @@ public class UiThemeTests
         Assert.AreEqual(expected.r, actual.r, 0.002f, msg + " (r)");
         Assert.AreEqual(expected.g, actual.g, 0.002f, msg + " (g)");
         Assert.AreEqual(expected.b, actual.b, 0.002f, msg + " (b)");
+    }
+
+    const string UssPath = "Assets/_Project/UI/TrainingsSessionStyle.uss";
+
+    // Feld in UiTheme, USS-Token (--bq-<token>), Spec-Hex (Pub-Grün).
+    static readonly object[] Palette =
+    {
+        new object[] { "Stage",     "stage",      "0F3B2E" },
+        new object[] { "StageEdge", "stage-edge", "0A2A20" },
+        new object[] { "Panel",     "panel",      "17503E" },
+        new object[] { "Line",      "line",       "2A6B53" },
+        new object[] { "Text",      "text",       "F4EBD6" },
+        new object[] { "Muted",     "muted",      "A9BFB2" },
+        new object[] { "Live",      "live",       "D7262E" },
+        new object[] { "Ai",        "ai",         "2D9CDB" },
+        new object[] { "Hit",       "hit",        "9BE870" },
+        new object[] { "Warm",      "warm",       "E8B64A" },
+        new object[] { "Wood",      "wood",       "7A4E2D" },
+        new object[] { "Slate",     "slate",      "1C2B25" },
+    };
+
+    static Color Field(string name)
+    {
+        var f = typeof(UiTheme).GetField(name);
+        Assert.IsNotNull(f, $"UiTheme.{name} fehlt");
+        return (Color)f.GetValue(null);
+    }
+
+    [TestCaseSource(nameof(Palette))]
+    public void Palette_UiThemeMatchesSpecAndUss(string field, string token, string hex)
+    {
+        Assert.AreEqual(hex, ColorUtility.ToHtmlStringRGB(Field(field)), $"UiTheme.{field}");
+        var m = Regex.Match(File.ReadAllText(UssPath), $@"--bq-{token}:\s*#([0-9A-Fa-f]{{6}});");
+        Assert.IsTrue(m.Success, $"--bq-{token} fehlt in der USS");
+        Assert.AreEqual(hex, m.Groups[1].Value.ToUpperInvariant(), $"--bq-{token}");
+    }
+
+    [TestCase("Sector1",  "123F31")]
+    [TestCase("Sector2",  "184A3A")]
+    [TestCase("HeatLow",  "7A1218")]
+    [TestCase("HeatHigh", "F4EBD6")]
+    public void HeatRamp_HasPubGreenValues(string field, string hex)
+    {
+        Assert.AreEqual(hex, ColorUtility.ToHtmlStringRGB(Field(field)), $"UiTheme.{field}");
     }
 
     [Test]
