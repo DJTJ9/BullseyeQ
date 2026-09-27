@@ -498,8 +498,12 @@
     transition-property: color, border-bottom-color;
     transition-duration: 150ms;
 }
-.stats-inner-tab:hover   { color: var(--bq-text); }
-.stats-inner-tab--active { color: var(--bq-text); border-bottom-color: var(--bq-live); }
+/* #root scope beats "#root .unity-text-element" (tabs are text elements); :focus mirrors :hover */
+#root .stats-inner-tab { color: var(--bq-muted); }
+#root .stats-inner-tab:hover,
+#root .stats-inner-tab:focus,
+#root .stats-inner-tab--active { color: var(--bq-text); }
+.stats-inner-tab--active { border-bottom-color: var(--bq-live); }
 
 /* ── Columns ──────────────────────────────────────────────────────────── */
 
