@@ -220,9 +220,10 @@ public class DartInputController : MonoBehaviour
             else            _sessionTabBtns[i].RemoveFromClassList("stats-inner-tab--active");
         }
 
-        if (index == 0) FocusField(0);
-        if (index == 1) _foField0?.schedule.Execute(() => { if (_nav.Active == WinSessions) _foField0.Focus(); });
-        if (index == 2) _checkOutController?.RefreshAll();
+        // The new tab panel only displays after the old one's exit (UiFx.SwitchPanel); a field can't take focus before that.
+        if (index == 0) _fields[0].schedule.Execute(() => FocusField(0)).StartingIn(UiFx.LayerExitMs);
+        if (index == 1) _foField0?.schedule.Execute(() => _foField0.schedule.Execute(() => { if (_nav.Active == WinSessions) _foField0.Focus(); })).StartingIn(UiFx.LayerExitMs);
+        if (index == 2) { _checkOutController?.RefreshAll(); _checkOutController?.FocusActiveMode(); }
     }
 
     private void ShowPanel(int index)

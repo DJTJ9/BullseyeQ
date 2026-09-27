@@ -193,13 +193,25 @@ public class CheckOutController : MonoBehaviour
         if (Session != null && Session.mode != newMode)
             DataManager.Instance.StartNewCheckOutSession(newMode);
 
-        switch (index)
-        {
-            case 0: FocusTd(0); break;
-            case 1: FocusCh(0); break;
-            case 2: FocusFive(0); break;
-        }
+        FocusActiveMode();
         RefreshAll();
+    }
+
+    /// <summary>Focuses the first dart field of the active mode (after a mode or session-tab switch).</summary>
+    public void FocusActiveMode()
+    {
+        if (_activeMode < 0) return;
+        int mode = _activeMode;
+        // The new panel only displays after the old one's exit (UiFx.SwitchPanel); a field can't take focus before that.
+        _modePanels[mode].schedule.Execute(() =>
+        {
+            switch (mode)
+            {
+                case 0: FocusTd(0); break;
+                case 1: FocusCh(0); break;
+                case 2: FocusFive(0); break;
+            }
+        }).StartingIn(UiFx.LayerExitMs);
     }
 
     // ── Target Double ─────────────────────────────────────────────────────────
