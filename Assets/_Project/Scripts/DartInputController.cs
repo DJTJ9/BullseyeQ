@@ -53,6 +53,7 @@ public class DartInputController : MonoBehaviour
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
         var root = _root;
+        HoverFocus.Install(root);
 
         // Must precede the first panel switch below, so Show() sees the correct NoMotion state.
         // Applied to the same element SettingsController toggles (#root, one level below the
