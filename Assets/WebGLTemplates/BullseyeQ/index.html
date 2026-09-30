@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BullseyeQ</title>
+  <style>
+    @font-face { font-family: 'Space Grotesk'; font-weight: 500; font-display: swap; src: url(fonts/space-grotesk-500-latin.woff2) format('woff2'); }
+    @font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url(fonts/inter-400-latin.woff2) format('woff2'); }
+    :root {
+      --bq-stage: #0F3B2E; --bq-stage-edge: #0A2A20; --bq-text: #F4EBD6;
+      --bq-muted: #A9BFB2; --bq-warm: #E8B64A; --bq-panel: #17503E;
+    }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bq-stage); color: var(--bq-text);
+                 font: 400 16px/1.5 'Inter', system-ui, sans-serif; }
+    #unity-canvas { position: fixed; inset: 0; width: 100dvw; height: 100dvh; display: block; background: var(--bq-stage); }
+    .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+              gap: 16px; padding: 24px; box-sizing: border-box; text-align: center;
+              background: radial-gradient(circle at center, var(--bq-stage) 55%, var(--bq-stage-edge)); }
+    #loader { transition: opacity .4s ease; }
+    #loader.done { opacity: 0; pointer-events: none; }
+    #board { width: min(40vmin, 220px); height: auto; }
+    #board .seg { fill: var(--bq-panel); stroke: var(--bq-stage-edge); stroke-width: .8; }
+    #board .seg.on { fill: var(--bq-warm); }
+    #board .rim { fill: none; stroke: var(--bq-muted); stroke-width: 1.5; }
+    #board .bull { fill: var(--bq-panel); transform-box: fill-box; transform-origin: center; }
+    #board.full .bull { fill: var(--bq-warm); }
+    #board .bull.pulse { animation: pulse .6s ease-out 1; }
+    #board.empty .seg, #board.empty .bull { visibility: hidden; }
+    @keyframes pulse { 50% { transform: scale(1.5); } }
+    h1 { margin: 0; font: 500 clamp(28px, 5vmin, 40px)/1.1 'Space Grotesk', sans-serif; }
+    #status { margin: 0; max-width: 36ch; }
+    #status a { color: var(--bq-warm); }
+    .backlink { position: fixed; right: 16px; bottom: 12px; color: var(--bq-muted); font-size: 14px; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--bq-warm); outline-offset: 3px; }
+    #rotate { display: none; z-index: 2; }
+    #rotate p { margin: 0; max-width: 36ch; }
+    #rotate .phone { width: 64px; height: 64px; animation: turn 1.2s ease-in-out .3s 1 both; }
+    @keyframes turn { to { transform: rotate(90deg); } }
+    @media (orientation: portrait) and (pointer: coarse) { #rotate { display: flex; } }
+    @media (prefers-reduced-motion: reduce) {
+      #loader { transition: none; }
+      #board .bull.pulse, #rotate .phone { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+  <div id="loader" class="screen">
+    <svg id="board" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="rim" cx="50" cy="50" r="48"></circle>
+      <circle class="bull" cx="50" cy="50" r="8"></circle>
+    </svg>
+    <h1>BullseyeQ</h1>
+    <p id="status" role="status" aria-live="polite"></p>
+    <a class="backlink" href="https://thinkshark.de">thinkshark.de</a>
+  </div>
+
+  <div id="rotate" class="screen" role="alert">
+    <svg class="phone" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="20" y="6" width="24" height="52" rx="4" fill="none" stroke="#F4EBD6" stroke-width="3"></rect>
+      <circle cx="32" cy="50" r="2" fill="#F4EBD6"></circle>
+    </svg>
+    <p id="rotate-text"></p>
+  </div>
+
+  <script>
+    const ORDER = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+    const TOTAL = Number('__BQ_TOTAL_BYTES__') || 0;
+    const DE = (navigator.language || '').toLowerCase().startsWith('de');
+    const T = DE
+      ? { loading: 'Lädt die App.', of: 'von', rotate: 'Dreh dein Handy ins Querformat.',
+          error: 'Dein Browser kann BullseyeQ nicht starten. Die App braucht WebGL 2, zum Beispiel in einem aktuellen Chrome, Firefox oder Safari.',
+          back: 'Zurück zur Projektseite' }
+      : { loading: 'Loading the app.', of: 'of', rotate: 'Turn your phone sideways.',
+          error: 'Your browser cannot start BullseyeQ. The app needs WebGL 2, for example in a current Chrome, Firefox or Safari.',
+          back: 'Back to the project page' };
+    document.documentElement.lang = DE ? 'de' : 'en';
+    document.getElementById('rotate-text').textContent = T.rotate;
+
+    const loader = document.getElementById('loader');
+    const board = document.getElementById('board');
+    const bull = board.querySelector('.bull');
+    const status = document.getElementById('status');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 20 wedges clockwise from the top, 18 degrees each, in real board order.
+    const NS = 'http://www.w3.org/2000/svg';
+    const pt = (r, deg) => {
+      const a = deg * Math.PI / 180;
+      return (50 + r * Math.cos(a)).toFixed(2) + ' ' + (50 + r * Math.sin(a)).toFixed(2);
+    };
+    const segs = ORDER.map((n, i) => {
+      const a0 = -99 + i * 18, a1 = a0 + 18;
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', 'M' + pt(11, a0) + ' L' + pt(46, a0) + ' A46 46 0 0 1 ' + pt(46, a1) +
+                             ' L' + pt(11, a1) + ' A11 11 0 0 0 ' + pt(11, a0) + ' Z');
+      path.setAttribute('class', 'seg');
+      board.insertBefore(path, bull);
+      return path;
+    });
+
+    const mb = bytes => Math.round(bytes / 1048576);
+    function setProgress(fraction) {
+      const lit = Math.floor(fraction * 20 + 1e-6);
+      segs.forEach((s, i) => s.classList.toggle('on', i < lit));
+      status.textContent = TOTAL > 0
+        ? T.loading + ' ' + mb(fraction * TOTAL) + ' ' + T.of + ' ' + mb(TOTAL) + ' MB'
+        : T.loading;
+    }
+
+    function finish() {
+      setProgress(1);
+      board.classList.add('full');
+      if (reduced) { loader.remove(); return; }
+      bull.classList.add('pulse');
+      bull.addEventListener('animationend', () => {
+        loader.classList.add('done');
+        loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+      }, { once: true });
+    }
+
+    function fail() {
+      board.classList.add('empty');
+      status.textContent = T.error + ' ';
+      const link = document.createElement('a');
+      link.href = 'https://thinkshark.de/projekt-bullseyeq.html';
+      link.textContent = T.back;
+      status.appendChild(link);
+    }
+
+    // Android only: fullscreen plus landscape lock after the first tap. iOS cannot, the overlay stays there.
+    if (/Android/i.test(navigator.userAgent)) {
+      window.addEventListener('pointerdown', async () => {
+        try {
+          await document.documentElement.requestFullscreen();
+          await screen.orientation.lock('landscape');
+        } catch (e) { /* not allowed on this device, the overlay covers it */ }
+      }, { once: true });
+    }
+
+    setProgress(0);
+
+    if (!document.createElement('canvas').getContext('webgl2')) {
+      fail();
+    } else {
+      const buildUrl = 'Build';
+      const config = {
+        arguments: [],
+        dataUrl: buildUrl + '/{{{ DATA_FILENAME }}}',
+        frameworkUrl: buildUrl + '/{{{ FRAMEWORK_FILENAME }}}',
+        codeUrl: buildUrl + '/{{{ CODE_FILENAME }}}',
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + '/{{{ MEMORY_FILENAME }}}',
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + '/{{{ SYMBOLS_FILENAME }}}',
+#endif
+        streamingAssetsUrl: 'StreamingAssets',
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        autoSyncPersistentDataPath: true,
+        showBanner: (msg, type) => { if (type === 'error') fail(); else console.warn(msg); },
+      };
+      const script = document.createElement('script');
+      script.src = buildUrl + '/{{{ LOADER_FILENAME }}}';
+      script.onload = () => {
+        createUnityInstance(document.getElementById('unity-canvas'), config, setProgress)
+          .then(finish)
+          .catch(fail);
+      };
+      script.onerror = fail;
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>
