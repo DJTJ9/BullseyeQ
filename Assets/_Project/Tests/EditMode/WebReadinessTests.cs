@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NUnit.Framework;
 using UnityEditor;
@@ -53,4 +54,22 @@ public class WebReadinessTests
     [TestCase("inter-400-latin.woff2")]
     public void Template_ShipsFont(string file) =>
         Assert.IsTrue(File.Exists(Path.Combine(TemplateDir, "fonts", file)), file);
+
+    [Test]
+    public void StampTotalSize_ReplacesThePlaceholderWithTheBuildSize()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "bq-web-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(Path.Combine(dir, "Build"));
+        try
+        {
+            File.WriteAllBytes(Path.Combine(dir, "Build", "a.wasm.br"), new byte[300]);
+            File.WriteAllBytes(Path.Combine(dir, "Build", "b.data.br"), new byte[200]);
+            File.WriteAllText(Path.Combine(dir, "index.html"), "const TOTAL = Number('__BQ_TOTAL_BYTES__') || 0;");
+
+            WebBuild.StampTotalSize(dir);
+
+            StringAssert.Contains("Number('500')", File.ReadAllText(Path.Combine(dir, "index.html")));
+        }
+        finally { Directory.Delete(dir, true); }
+    }
 }
