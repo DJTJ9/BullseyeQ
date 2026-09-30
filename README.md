@@ -75,6 +75,12 @@ UI (UIDocument)
 - In the editor: *Window → General → Test Runner → EditMode → Run All*.
 - Batch mode (Unity closed): `bash run-tests.sh` → writes `test-results.xml` and `unity-test.log`. Adjust the `UNITY=` path to your install.
 
+## Play in the browser
+
+**[darts.thinkshark.de](https://darts.thinkshark.de)** runs the current web build. A fresh browser starts with demo data, your own sessions are stored in that browser only. *Settings → Reset statistics* clears the demo data for good. Best played in landscape.
+
+Deploy a new version (Unity editor closed): `./deploy-web.sh`. It builds with `BullseyeQ/Build Web` (Brotli, hashed file names, template `Assets/WebGLTemplates/BullseyeQ`) and swaps the files on the server. The demo data comes from `BullseyeQ/Generate Demo Profile`.
+
 ## Build and run
 
 1. Open the folder in Unity Hub with **Unity 6000.4.0f1**.
