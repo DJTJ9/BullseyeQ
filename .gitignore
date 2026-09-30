@@ -20,3 +20,15 @@
 Packages/packages-lock.json
 .diversion/
 .dvignore
+
+# Third-party packages under commercial / Asset Store licences (kept locally, not redistributed)
+Assets/Plugins/Sirenix/
+Assets/Plugins/Sirenix.meta
+Packages/com.singularitygroup.hotreload/
+Assets/Wingman/
+Assets/Wingman.meta
+# Layer Lab GUI-TheStone sprites copied into the project
+Assets/_Project/Art/UI/Icon_*
+Assets/_Project/Art/UI/Button_Square03_White.png*
+Assets/_Project/Art/UI/Button01_Red.png*
+Assets/_Project/Art/UI/BasicFrame_Square01_White.Png*
