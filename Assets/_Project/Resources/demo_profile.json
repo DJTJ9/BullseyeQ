@@ -1,0 +1,3600 @@
+{
+  "$type": "PlayerProfile, DartTrainingsApp",
+  "sessions": [
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 140,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "9",
+              "baseValue": 9,
+              "multiplier": 1,
+              "score": 9
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 41,
+          "dartsThrown": 3
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S20": 11,
+        "T20": 4,
+        "S9": 1,
+        "S16": 1,
+        "D8": 1
+      },
+      "sessionId": "demo-0",
+      "date": "2026-09-17 19:00",
+      "endTime": "2026-09-17 19:12",
+      "durationSeconds": 720,
+      "sessionType": 1,
+      "remaining": 0,
+      "totalDartsThrown": 18,
+      "threeDartAverage": 83.5,
+      "tripleHitRate": 0.222222224,
+      "wastedDartRate": 0.055555556,
+      "dartsToFinishPossible": 16,
+      "checkoutAttempts": 2,
+      "checkoutHits": 1,
+      "checkoutRate": 0.5,
+      "wonLeg": true
+    },
+    {
+      "$type": "CheckOutSession, DartTrainingsApp",
+      "mode": 0,
+      "rounds": [
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "7",
+              "baseValue": 7,
+              "multiplier": 1,
+              "score": 7
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "7",
+              "baseValue": 7,
+              "multiplier": 1,
+              "score": 7
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "7",
+              "baseValue": 7,
+              "multiplier": 1,
+              "score": 7
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "7",
+              "baseValue": 7,
+              "multiplier": 1,
+              "score": 7
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D16",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S7": 4,
+        "S16": 12,
+        "D16": 13,
+        "S8": 1
+      },
+      "difficulty": 0,
+      "assignedScores": [],
+      "completedScores": [],
+      "fieldAttempts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D16": 10
+      },
+      "fieldHits": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D16": 9
+      },
+      "sessionId": "demo-1",
+      "date": "2026-09-17 19:20",
+      "endTime": "2026-09-17 19:35",
+      "durationSeconds": 900,
+      "sessionType": 2,
+      "currentScore": 21,
+      "sessionHighScore": 0,
+      "totalAttempts": 10,
+      "totalHits": 9,
+      "hitRate": 0.9
+    },
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 140,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "9",
+              "baseValue": 9,
+              "multiplier": 1,
+              "score": 9
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 45,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 16,
+          "dartsThrown": 1
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "T20": 5,
+        "S20": 8,
+        "S9": 1,
+        "S16": 1,
+        "D8": 1
+      },
+      "sessionId": "demo-2",
+      "date": "2026-09-17 19:45",
+      "endTime": "2026-09-17 19:57",
+      "durationSeconds": 720,
+      "sessionType": 3,
+      "remaining": 0,
+      "totalDartsThrown": 16,
+      "threeDartAverage": 93.9375,
+      "tripleHitRate": 0.3125,
+      "wastedDartRate": 0.0625,
+      "dartsToFinishPossible": 14,
+      "checkoutAttempts": 2,
+      "checkoutHits": 1,
+      "checkoutRate": 0.5,
+      "wonLeg": true
+    },
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 121,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 85,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "17",
+              "baseValue": 17,
+              "multiplier": 1,
+              "score": 17
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 19,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "4-",
+              "baseValue": 4,
+              "multiplier": 2,
+              "score": 8
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 16,
+          "dartsThrown": 2
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S20": 8,
+        "T20": 5,
+        "S1": 3,
+        "S5": 1,
+        "S17": 1,
+        "S8": 1,
+        "D4": 1
+      },
+      "sessionId": "demo-3",
+      "date": "2026-09-18 19:00",
+      "endTime": "2026-09-18 19:12",
+      "durationSeconds": 720,
+      "sessionType": 1,
+      "remaining": 0,
+      "totalDartsThrown": 20,
+      "threeDartAverage": 75.15,
+      "tripleHitRate": 0.25,
+      "wastedDartRate": 0.2,
+      "dartsToFinishPossible": 16,
+      "checkoutAttempts": 3,
+      "checkoutHits": 1,
+      "checkoutRate": 0.333333343,
+      "wonLeg": true
+    },
+    {
+      "$type": "CheckOutSession, DartTrainingsApp",
+      "mode": 0,
+      "rounds": [
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D20",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S5": 4,
+        "S20": 13,
+        "D20": 12,
+        "S1": 1
+      },
+      "difficulty": 0,
+      "assignedScores": [],
+      "completedScores": [],
+      "fieldAttempts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D20": 10
+      },
+      "fieldHits": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D20": 8
+      },
+      "sessionId": "demo-4",
+      "date": "2026-09-18 19:20",
+      "endTime": "2026-09-18 19:35",
+      "durationSeconds": 900,
+      "sessionType": 2,
+      "currentScore": 21,
+      "sessionHighScore": 0,
+      "totalAttempts": 10,
+      "totalHits": 8,
+      "hitRate": 0.8
+    },
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 81,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 81,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 30,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "17",
+              "baseValue": 17,
+              "multiplier": 1,
+              "score": 17
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16-",
+              "baseValue": 16,
+              "multiplier": 2,
+              "score": 32
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 49,
+          "dartsThrown": 2
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S20": 10,
+        "T20": 4,
+        "S1": 2,
+        "S5": 2,
+        "S17": 1,
+        "D16": 1
+      },
+      "sessionId": "demo-5",
+      "date": "2026-09-18 19:45",
+      "endTime": "2026-09-18 19:57",
+      "durationSeconds": 720,
+      "sessionType": 3,
+      "remaining": 0,
+      "totalDartsThrown": 20,
+      "threeDartAverage": 75.15,
+      "tripleHitRate": 0.2,
+      "wastedDartRate": 0.2,
+      "dartsToFinishPossible": 19,
+      "checkoutAttempts": 1,
+      "checkoutHits": 1,
+      "checkoutRate": 1.0,
+      "wonLeg": true
+    },
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 66,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 41,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 26,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 180,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "14-",
+              "baseValue": 14,
+              "multiplier": 2,
+              "score": 28
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 28,
+          "dartsThrown": 1
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S5": 2,
+        "T20": 5,
+        "S1": 3,
+        "S20": 8,
+        "D14": 1
+      },
+      "sessionId": "demo-6",
+      "date": "2026-09-19 19:00",
+      "endTime": "2026-09-19 19:12",
+      "durationSeconds": 720,
+      "sessionType": 1,
+      "remaining": 0,
+      "totalDartsThrown": 19,
+      "threeDartAverage": 79.10526,
+      "tripleHitRate": 0.2631579,
+      "wastedDartRate": 0.2631579,
+      "dartsToFinishPossible": 18,
+      "checkoutAttempts": 1,
+      "checkoutHits": 1,
+      "checkoutRate": 1.0,
+      "wonLeg": true
+    },
+    {
+      "$type": "CheckOutSession, DartTrainingsApp",
+      "mode": 0,
+      "rounds": [
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "11",
+              "baseValue": 11,
+              "multiplier": 1,
+              "score": 11
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "11",
+              "baseValue": 11,
+              "multiplier": 1,
+              "score": 11
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": false
+        },
+        {
+          "$type": "CheckOutRound, DartTrainingsApp",
+          "mode": 0,
+          "targetField": "D8",
+          "targetScore": 0,
+          "darts": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "16",
+              "baseValue": 16,
+              "multiplier": 1,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8-",
+              "baseValue": 8,
+              "multiplier": 2,
+              "score": 16
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "8",
+              "baseValue": 8,
+              "multiplier": 1,
+              "score": 8
+            }
+          ],
+          "dartsUsed": 3,
+          "succeeded": true
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S16": 8,
+        "S8": 13,
+        "D8": 7,
+        "S11": 2
+      },
+      "difficulty": 0,
+      "assignedScores": [],
+      "completedScores": [],
+      "fieldAttempts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D8": 10
+      },
+      "fieldHits": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "D8": 6
+      },
+      "sessionId": "demo-7",
+      "date": "2026-09-19 19:20",
+      "endTime": "2026-09-19 19:35",
+      "durationSeconds": 900,
+      "sessionType": 2,
+      "currentScore": 21,
+      "sessionHighScore": 0,
+      "totalAttempts": 10,
+      "totalHits": 6,
+      "hitRate": 0.6
+    },
+    {
+      "$type": "FiveOhOneSession, DartTrainingsApp",
+      "visits": [
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 81,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 100,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 60,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 121,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "19",
+              "baseValue": 19,
+              "multiplier": 1,
+              "score": 19
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "busted": false,
+          "checkout": false,
+          "scoredPoints": 21,
+          "dartsThrown": 3
+        },
+        {
+          "$type": "FiveOhOneVisit, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "9-",
+              "baseValue": 9,
+              "multiplier": 2,
+              "score": 18
+            }
+          ],
+          "busted": false,
+          "checkout": true,
+          "scoredPoints": 18,
+          "dartsThrown": 1
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "T20": 5,
+        "S20": 8,
+        "S1": 4,
+        "S19": 1,
+        "D9": 1
+      },
+      "sessionId": "demo-8",
+      "date": "2026-09-19 19:45",
+      "endTime": "2026-09-19 19:57",
+      "durationSeconds": 720,
+      "sessionType": 3,
+      "remaining": 0,
+      "totalDartsThrown": 19,
+      "threeDartAverage": 79.10526,
+      "tripleHitRate": 0.2631579,
+      "wastedDartRate": 0.105263159,
+      "dartsToFinishPossible": 16,
+      "checkoutAttempts": 2,
+      "checkoutHits": 1,
+      "checkoutRate": 0.5,
+      "wonLeg": true
+    },
+    {
+      "$type": "ScoringSession, DartTrainingsApp",
+      "rounds": [
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18",
+              "baseValue": 18,
+              "multiplier": 1,
+              "score": 18
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "12",
+              "baseValue": 12,
+              "multiplier": 1,
+              "score": 12
+            }
+          ],
+          "totalScore": 35
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "0",
+              "baseValue": 0,
+              "multiplier": 1,
+              "score": 0
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18",
+              "baseValue": 18,
+              "multiplier": 1,
+              "score": 18
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 38
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18",
+              "baseValue": 18,
+              "multiplier": 1,
+              "score": 18
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 58
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20-",
+              "baseValue": 20,
+              "multiplier": 2,
+              "score": 40
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 65
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 11
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 60
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 26
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1+",
+              "baseValue": 1,
+              "multiplier": 3,
+              "score": 3
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 24
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 45
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 45
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S18": 3,
+        "S5": 7,
+        "S12": 1,
+        "S0": 1,
+        "S20": 13,
+        "D20": 1,
+        "S1": 3,
+        "T1": 1
+      },
+      "sessionId": "07a85627-62dc-45fd-8c67-5e25fd2060ec",
+      "date": "2026-09-24 19:20",
+      "endTime": "2026-09-24 19:25",
+      "durationSeconds": 292,
+      "sessionType": 0,
+      "totalDartsThrown": 30,
+      "averageScore": 40.7,
+      "count180": 0,
+      "count140Plus": 0,
+      "count100Plus": 0,
+      "rate180": 0.0,
+      "rate140Plus": 0.0,
+      "rate100Plus": 0.0,
+      "tripleHitRate": 0.0,
+      "wastedDartRate": 0.433333337
+    },
+    {
+      "$type": "ScoringSession, DartTrainingsApp",
+      "rounds": [
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 41
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 7
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "12",
+              "baseValue": 12,
+              "multiplier": 1,
+              "score": 12
+            }
+          ],
+          "totalScore": 18
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "12",
+              "baseValue": 12,
+              "multiplier": 1,
+              "score": 12
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "6",
+              "baseValue": 6,
+              "multiplier": 1,
+              "score": 6
+            }
+          ],
+          "totalScore": 78
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 41
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 45
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 45
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "4",
+              "baseValue": 4,
+              "multiplier": 1,
+              "score": 4
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 14
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "13",
+              "baseValue": 13,
+              "multiplier": 1,
+              "score": 13
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            }
+          ],
+          "totalScore": 78
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 3
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S20": 8,
+        "S1": 8,
+        "S5": 7,
+        "S12": 2,
+        "T20": 2,
+        "S6": 1,
+        "S4": 1,
+        "S13": 1
+      },
+      "sessionId": "7361bdee-7eab-4f41-9898-5f6baf9b6b31",
+      "date": "2026-09-24 19:25",
+      "endTime": "2026-09-24 19:29",
+      "durationSeconds": 274,
+      "sessionType": 0,
+      "totalDartsThrown": 30,
+      "averageScore": 37.0,
+      "count180": 0,
+      "count140Plus": 0,
+      "count100Plus": 0,
+      "rate180": 0.0,
+      "rate140Plus": 0.0,
+      "rate100Plus": 0.0,
+      "tripleHitRate": 0.06666667,
+      "wastedDartRate": 0.6666667
+    },
+    {
+      "$type": "ScoringSession, DartTrainingsApp",
+      "rounds": [
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 11
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 7
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 41
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 45
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "12",
+              "baseValue": 12,
+              "multiplier": 1,
+              "score": 12
+            }
+          ],
+          "totalScore": 52
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 62
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            }
+          ],
+          "totalScore": 30
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20+",
+              "baseValue": 20,
+              "multiplier": 3,
+              "score": 60
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "0",
+              "baseValue": 0,
+              "multiplier": 1,
+              "score": 0
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 80
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "4",
+              "baseValue": 4,
+              "multiplier": 1,
+              "score": 4
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18",
+              "baseValue": 18,
+              "multiplier": 1,
+              "score": 18
+            }
+          ],
+          "totalScore": 23
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 60
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "S1": 7,
+        "S5": 6,
+        "S20": 11,
+        "S12": 1,
+        "T20": 2,
+        "S0": 1,
+        "S4": 1,
+        "S18": 1
+      },
+      "sessionId": "a6115e90-b1ce-4524-b424-6aeab6307687",
+      "date": "2026-09-24 19:29",
+      "endTime": "2026-09-24 19:33",
+      "durationSeconds": 215,
+      "sessionType": 0,
+      "totalDartsThrown": 30,
+      "averageScore": 41.1,
+      "count180": 0,
+      "count140Plus": 0,
+      "count100Plus": 0,
+      "rate180": 0.0,
+      "rate140Plus": 0.0,
+      "rate100Plus": 0.0,
+      "tripleHitRate": 0.06666667,
+      "wastedDartRate": 0.533333361
+    },
+    {
+      "$type": "ScoringSession, DartTrainingsApp",
+      "rounds": [
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1+",
+              "baseValue": 1,
+              "multiplier": 3,
+              "score": 3
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 24
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            }
+          ],
+          "totalScore": 7
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5+",
+              "baseValue": 5,
+              "multiplier": 3,
+              "score": 15
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18",
+              "baseValue": 18,
+              "multiplier": 1,
+              "score": 18
+            }
+          ],
+          "totalScore": 34
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5+",
+              "baseValue": 5,
+              "multiplier": 3,
+              "score": 15
+            }
+          ],
+          "totalScore": 36
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5-",
+              "baseValue": 5,
+              "multiplier": 2,
+              "score": 10
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "13",
+              "baseValue": 13,
+              "multiplier": 1,
+              "score": 13
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "18+",
+              "baseValue": 18,
+              "multiplier": 3,
+              "score": 54
+            }
+          ],
+          "totalScore": 77
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "1",
+              "baseValue": 1,
+              "multiplier": 1,
+              "score": 1
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 41
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 60
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 45
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "13",
+              "baseValue": 13,
+              "multiplier": 1,
+              "score": 13
+            }
+          ],
+          "totalScore": 53
+        },
+        {
+          "$type": "ScoringRound, DartTrainingsApp",
+          "arrows": [
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "5",
+              "baseValue": 5,
+              "multiplier": 1,
+              "score": 5
+            },
+            {
+              "$type": "DartArrow, DartTrainingsApp",
+              "rawInput": "20",
+              "baseValue": 20,
+              "multiplier": 1,
+              "score": 20
+            }
+          ],
+          "totalScore": 45
+        }
+      ],
+      "fieldHitCounts": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
+        "T1": 1,
+        "S1": 6,
+        "S20": 13,
+        "S5": 3,
+        "T5": 2,
+        "S18": 1,
+        "D5": 1,
+        "S13": 2,
+        "T18": 1
+      },
+      "sessionId": "d03b26bc-8911-4441-9053-455d443ab66b",
+      "date": "2026-09-24 19:33",
+      "endTime": "2026-09-24 19:37",
+      "durationSeconds": 245,
+      "sessionType": 0,
+      "totalDartsThrown": 30,
+      "averageScore": 42.2,
+      "count180": 0,
+      "count140Plus": 0,
+      "count100Plus": 0,
+      "rate180": 0.0,
+      "rate140Plus": 0.0,
+      "rate100Plus": 0.0,
+      "tripleHitRate": 0.0333333351,
+      "wastedDartRate": 0.5
+    }
+  ],
+  "trainingGameMatches": [
+    {
+      "$type": "TrainingGameMatch, DartTrainingsApp",
+      "endTime": "2026-09-17 19:57",
+      "playerWon": true,
+      "playerDartsThrown": 16,
+      "playerAverage": 93.9375,
+      "playerTripleRate": 0.3125,
+      "playerWastedRate": 0.0625,
+      "playerCheckoutRate": 0.5,
+      "aiDartsThrown": 20,
+      "aiAverage": 49.3917961,
+      "aiCheckoutRate": 0.3
+    },
+    {
+      "$type": "TrainingGameMatch, DartTrainingsApp",
+      "endTime": "2026-09-18 19:57",
+      "playerWon": false,
+      "playerDartsThrown": 20,
+      "playerAverage": 75.15,
+      "playerTripleRate": 0.2,
+      "playerWastedRate": 0.2,
+      "playerCheckoutRate": 1.0,
+      "aiDartsThrown": 17,
+      "aiAverage": 54.3346176,
+      "aiCheckoutRate": 0.3
+    },
+    {
+      "$type": "TrainingGameMatch, DartTrainingsApp",
+      "endTime": "2026-09-19 19:57",
+      "playerWon": false,
+      "playerDartsThrown": 19,
+      "playerAverage": 79.10526,
+      "playerTripleRate": 0.2631579,
+      "playerWastedRate": 0.105263159,
+      "playerCheckoutRate": 0.5,
+      "aiDartsThrown": 16,
+      "aiAverage": 53.8206177,
+      "aiCheckoutRate": 0.3
+    }
+  ],
+  "lifetimeAverage": 57.7,
+  "totalRoundsThrown": 80
+}
