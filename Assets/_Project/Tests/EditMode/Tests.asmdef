@@ -3,7 +3,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "DartTrainingsApp"
+        "DartTrainingsApp",
+        "DartTrainingsApp.Editor"
     ],
     "includePlatforms": [
         "Editor"
