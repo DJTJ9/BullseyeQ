@@ -1,0 +1,4 @@
+<linker>
+  <!-- Newtonsoft builds the profile types via reflection (private setters, [JsonConstructor] ctors). IL2CPP must keep them. -->
+  <assembly fullname="DartTrainingsApp" preserve="all" />
+</linker>
