@@ -32,3 +32,11 @@ Assets/_Project/Art/UI/Icon_*
 Assets/_Project/Art/UI/Button_Square03_White.png*
 Assets/_Project/Art/UI/Button01_Red.png*
 Assets/_Project/Art/UI/BasicFrame_Square01_White.Png*
+# Local tooling and working notes
+Tempclaude-config-inspect/
+codex-prep.sh
+dv-commit.sh
+PROJECT_SUMMARY.md
+501_IMPLEMENTATION.md
+test-results.xml
+unity-test.log

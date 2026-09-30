@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run Unity EditMode tests in batch mode
 UNITY="/c/Program Files/Unity/Hub/Editor/6000.4.0f1/Editor/Unity.exe"
-PROJECT="C:/Unity/Aktuelle Projekte/DartTrainingsApp"
+PROJECT="$(cd "$(dirname "$0")" && pwd -W)"
 RESULTS="$PROJECT/test-results.xml"
 LOG="$PROJECT/unity-test.log"
 
